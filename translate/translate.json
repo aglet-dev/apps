@@ -1,0 +1,38 @@
+{
+  "manifest": {
+    "id": "translate",
+    "name": {
+      "default": "Translate",
+      "zh": "翻译助手",
+      "ja": "翻訳"
+    },
+    "description": {
+      "default": "LLM-powered translator. Pick target language, paste text, hit translate.",
+      "zh": "本地 LLM 翻译，选目标语言一键译。",
+      "ja": "ローカル LLM 翻訳。"
+    },
+    "version": "1.0.0",
+    "runtime": "json-ui-react-v2",
+    "author": "agent-rt",
+    "category": "utilities",
+    "keywords": ["translate", "llm", "language"],
+    "icon": "https://api.iconify.design/ph/translate-fill.svg?color=%233a6ea5&width=256",
+    "permissions": [],
+    "window": { "style": "phone", "width": 460, "height": 720 },
+    "scripts": { "js_path": "translate.scripts.js" },
+    "state": {
+      "endpoint": "http://10.0.0.64:8800/v1/chat/completions",
+      "model": "unsloth/gemma-4-26B-A4B-it-GGUF:gemma-4-26B-A4B-it-UD-Q4_K_M",
+      "target": "zh",
+      "output": "",
+      "loading": false,
+      "error": ""
+    },
+    "collections": {
+      "scratch": {
+        "schema": { "input": { "type": "string" } }
+      }
+    }
+  },
+  "ui": "translate.ui.tsx"
+}
