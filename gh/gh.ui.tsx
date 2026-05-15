@@ -5,13 +5,17 @@
         collection="prs"
         query={{ where: { reviewed_by_me: true, state: "open" }, orderBy: [{ field: "updated_at", direction: "desc" }] }}
       >
-        <Empty><EmptyState title="没有等你 review 的 PR" description="跑 `corelet scheduler tick` 刷新" icon="check-circle"/></Empty>
+        <Empty><EmptyState title="没有等你 review 的 PR" description="等下一轮 scheduler tick 刷新" icon="check-circle"/></Empty>
         <Item>
           <Card>
             <VStack gap={6}>
-              <Text muted>{item.repo} #{item.number}</Text>
+              <HStack gap={6} justify="between">
+                <Text muted>{item.repo} #{item.number}</Text>
+                {item.is_draft && <Text muted className="text-xs uppercase tracking-wider">draft</Text>}
+              </HStack>
               <Heading level={3}>{item.title}</Heading>
-              <Text muted>by {item.author} · 更新于 {item.updated_at | relative} · 💬 {item.comments_count}</Text>
+              <Text muted>by {item.author} · {item.updated_at | relative} · 💬 {item.comments_count}</Text>
+              {item.labels && <Text muted className="text-xs">{item.labels}</Text>}
               <HStack justify="end" gap={8}>
                 <Link label="在 GitHub 打开" icon="arrow-square-out" href={item.url}/>
               </HStack>
@@ -30,9 +34,13 @@
         <Item>
           <Card>
             <VStack gap={6}>
-              <Text muted>{item.repo} #{item.number}</Text>
+              <HStack gap={6} justify="between">
+                <Text muted>{item.repo} #{item.number}</Text>
+                {item.is_draft && <Text muted className="text-xs uppercase tracking-wider">draft</Text>}
+              </HStack>
               <Heading level={3}>{item.title}</Heading>
-              <Text muted>更新于 {item.updated_at | relative} · 💬 {item.comments_count}</Text>
+              <Text muted>{item.updated_at | relative} · 💬 {item.comments_count}</Text>
+              {item.labels && <Text muted className="text-xs">{item.labels}</Text>}
               <HStack justify="end" gap={8}>
                 <Link label="在 GitHub 打开" icon="arrow-square-out" href={item.url}/>
               </HStack>

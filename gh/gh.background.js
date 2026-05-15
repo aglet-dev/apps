@@ -6,6 +6,7 @@
 // authored_by_me 旗标。同 PR 命中两条 → merge（保 true）。
 //
 // 幂等 dedup by pr_id = "<owner/repo>#<number>"。
+// 上一轮在库中但本轮未命中的 PR 视为关闭/合并，自动 delete（保持 open 列表新鲜）。
 
 const APP_ID = (typeof input === "object" && input && input.app_id) || "gh";
 
@@ -28,9 +29,13 @@ const mine    = ghSearch("--author=@me");
 
 let added = 0;
 let updated = 0;
+let removed = 0;
+
+const seen = new Set();
 
 function ingest(pr, kind /* "review" | "mine" */) {
   const pr_id = `${pr.repository.nameWithOwner}#${pr.number}`;
+  seen.add(pr_id);
   const labels = (pr.labels || []).map(l => l.name).join(", ");
   let reviewed = kind === "review";
   let authored = kind === "mine";
@@ -70,4 +75,13 @@ function ingest(pr, kind /* "review" | "mine" */) {
 for (const pr of reviews) ingest(pr, "review");
 for (const pr of mine)    ingest(pr, "mine");
 
-output = { reviewed: reviews.length, mine: mine.length, added, updated };
+// 清理：上一轮存在但本轮 search 未命中（PR 关闭/合并/被 dismiss）→ 删
+const all = corelet.data.list(APP_ID, "prs", { limit: 500 });
+for (const row of all.items) {
+  if (!seen.has(row.data.pr_id)) {
+    corelet.data.delete(APP_ID, "prs", row.id);
+    removed++;
+  }
+}
+
+output = { reviewed: reviews.length, mine: mine.length, added, updated, removed };
