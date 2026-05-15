@@ -11,9 +11,16 @@
               label="添加"
               color="primary"
               icon="plus"
+              disabled={!form.title}
               onClick={() => data.create({
                 collection: "items",
-                data: { title: form.title, notes: form.notes, due_at: form.due_at, completed: false, created_at: now },
+                data: {
+                  title: form.title,
+                  notes: form.notes,
+                  due_at: form.due_at,
+                  completed: false,
+                  created_at: now,
+                },
               })}
             />
           </HStack>
@@ -57,15 +64,23 @@
             <HStack justify="between" gap={8}>
               <VStack gap={4}>
                 <Text muted>✓ {item.title}</Text>
-                {item.completed_at && <Text muted>{item.completed_at | relative}完成</Text>}
+                {item.completed_at && <Text muted>{item.completed_at | relative} 完成</Text>}
               </VStack>
-              <Button
-                label="撤销"
-                icon="arrow-counter-clockwise"
-                onClick={() => data.update({
-                  collection: "items", id: item.id, patch: { completed: false, completed_at: "" },
-                })}
-              />
+              <HStack gap={4}>
+                <Button
+                  label="撤销"
+                  icon="arrow-counter-clockwise"
+                  onClick={() => data.update({
+                    collection: "items", id: item.id, patch: { completed: false, completed_at: "" },
+                  })}
+                />
+                <Button
+                  label="删除"
+                  icon="trash"
+                  color="danger"
+                  onClick={() => data.delete({ collection: "items", id: item.id })}
+                />
+              </HStack>
             </HStack>
           </Card>
         </Item>

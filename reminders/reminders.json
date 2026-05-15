@@ -3,13 +3,19 @@
     "id": "reminders",
     "name": {
       "default": "Reminders",
-      "zh": "提醒"
+      "zh": "提醒",
+      "ja": "リマインダー"
     },
     "description": {
-      "default": "Simple user-input reminders with optional due time"
+      "default": "Lightweight reminders with optional due time. Background scan fires system notifications when due.",
+      "zh": "轻量提醒，可选截止时间。后台扫描到点系统通知。",
+      "ja": "軽量リマインダー、任意で締切時刻。バックグラウンドが到来時にシステム通知。"
     },
     "version": "1.0.0",
     "runtime": "json-ui-react-v2",
+    "author": "agent-rt",
+    "category": "productivity",
+    "keywords": ["reminders", "todo", "tasks", "notify"],
     "permissions": [
       "data:read",
       "data:write",
@@ -17,8 +23,8 @@
     ],
     "window": {
       "style": "phone",
-      "width": 420,
-      "height": 720
+      "width": 380,
+      "height": 640
     },
     "background": {
       "js_path": "reminders.background.js"
@@ -26,33 +32,15 @@
     "collections": {
       "items": {
         "schema": {
-          "title": {
-            "type": "string"
-          },
-          "notes": {
-            "type": "string"
-          },
-          "due_at": {
-            "type": "string"
-          },
-          "completed": {
-            "type": "boolean"
-          },
-          "created_at": {
-            "type": "string"
-          },
-          "completed_at": {
-            "type": "string"
-          },
-          "notified_at": {
-            "type": "string"
-          }
+          "title": { "type": "string" },
+          "notes": { "type": "string" },
+          "due_at": { "type": "string" },
+          "completed": { "type": "boolean" },
+          "created_at": { "type": "string" },
+          "completed_at": { "type": "string" },
+          "notified_at": { "type": "string" }
         },
-        "indexes": [
-          "completed",
-          "due_at",
-          "completed_at"
-        ]
+        "indexes": ["completed", "due_at", "completed_at"]
       }
     }
   },
