@@ -1,0 +1,18 @@
+{
+  "manifest": {
+    "id": "calc",
+    "name": { "default": "Calculator", "zh": "计算器" },
+    "description": { "default": "iOS-style calculator" },
+    "version": "1.0.0",
+    "runtime": "json-ui-react-v2",
+    "permissions": [],
+    "window": { "style": "phone", "width": 320, "height": 540 },
+    "state": {
+      "display": 0,
+      "pending": 0,
+      "op": "",
+      "fresh": true
+    }
+  },
+  "ui": "calc.ui.tsx"
+}

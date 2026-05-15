@@ -1,0 +1,60 @@
+{
+  "manifest": {
+    "id": "reminders",
+    "name": {
+      "default": "Reminders",
+      "zh": "提醒"
+    },
+    "description": {
+      "default": "Simple user-input reminders with optional due time"
+    },
+    "version": "1.0.0",
+    "runtime": "json-ui-react-v2",
+    "permissions": [
+      "data:read",
+      "data:write",
+      "notifications:post"
+    ],
+    "window": {
+      "style": "phone",
+      "width": 420,
+      "height": 720
+    },
+    "background": {
+      "js_path": "reminders.background.js"
+    },
+    "collections": {
+      "items": {
+        "schema": {
+          "title": {
+            "type": "string"
+          },
+          "notes": {
+            "type": "string"
+          },
+          "due_at": {
+            "type": "string"
+          },
+          "completed": {
+            "type": "boolean"
+          },
+          "created_at": {
+            "type": "string"
+          },
+          "completed_at": {
+            "type": "string"
+          },
+          "notified_at": {
+            "type": "string"
+          }
+        },
+        "indexes": [
+          "completed",
+          "due_at",
+          "completed_at"
+        ]
+      }
+    }
+  },
+  "ui": "reminders.ui.tsx"
+}

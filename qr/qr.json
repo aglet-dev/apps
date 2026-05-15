@@ -1,0 +1,25 @@
+{
+  "manifest": {
+    "id": "qr",
+    "name": { "default": "QR", "zh": "二维码" },
+    "description": { "default": "文本生成二维码 + 粘贴解码" },
+    "version": "1.0.0",
+    "runtime": "json-ui-react-v2",
+    "permissions": [],
+    "window": { "style": "phone", "width": 360, "height": 720 },
+    "collections": {
+      "scratch": {
+        "schema": {
+          "text": { "type": "string" }
+        }
+      }
+    },
+    "scripts": { "js_path": "qr.scripts.js" },
+    "state": {
+      "qr": "",
+      "decoded": "",
+      "error": ""
+    }
+  },
+  "ui": "qr.ui.tsx"
+}
