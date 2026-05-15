@@ -13,6 +13,10 @@
     "author": "agent-rt",
     "category": "utilities",
     "keywords": ["calculator", "math", "ios"],
+    "icon": "https://api.iconify.design/ph/calculator-fill.svg?color=%23ef6f5f&width=256",
+    "screenshots": [
+      { "url": "screenshots/01.png", "caption": "iOS-style display" }
+    ],
     "window": { "style": "phone", "width": 320, "height": 504 },
     "keys": {
       "0": { "script": "digit", "args": { "n": 0 } },

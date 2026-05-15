@@ -1,11 +1,22 @@
 {
   "manifest": {
     "id": "qr",
-    "name": { "default": "QR", "zh": "二维码" },
-    "description": { "default": "文本生成二维码 + 粘贴解码" },
+    "name": { "default": "QR", "zh": "二维码", "ja": "QRコード" },
+    "description": {
+      "default": "Encode text into QR codes, paste images to decode.",
+      "zh": "文本生成二维码 + 粘贴图片解码",
+      "ja": "テキストを QR にエンコード、画像貼り付けでデコード"
+    },
     "version": "1.0.0",
     "runtime": "json-ui-react-v2",
     "permissions": [],
+    "author": "agent-rt",
+    "category": "utilities",
+    "keywords": ["qr", "code", "encode", "decode"],
+    "icon": "https://api.iconify.design/ph/qr-code-fill.svg?color=%233a6ea5&width=256",
+    "screenshots": [
+      { "url": "screenshots/01.png", "caption": "Encode any text" }
+    ],
     "window": { "style": "phone", "width": 360, "height": 720 },
     "collections": {
       "scratch": {

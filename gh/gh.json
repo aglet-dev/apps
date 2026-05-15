@@ -17,6 +17,10 @@
     "author": "agent-rt",
     "category": "developer-tools",
     "keywords": ["github", "pr", "review", "code"],
+    "icon": "https://api.iconify.design/ph/git-pull-request-fill.svg?color=%231f883d&width=256",
+    "screenshots": [
+      { "url": "screenshots/01.png", "caption": "Review queue + your open PRs" }
+    ],
     "permissions": [
       "data:read",
       "data:write",

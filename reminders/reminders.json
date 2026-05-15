@@ -16,6 +16,10 @@
     "author": "agent-rt",
     "category": "productivity",
     "keywords": ["reminders", "todo", "tasks", "notify"],
+    "icon": "https://api.iconify.design/ph/bell-fill.svg?color=%23ef6f5f&width=256",
+    "screenshots": [
+      { "url": "screenshots/01.png", "caption": "Active reminders list" }
+    ],
     "permissions": [
       "data:read",
       "data:write",
