@@ -40,9 +40,56 @@
   </Card>
 
   <Section title="全部 Issues">
+    <HStack gap={6} justify="end">
+      <Drawer
+        title="筛选"
+        description="按状态 / 优先级过滤；空 = 全部"
+        side="right"
+        trigger={<Button label="筛选" leftIcon="funnel"/>}
+      >
+        <Heading level={3} content="状态"/>
+        <HStack gap={4}>
+          <Button label="全部" size="sm" pressed={!state.filterStatus}
+            onClick={() => setState("/state/filterStatus", "")}/>
+          <Button label="待处理" size="sm" pressed={state.filterStatus == "open"}
+            onClick={() => setState("/state/filterStatus", "open")}/>
+          <Button label="进行中" size="sm" pressed={state.filterStatus == "in_progress"}
+            onClick={() => setState("/state/filterStatus", "in_progress")}/>
+          <Button label="已关闭" size="sm" pressed={state.filterStatus == "closed"}
+            onClick={() => setState("/state/filterStatus", "closed")}/>
+        </HStack>
+        <Heading level={3} content="优先级"/>
+        <HStack gap={4}>
+          <Button label="全部" size="sm" pressed={!state.filterPriority}
+            onClick={() => setState("/state/filterPriority", "")}/>
+          <Button label="高" size="sm" pressed={state.filterPriority == "high"}
+            onClick={() => setState("/state/filterPriority", "high")}/>
+          <Button label="中" size="sm" pressed={state.filterPriority == "medium"}
+            onClick={() => setState("/state/filterPriority", "medium")}/>
+          <Button label="低" size="sm" pressed={state.filterPriority == "low"}
+            onClick={() => setState("/state/filterPriority", "low")}/>
+        </HStack>
+      </Drawer>
+    </HStack>
+    <HStack gap={4}>
+      {state.filterStatus && (
+        <Tag label={state.filterStatus} color="primary" icon="funnel" removable
+          onRemove={() => setState("/state/filterStatus", "")}/>
+      )}
+      {state.filterPriority && (
+        <Tag label={state.filterPriority} color="warning" icon="funnel" removable
+          onRemove={() => setState("/state/filterPriority", "")}/>
+      )}
+    </HStack>
     <Table
       collection="issues"
-      query={{ orderBy: [{ field: "created_at", direction: "desc" }] }}
+      query={{
+        where: {
+          status: state.filterStatus,
+          priority: state.filterPriority,
+        },
+        orderBy: [{ field: "created_at", direction: "desc" }],
+      }}
       paginate={{ pageSize: 10 }}
     >
       <Empty><EmptyState title="还没有 Issue" icon="folder-open"/></Empty>

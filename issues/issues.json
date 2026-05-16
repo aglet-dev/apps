@@ -18,6 +18,10 @@
     "icon": "https://api.iconify.design/ph/list-bullets-fill.svg?color=%233a6ea5&width=256",
     "permissions": ["data:read", "data:write"],
     "window": { "style": "desktop", "width": 960, "height": 720 },
+    "state": {
+      "filterStatus": "",
+      "filterPriority": ""
+    },
     "collections": {
       "issues": {
         "schema": {
