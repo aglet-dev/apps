@@ -47,7 +47,7 @@
               <VStack gap={4}>
                 <Heading level={3}>{item.name}</Heading>
                 <Text muted>🎂 {item.birthday} · 主题 {item.theme}</Text>
-                <Progress value={item.volume} max={100} label="音量" size="sm" color="primary"/>
+                <Meter value={item.volume} min={0} max={100} label="音量" size="sm" color="primary"/>
                 {item.bio && <Text>{item.bio}</Text>}
               </VStack>
             </HStack>
