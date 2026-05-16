@@ -57,28 +57,24 @@
         {item.tags && <Text muted>#{item.tags}</Text>}
       </Column>
       <Column key="actions" label="" align="right">
-        <HStack gap={4}>
-          <Button
-            label="关闭"
-            leftIcon="check"
+        <Menu trigger={<Button label="" leftIcon="dots-three-vertical" size="sm"/>}>
+          <MenuItem label="设为待处理" icon="circle-dashed"
+            disabled={item.status == "open"}
+            onClick={() => data.update({ collection: "issues", id: item.id, patch: { status: "open" } })}/>
+          <MenuItem label="开始处理" icon="play"
+            disabled={item.status == "in_progress"}
+            onClick={() => data.update({ collection: "issues", id: item.id, patch: { status: "in_progress" } })}/>
+          <MenuItem label="关闭" icon="check"
             disabled={item.status == "closed"}
-            onClick={() => data.update({
-              collection: "issues",
-              id: item.id,
-              patch: { status: "closed" },
-            })}
-          />
-          <Button
-            label="删除"
-            color="danger"
-            leftIcon="trash"
+            onClick={() => data.update({ collection: "issues", id: item.id, patch: { status: "closed" } })}/>
+          <MenuItem separator/>
+          <MenuItem label="删除" icon="trash" danger
             onClick={() => app.confirm({
               title: "删除该 Issue？",
               color: "danger",
               onConfirm: () => data.delete({ collection: "issues", id: item.id }),
-            })}
-          />
-        </HStack>
+            })}/>
+        </Menu>
       </Column>
     </Table>
   </Section>
