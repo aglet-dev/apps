@@ -12,7 +12,7 @@
       "ja": "為替換算と仕入原価・利益率の計算。"
     },
     "version": "1.0.0",
-    "runtime": "json-ui-react-v2",
+    "runtime": "json-ui-react",
     "author": "agent-rt",
     "category": "utilities",
     "keywords": ["currency", "fx", "profit", "margin"],

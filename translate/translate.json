@@ -12,7 +12,7 @@
       "ja": "ローカル LLM 翻訳。"
     },
     "version": "1.0.0",
-    "runtime": "json-ui-react-v2",
+    "runtime": "json-ui-react",
     "author": "agent-rt",
     "category": "utilities",
     "keywords": ["translate", "llm", "language"],

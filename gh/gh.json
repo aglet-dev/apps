@@ -13,7 +13,7 @@
     },
     "docs": "# GitHub PR 看板\n\n本地化的 PR review / 我的 PR 列表。数据通过 `gh` CLI 同步进来。\n\n## 工作流\n\n```sh\ncorelet scheduler tick           # 每 60 秒一次（plist 已装）\n```\n\n后台脚本跑：\n\n```sh\ngh search prs --review-requested=@me --state=open --json …\ngh search prs --author=@me         --state=open --json …\n```\n\n两批结果合并写入 `prs` 集合；上一轮存在但本轮未命中的 PR 视为关闭/合并，自动删掉。\n\n## Tabs\n\n- **Review**：被 request review 的 open PR\n- **我的**：我作为 author 的 open PR\n- **全部**：所有 open PR\n\n## 同 PR 多分类\n\n一个 PR 可能同时是 review queue 和 mine（自己 author 自己 review）。schema 用两个 bool 字段而非 category 字符串，ingest dedup 时 merge 旗标。\n\n## 不写入字段\n\n这是只读看板：Agent 写库，用户只浏览 + 跳 GitHub。\n",
     "version": "1.0.0",
-    "runtime": "json-ui-react-v2",
+    "runtime": "json-ui-react",
     "author": "agent-rt",
     "category": "developer-tools",
     "keywords": ["github", "pr", "review", "code"],

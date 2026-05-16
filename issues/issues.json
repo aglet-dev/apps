@@ -11,7 +11,7 @@
       "zh": "轻量工单追踪：表格 + 状态徽章 + 分页。"
     },
     "version": "1.0.0",
-    "runtime": "json-ui-react-v2",
+    "runtime": "json-ui-react",
     "author": "agent-rt",
     "category": "productivity",
     "keywords": ["issues", "tracker", "table", "kanban"],

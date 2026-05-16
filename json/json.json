@@ -12,7 +12,7 @@
       "ja": "JSON のフォーマット / 圧縮 / 検証、エラー位置表示。"
     },
     "version": "1.0.0",
-    "runtime": "json-ui-react-v2",
+    "runtime": "json-ui-react",
     "author": "agent-rt",
     "category": "developer-tools",
     "keywords": ["json", "format", "pretty", "validator"],

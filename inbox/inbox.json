@@ -12,7 +12,7 @@
       "ja": "メモ・ToDo・リンクの即時キャプチャ。"
     },
     "version": "1.0.0",
-    "runtime": "json-ui-react-v2",
+    "runtime": "json-ui-react",
     "author": "agent-rt",
     "category": "productivity",
     "keywords": ["notes", "capture", "inbox", "todo"],

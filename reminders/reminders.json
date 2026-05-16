@@ -12,7 +12,7 @@
       "ja": "軽量リマインダー、任意で締切時刻。バックグラウンドが到来時にシステム通知。"
     },
     "version": "1.0.0",
-    "runtime": "json-ui-react-v2",
+    "runtime": "json-ui-react",
     "author": "agent-rt",
     "category": "productivity",
     "keywords": ["reminders", "todo", "tasks", "notify"],

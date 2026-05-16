@@ -8,7 +8,7 @@
       "ja": "シンプルなカウントダウン。プリセットを選び、開始、ゼロで通知。"
     },
     "version": "1.0.0",
-    "runtime": "json-ui-react-v2",
+    "runtime": "json-ui-react",
     "permissions": [],
     "author": "agent-rt",
     "category": "utilities",
