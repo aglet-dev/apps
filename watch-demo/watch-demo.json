@@ -4,7 +4,7 @@
     "name": { "default": "Watch Demo" },
     "description": { "default": "验证 json-render watch 配置：a 变化时自动派生 b 与 c" },
     "version": "1.0.0",
-    "runtime": "json-ui-react",
+    "runtime": "auto",
     "permissions": [],
     "window": { "style": "phone", "width": 320, "height": 480 },
     "state": {

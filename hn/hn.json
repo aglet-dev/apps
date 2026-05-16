@@ -12,7 +12,7 @@
     },
     "docs": "# HackerNews 中文版\n\n中文化的 HN 阅读器。Agent 是核心 —— 你（Agent）负责从 news.ycombinator.com 拉首页、翻译每条 story 标题到中文、写一两句中文摘要后写库。用户在 miniapp 里浏览、点赞、屏蔽。\n\n## 工作流（每次刷新）\n\n```sh\n# 1. 拉首页 markdown\nmdctl https://news.ycombinator.com > /tmp/hn.md\n\n# 2. 解析每条 story\n# 3. 对每条 story:\n#    a) corelet bridge hn '{\"action\":\"data.list\",\"params\":{\"collection\":\"stories\",\"query\":{\"where\":{\"hn_id\":<id>}}}}'\n#    b) 若已存在 → data.update 仅更新 points / comments / age（保留用户的 liked/disliked）\n#    c) 不存在 → 翻译 title → title_zh，写 summary_zh，data.create\n```\n\n## 翻译规范\n\n- **title_zh**：直译为主，技术名词保留英文（Rust / Kafka / GPU / OAuth）。\n- **summary_zh**：1–2 句，控制 80 中文字以内。不复述标题，写「为什么这条上 HN」。\n- 每次 ingestion ≤ 30 条。\n\n## 写入示例\n\n```sh\ncorelet bridge hn '{\n  \"id\": \"x\",\n  \"action\": \"data.create\",\n  \"params\": {\n    \"collection\": \"stories\",\n    \"data\": { \"hn_id\": 48111545, \"title_en\": \"...\", \"title_zh\": \"...\", \"summary_zh\": \"...\", \"points\": 576, \"liked\": false, \"disliked\": false }\n  }\n}'\n```\n\n## 不要\n\n- 不要把英文 title 直接写进 title_zh\n- 不要触碰 `liked` / `disliked` —— 那是用户字段，Agent 永远写 false/false\n- 同一 hn_id 不要重复 data.create — 必须先 data.list 检查\n",
     "version": "1.0.0",
-    "runtime": "json-ui-react",
+    "runtime": "auto",
     "author": "agent-rt",
     "category": "media",
     "keywords": ["hackernews", "hn", "reader", "translated", "chinese"],

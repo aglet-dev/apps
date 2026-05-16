@@ -13,7 +13,7 @@
     },
     "docs": "# Scheduler\n\n所有 miniapp 的周期触发。本身就是一个 miniapp，dogfood corelet 架构。\n\n## 启动\n\n```sh\ncorelet scheduler install   # 装 launchd plist：每 60 秒 'corelet scheduler tick'\ncorelet scheduler status    # 看 plist 状态\ncorelet scheduler uninstall # 卸 plist\n```\n\n## 工作流\n\n每次 tick (60s)：\n1. 扫 `~/.corelet/ingest/*.sh` —— 找出有 ingest 能力的 miniapp\n2. 缺 schedule 行的 → 自动创建（默认 interval=900s / 15min，enabled=true）\n3. enabled=true 且 next_run_at <= now 的 → 顺序 spawn `corelet ingest <app_id>`\n4. 更新 last_run_at / next_run_at / last_status\n\n## UI\n\n- 卡片列表：每张 schedule\n- toggle 启用 / 停\n- 'Run Now' 把 next_run_at 推到过去，让下次 tick 立即处理\n",
     "version": "1.0.0",
-    "runtime": "json-ui-react",
+    "runtime": "auto",
     "author": "agent-rt",
     "category": "system",
     "keywords": ["scheduler", "cron", "ingest", "system"],

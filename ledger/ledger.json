@@ -12,7 +12,7 @@
       "ja": "収支家計簿、カテゴリ集計。"
     },
     "version": "1.0.0",
-    "runtime": "json-ui-react",
+    "runtime": "auto",
     "author": "agent-rt",
     "category": "productivity",
     "keywords": ["ledger", "finance", "budget", "money"],

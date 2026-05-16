@@ -12,7 +12,7 @@
       "ja": "軽量タスク管理。優先度・プロジェクト・状態タブ。"
     },
     "version": "1.0.0",
-    "runtime": "json-ui-react",
+    "runtime": "auto",
     "author": "agent-rt",
     "category": "productivity",
     "keywords": ["tasks", "todo", "kanban", "productivity"],

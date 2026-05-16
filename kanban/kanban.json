@@ -12,7 +12,7 @@
       "ja": "ステージ別タスクボード。担当・優先度・見積りつき。"
     },
     "version": "1.0.0",
-    "runtime": "json-ui-react",
+    "runtime": "auto",
     "default_locale": "en",
     "author": "agent-rt",
     "category": "productivity",

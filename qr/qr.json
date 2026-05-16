@@ -8,7 +8,7 @@
       "ja": "テキストを QR にエンコード、画像貼り付けでデコード"
     },
     "version": "1.0.1",
-    "runtime": "json-ui-react",
+    "runtime": "auto",
     "permissions": [],
     "author": "agent-rt",
     "category": "utilities",
