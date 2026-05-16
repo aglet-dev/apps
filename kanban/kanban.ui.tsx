@@ -1,30 +1,30 @@
 <Page title="Kanban">
   <HStack justify="between" gap={6}>
-    <Text muted>看板：拖卡片在不同状态间，用 Menu 调整或删除；筛选用 Drawer。</Text>
+    <Text muted>{t.intro}</Text>
     <Drawer
-      title="筛选"
-      description="按负责人 / 优先级"
+      title={t.filter}
+      description={t.filterDesc}
       side="right"
-      trigger={<Button label="筛选" leftIcon="funnel"/>}
+      trigger={<Button label={t.filter} leftIcon="funnel"/>}
     >
-      <Heading level={3} content="负责人"/>
+      <Heading level={3} content={t.assignee}/>
       <HStack gap={4}>
-        <Button label="全部" size="sm" pressed={!state.filterAssignee}
+        <Button label={t.all} size="sm" pressed={!state.filterAssignee}
           onClick={() => setState("/state/filterAssignee", "")}/>
         <Button label="Ada" size="sm" pressed={state.filterAssignee == "Ada"}
           onClick={() => setState("/state/filterAssignee", "Ada")}/>
         <Button label="Linus" size="sm" pressed={state.filterAssignee == "Linus"}
           onClick={() => setState("/state/filterAssignee", "Linus")}/>
       </HStack>
-      <Heading level={3} content="优先级"/>
+      <Heading level={3} content={t.priority}/>
       <HStack gap={4}>
-        <Button label="全部" size="sm" pressed={!state.filterPriority}
+        <Button label={t.all} size="sm" pressed={!state.filterPriority}
           onClick={() => setState("/state/filterPriority", "")}/>
-        <Button label="高" size="sm" pressed={state.filterPriority == "high"}
+        <Button label={t.high} size="sm" pressed={state.filterPriority == "high"}
           onClick={() => setState("/state/filterPriority", "high")}/>
-        <Button label="中" size="sm" pressed={state.filterPriority == "medium"}
+        <Button label={t.medium} size="sm" pressed={state.filterPriority == "medium"}
           onClick={() => setState("/state/filterPriority", "medium")}/>
-        <Button label="低" size="sm" pressed={state.filterPriority == "low"}
+        <Button label={t.low} size="sm" pressed={state.filterPriority == "low"}
           onClick={() => setState("/state/filterPriority", "low")}/>
       </HStack>
     </Drawer>
@@ -42,26 +42,26 @@
   </HStack>
 
   <Accordion defaultOpen={["new"]}>
-    <AccordionItem value="new" header="➕ 新建卡片" icon="plus-circle">
+    <AccordionItem value="new" header={t.newCard} icon="plus-circle">
       <DataForm collection="cards">
-        <Input name="title" label="" placeholder="任务标题"/>
+        <Input name="title" label="" placeholder={t.titlePh}/>
         <HStack gap={6}>
-          <Select name="priority" placeholder="优先级">
-            <Option value="high" label="高"/>
-            <Option value="medium" label="中"/>
-            <Option value="low" label="低"/>
+          <Select name="priority" placeholder={t.priority}>
+            <Option value="high" label={t.high}/>
+            <Option value="medium" label={t.medium}/>
+            <Option value="low" label={t.low}/>
           </Select>
-          <Combobox name="assignee" placeholder="负责人">
+          <Combobox name="assignee" placeholder={t.assignee}>
             <Option value="Ada" label="Ada Lovelace"/>
             <Option value="Linus" label="Linus Torvalds"/>
             <Option value="Grace" label="Grace Hopper"/>
           </Combobox>
-          <NumberField name="effort" label="" placeholder="估时 (h)" min={0} max={40} step={0.5}/>
+          <NumberField name="effort" label="" placeholder={t.estimatePh} min={0} max={40} step={0.5}/>
         </HStack>
-        <Textarea name="notes" label="" placeholder="备注（可选）" rows={2} autoResize/>
+        <Textarea name="notes" label="" placeholder={t.notesPh} rows={2} autoResize/>
         <HStack justify="end">
           <Button
-            label="创建"
+            label={t.create}
             color="primary"
             leftIcon="plus"
             disabled={!form.title}
@@ -78,7 +78,7 @@
                   created_at: now,
                 },
               });
-              app.toast({ title: "已加入待办", color: "success" });
+              app.toast({ title: t.createdToast, color: "success" });
             }}
           />
         </HStack>
@@ -89,17 +89,21 @@
   <HStack gap={6} align="start">
     <VStack gap={6}>
       <HStack justify="between" gap={6}>
-        <Heading level={3} content="待办"/>
+        <Heading level={3} content={t.backlog}/>
         <Badge content="backlog" color="default"/>
       </HStack>
       <DataList
         collection="cards"
         query={{
-          where: { status: "backlog", priority: state.filterPriority, assignee: state.filterAssignee },
+          where: {
+            status: "backlog",
+            ...(state.filterPriority && { priority: state.filterPriority }),
+            ...(state.filterAssignee && { assignee: state.filterAssignee }),
+          },
           orderBy: [{ field: "created_at", direction: "desc" }],
         }}
       >
-        <Empty><EmptyState title="无待办" icon="check-circle"/></Empty>
+        <Empty><EmptyState title={t.noBacklog} icon="check-circle"/></Empty>
         <Item>
           <Card>
             <VStack gap={4}>
@@ -114,19 +118,19 @@
                 </HStack>
               )}
               {item.notes && <Text muted>{item.notes}</Text>}
-              {item.effort && <Meter value={item.effort} min={0} max={40} label="估时 (h)" size="sm" color="primary"/>}
+              {item.effort && <Meter value={item.effort} min={0} max={40} label={t.estimate} size="sm" color="primary"/>}
               <HStack justify="end" gap={4}>
-                <Tooltip content="开始处理 (移至进行中)">
-                  <Button label="开始" size="sm" leftIcon="play"
+                <Tooltip content={t.startTip}>
+                  <Button label={t.start} size="sm" leftIcon="play"
                     onClick={() => data.update({ collection: "cards", id: item.id, patch: { status: "doing" } })}/>
                 </Tooltip>
                 <Menu trigger={<Button label="" leftIcon="dots-three-vertical" size="sm"/>}>
-                  <MenuItem label="提至完成" icon="check"
+                  <MenuItem label={t.moveToDone} icon="check"
                     onClick={() => data.update({ collection: "cards", id: item.id, patch: { status: "done", completed_at: now } })}/>
                   <MenuItem separator/>
-                  <MenuItem label="删除" icon="trash" danger
+                  <MenuItem label={t.delete} icon="trash" danger
                     onClick={() => app.confirm({
-                      title: "删除该卡片？",
+                      title: t.deletePrompt,
                       color: "danger",
                       onConfirm: () => data.delete({ collection: "cards", id: item.id }),
                     })}/>
@@ -140,17 +144,21 @@
 
     <VStack gap={6}>
       <HStack justify="between" gap={6}>
-        <Heading level={3} content="进行中"/>
+        <Heading level={3} content={t.doing}/>
         <Badge content="doing" color="warning"/>
       </HStack>
       <DataList
         collection="cards"
         query={{
-          where: { status: "doing", priority: state.filterPriority, assignee: state.filterAssignee },
+          where: {
+            status: "doing",
+            ...(state.filterPriority && { priority: state.filterPriority }),
+            ...(state.filterAssignee && { assignee: state.filterAssignee }),
+          },
           orderBy: [{ field: "created_at", direction: "desc" }],
         }}
       >
-        <Empty><EmptyState title="无进行" icon="coffee"/></Empty>
+        <Empty><EmptyState title={t.noDoing} icon="coffee"/></Empty>
         <Item>
           <Card>
             <VStack gap={4}>
@@ -164,19 +172,19 @@
                   <Text muted>{item.assignee}</Text>
                 </HStack>
               )}
-              {item.effort && <Meter value={item.effort} min={0} max={40} label="估时 (h)" size="sm" color="primary"/>}
+              {item.effort && <Meter value={item.effort} min={0} max={40} label={t.estimate} size="sm" color="primary"/>}
               <HStack justify="end" gap={4}>
-                <Tooltip content="完成">
-                  <Button label="完成" size="sm" color="primary" leftIcon="check"
+                <Tooltip content={t.finishTip}>
+                  <Button label={t.finish} size="sm" color="primary" leftIcon="check"
                     onClick={() => data.update({ collection: "cards", id: item.id, patch: { status: "done", completed_at: now } })}/>
                 </Tooltip>
                 <Menu trigger={<Button label="" leftIcon="dots-three-vertical" size="sm"/>}>
-                  <MenuItem label="退回待办" icon="arrow-left"
+                  <MenuItem label={t.moveToBacklog} icon="arrow-left"
                     onClick={() => data.update({ collection: "cards", id: item.id, patch: { status: "backlog" } })}/>
                   <MenuItem separator/>
-                  <MenuItem label="删除" icon="trash" danger
+                  <MenuItem label={t.delete} icon="trash" danger
                     onClick={() => app.confirm({
-                      title: "删除该卡片？",
+                      title: t.deletePrompt,
                       color: "danger",
                       onConfirm: () => data.delete({ collection: "cards", id: item.id }),
                     })}/>
@@ -190,33 +198,37 @@
 
     <VStack gap={6}>
       <HStack justify="between" gap={6}>
-        <Heading level={3} content="完成"/>
+        <Heading level={3} content={t.done}/>
         <Badge content="done" color="success"/>
       </HStack>
       <DataList
         collection="cards"
         query={{
-          where: { status: "done", priority: state.filterPriority, assignee: state.filterAssignee },
+          where: {
+            status: "done",
+            ...(state.filterPriority && { priority: state.filterPriority }),
+            ...(state.filterAssignee && { assignee: state.filterAssignee }),
+          },
           orderBy: [{ field: "completed_at", direction: "desc" }],
         }}
         paginate={{ pageSize: 10 }}
       >
-        <Empty><EmptyState title="还未完成任何卡片" icon="trophy"/></Empty>
+        <Empty><EmptyState title={t.noDone} icon="trophy"/></Empty>
         <Item>
           <Card>
             <HStack justify="between" gap={8}>
               <VStack gap={4}>
                 <Text muted>✓ {item.title}</Text>
-                {item.assignee && <Text muted>by {item.assignee}</Text>}
+                {item.assignee && <Text muted>{t.by} {item.assignee}</Text>}
                 {item.completed_at && <Text muted>{item.completed_at | relative}</Text>}
               </VStack>
               <Menu trigger={<Button label="" leftIcon="dots-three-vertical" size="sm"/>}>
-                <MenuItem label="重新打开" icon="arrow-counter-clockwise"
+                <MenuItem label={t.reopen} icon="arrow-counter-clockwise"
                   onClick={() => data.update({ collection: "cards", id: item.id, patch: { status: "doing", completed_at: "" } })}/>
                 <MenuItem separator/>
-                <MenuItem label="删除" icon="trash" danger
+                <MenuItem label={t.delete} icon="trash" danger
                   onClick={() => app.confirm({
-                    title: "删除该卡片？",
+                    title: t.deletePrompt,
                     color: "danger",
                     onConfirm: () => data.delete({ collection: "cards", id: item.id }),
                   })}/>

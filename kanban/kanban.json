@@ -13,6 +13,7 @@
     },
     "version": "1.0.0",
     "runtime": "json-ui-react-v2",
+    "default_locale": "en",
     "author": "agent-rt",
     "category": "productivity",
     "keywords": ["kanban", "tasks", "board", "workflow"],
