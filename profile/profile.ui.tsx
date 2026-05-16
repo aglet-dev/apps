@@ -43,7 +43,7 @@
         <Card>
           <HStack justify="between" gap={12}>
             <HStack gap={12}>
-              {item.avatar && <Image src={item.avatar} alt={item.name} width={56} height={56}/>}
+              <Avatar src={item.avatar} name={item.name} size="lg"/>
               <VStack gap={4}>
                 <Heading level={3}>{item.name}</Heading>
                 <Text muted>🎂 {item.birthday} · 主题 {item.theme}</Text>

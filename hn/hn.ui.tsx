@@ -24,9 +24,12 @@
                 <Heading level={3}>{item.title_zh}</Heading>
                 <Badge content={item.points} color="warning" icon="fire"/>
               </HStack>
-              <Text muted>
-                {item.domain} · {item.author} · {item.age} · 💬 {item.comments}
-              </Text>
+              <HStack gap="sm">
+                <Avatar name={item.author} size="sm"/>
+                <Text muted>
+                  {item.domain} · {item.author} · {item.age} · 💬 {item.comments}
+                </Text>
+              </HStack>
               <Text>{item.summary_zh}</Text>
               <HStack justify="end" gap={8}>
                 <Tooltip content={item.url}>
