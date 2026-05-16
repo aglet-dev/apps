@@ -32,7 +32,7 @@
                   title: "永久忘记这条记忆？",
                   description: "无法恢复。",
                   color: "danger",
-                  onConfirm: { action: "data.delete", params: { collection: "memories", id: item.id } },
+                  onConfirm: () => data.delete({ collection: "memories", id: item.id }),
                 })}
               />
             </HStack>
@@ -82,7 +82,7 @@
                   title: "永久忘记这条记忆？",
                   description: "无法恢复。",
                   color: "danger",
-                  onConfirm: { action: "data.delete", params: { collection: "memories", id: item.id } },
+                  onConfirm: () => data.delete({ collection: "memories", id: item.id }),
                 })}
               />
             </HStack>

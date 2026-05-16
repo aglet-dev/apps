@@ -75,7 +75,7 @@
             onClick={() => app.confirm({
               title: "删除该 Issue？",
               color: "danger",
-              onConfirm: { action: "data.delete", params: { collection: "issues", id: item.id } },
+              onConfirm: () => data.delete({ collection: "issues", id: item.id }),
             })}
           />
         </HStack>

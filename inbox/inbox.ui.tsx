@@ -94,7 +94,7 @@
                       title: "删除这条记录？",
                       description: "无法恢复。",
                       color: "danger",
-                      onConfirm: { action: "data.delete", params: { collection: "notes", id: item.id } },
+                      onConfirm: () => data.delete({ collection: "notes", id: item.id }),
                     })}
                   />
                 </HStack>

@@ -58,7 +58,7 @@
                 title: "删除该资料？",
                 description: "无法恢复。",
                 color: "danger",
-                onConfirm: { action: "data.delete", params: { collection: "profiles", id: item.id } },
+                onConfirm: () => data.delete({ collection: "profiles", id: item.id }),
               })}
             />
           </HStack>
