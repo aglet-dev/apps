@@ -1,0 +1,87 @@
+{
+  "manifest": {
+    "id": "apple-todos",
+    "name": { "default": "Apple Todos" },
+    "description": {
+      "default": "Minimal todo list for apple-runtime — Input + Button + DataList round-trip."
+    },
+    "version": "1.0.0",
+    "runtime": "apple",
+    "permissions": ["data:read", "data:write"],
+    "author": "agent-rt",
+    "category": "developer-tools",
+    "keywords": ["apple", "todo", "datalist"],
+    "window": { "style": "phone", "width": 380, "height": 600 },
+    "collections": {
+      "items": {
+        "schema": {
+          "title": { "type": "string" },
+          "created_at": { "type": "string" }
+        }
+      }
+    }
+  },
+  "ui": {
+    "type": "Page",
+    "props": { "title": "Apple Todos" },
+    "children": [
+      {
+        "type": "VStack",
+        "props": { "gap": 12 },
+        "children": [
+          {
+            "type": "Section",
+            "props": { "title": "Add" },
+            "children": [
+              {
+                "type": "DataForm",
+                "props": { "collection": "items" },
+                "children": [
+                  {
+                    "type": "Input",
+                    "props": {
+                      "name": "draft",
+                      "placeholder": "What needs doing?"
+                    }
+                  },
+                  {
+                    "type": "Button",
+                    "props": {
+                      "label": "Add",
+                      "color": "primary",
+                      "onClick": {
+                        "action": "data.create",
+                        "params": {
+                          "collection": "items",
+                          "data": {
+                            "title": { "op": "state", "path": "/form/draft" },
+                            "created_at": { "op": "now" }
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          { "type": "Divider" },
+          {
+            "type": "Section",
+            "props": { "title": "Items" },
+            "children": [
+              {
+                "type": "DataList",
+                "props": { "collection": "items" },
+                "item": {
+                  "type": "Text",
+                  "props": { "content": { "op": "bind_item", "field": "title" } }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
