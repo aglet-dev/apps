@@ -1,0 +1,29 @@
+{
+  "tabAdd": "記録",
+  "tabList": "履歴",
+  "tabSummary": "集計",
+
+  "kindLabel": "種別",
+  "kindExpense": "支出",
+  "kindIncome": "収入",
+  "amountLabel": "金額",
+  "amountPlaceholder": "0.00",
+  "categoryLabel": "カテゴリ",
+  "categoryPlaceholder": "食費 / 給料 / 交通…",
+  "noteLabel": "メモ",
+  "notePlaceholder": "任意",
+  "dateLabel": "日付",
+  "datePlaceholder": "YYYY-MM-DD（既定: 今日）",
+
+  "btnRecord": "記録",
+  "btnDelete": "削除",
+  "btnRefresh": "今月を更新",
+
+  "emptyEntries": "まだ記録がありません",
+
+  "summaryIncome": "今月の収入",
+  "summaryExpense": "今月の支出",
+  "summaryNet": "残高",
+  "summaryByCategory": "カテゴリ別",
+  "summaryEmpty": "今月の記録なし"
+}

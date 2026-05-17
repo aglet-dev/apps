@@ -1,0 +1,10 @@
+{
+  "inputLabel": "Input",
+  "inputPlaceholder": "Paste JSON here…",
+  "btnFormat": "Format",
+  "btnMinify": "Minify",
+  "btnValidate": "Validate",
+  "btnClear": "Clear",
+  "outputTitle": "Output",
+  "errorTitle": "Error"
+}

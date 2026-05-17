@@ -1,0 +1,39 @@
+{
+  "cardNew": "新規 Issue",
+  "labelTitle": "タイトル",
+  "titlePlaceholder": "問題を簡潔に",
+  "labelStatus": "ステータス",
+  "statusPlaceholder": "ステータス",
+  "labelPriority": "優先度",
+  "priorityPlaceholder": "優先度",
+  "labelTags": "タグ",
+  "tagsPlaceholder": "タグ（カンマ区切り、任意）",
+
+  "statusOpen": "未着手",
+  "statusInProgress": "対応中",
+  "statusClosed": "クローズ",
+  "priorityHigh": "高",
+  "priorityMedium": "中",
+  "priorityLow": "低",
+  "filterAll": "すべて",
+
+  "btnCreate": "作成",
+  "btnFilter": "絞り込み",
+  "filterDesc": "ステータス / 優先度で絞り込み；空 = すべて",
+
+  "createdToast": "Issue を作成しました",
+
+  "sectionAll": "全 Issue",
+  "emptyList": "Issue はまだありません",
+
+  "colTitle": "タイトル",
+  "colStatus": "ステータス",
+  "colPriority": "優先度",
+  "colTags": "タグ",
+
+  "menuSetOpen": "未着手にする",
+  "menuStart": "対応開始",
+  "menuClose": "クローズ",
+  "menuDelete": "削除",
+  "confirmDeleteTitle": "この Issue を削除？"
+}

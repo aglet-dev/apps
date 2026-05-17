@@ -1,10 +1,10 @@
 <Page className="p-6">
   <VStack gap={6}>
-    <Section title="生成 QR">
+    <Section title={t.sectionEncode}>
       <DataForm collection="scratch">
-        <Input name="text" label="文字" placeholder="输入要编码的文字..."/>
+        <Input name="text" label={t.labelText} placeholder={t.textPlaceholder}/>
         <HStack justify="end">
-          <Button label="生成" color="primary" icon="qr-code"
+          <Button label={t.btnEncode} color="primary" icon="qr-code"
             onClick={() => scripts.encode({text: form.text})}/>
         </HStack>
       </DataForm>
@@ -17,9 +17,9 @@
 
     <Divider/>
 
-    <Section title="解码 QR (剪贴板里有 QR 图片)">
+    <Section title={t.sectionDecode}>
       <HStack justify="end">
-        <Button label="粘贴解码" color="primary" icon="scan"
+        <Button label={t.btnPaste} color="primary" icon="scan"
           onClick={() => scripts.scan()}/>
       </HStack>
       {state.decoded && (
@@ -30,9 +30,7 @@
     </Section>
 
     {state.error && (
-      <Card className="border border-red-500/30">
-        <Text content={state.error} className="text-red-500"/>
-      </Card>
+      <Alert title={t.errorTitle} description={state.error} color="danger" icon="warning"/>
     )}
   </VStack>
 </Page>

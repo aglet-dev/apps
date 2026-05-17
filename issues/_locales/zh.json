@@ -1,0 +1,39 @@
+{
+  "cardNew": "新建 Issue",
+  "labelTitle": "标题",
+  "titlePlaceholder": "简述问题",
+  "labelStatus": "状态",
+  "statusPlaceholder": "状态",
+  "labelPriority": "优先级",
+  "priorityPlaceholder": "优先级",
+  "labelTags": "标签",
+  "tagsPlaceholder": "标签（逗号分隔，可选）",
+
+  "statusOpen": "待处理",
+  "statusInProgress": "进行中",
+  "statusClosed": "已关闭",
+  "priorityHigh": "高",
+  "priorityMedium": "中",
+  "priorityLow": "低",
+  "filterAll": "全部",
+
+  "btnCreate": "创建",
+  "btnFilter": "筛选",
+  "filterDesc": "按状态 / 优先级过滤；空 = 全部",
+
+  "createdToast": "Issue 已创建",
+
+  "sectionAll": "全部 Issues",
+  "emptyList": "还没有 Issue",
+
+  "colTitle": "标题",
+  "colStatus": "状态",
+  "colPriority": "优先级",
+  "colTags": "标签",
+
+  "menuSetOpen": "设为待处理",
+  "menuStart": "开始处理",
+  "menuClose": "关闭",
+  "menuDelete": "删除",
+  "confirmDeleteTitle": "删除该 Issue？"
+}

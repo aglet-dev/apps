@@ -1,24 +1,24 @@
 <Page>
-  <Tabs defaultValue="now" position="bottom">
-    <Tab value="now" label="生成" icon="sparkle">
+  <Tabs id="main" defaultValue="now" position="bottom">
+    <Tab value="now" label={t.tabNow} icon="sparkle">
       <DataForm collection="scratch">
-        <Input name="name" label="" placeholder="商品名（必填）"/>
-        <Textarea name="selling_points" label="" rows={3}
-          placeholder="卖点 / 功能 / 差异点（一行一条）"/>
+        <Input name="name" label={t.labelName} placeholder={t.namePlaceholder}/>
+        <Textarea name="selling_points" label={t.labelSellingPoints} rows={3}
+          placeholder={t.sellingPointsPlaceholder}/>
         <HStack gap={6}>
-          <Input name="audience" label="" placeholder="目标受众"/>
-          <Input name="platform" label="" placeholder="平台"/>
+          <Input name="audience" label={t.labelAudience} placeholder={t.audiencePlaceholder}/>
+          <Input name="platform" label={t.labelPlatform} placeholder={t.platformPlaceholder}/>
         </HStack>
-        <Select name="tone" placeholder="语调">
-          <Option value="professional" label="专业"/>
-          <Option value="playful" label="活泼"/>
-          <Option value="minimal" label="简洁"/>
-          <Option value="story" label="故事化"/>
+        <Select name="tone" label={t.labelTone} placeholder={t.tonePlaceholder}>
+          <Option value="professional" label={t.toneProfessional}/>
+          <Option value="playful" label={t.tonePlayful}/>
+          <Option value="minimal" label={t.toneMinimal}/>
+          <Option value="story" label={t.toneStory}/>
         </Select>
         <HStack justify="end" gap={6}>
-          <Button label="清空" icon="x"
+          <Button label={t.btnClear} icon="x" size="sm"
             onClick={() => scripts.clear()}/>
-          <Button label="生成 3 条" color="primary" icon="sparkle"
+          <Button label={t.btnGenerate} color="primary" icon="sparkle"
             disabled={!form.name}
             onClick={() => scripts.generate({
               name: form.name,
@@ -31,13 +31,11 @@
       </DataForm>
 
       {state.loading && (
-        <Text muted className="text-xs">生成中…</Text>
+        <Text muted className="text-xs">{t.loading}</Text>
       )}
 
       {state.error && (
-        <Card className="border border-red-500/40 bg-red-500/5">
-          <Text className="text-red-500 text-sm font-mono">{state.error}</Text>
-        </Card>
+        <Alert title={t.errorTitle} description={state.error} color="danger" icon="warning"/>
       )}
 
       {state.output && (
@@ -47,20 +45,20 @@
       )}
     </Tab>
 
-    <Tab value="history" label="历史" icon="clock-counter-clockwise">
+    <Tab value="history" label={t.tabHistory} icon="clock-counter-clockwise">
       <DataList
         collection="history"
         query={{ orderBy: [{ field: "created_at", direction: "desc" }], limit: 50 }}
       >
-        <Empty><EmptyState title="还没有生成记录" icon="clock"/></Empty>
+        <Empty><EmptyState title={t.emptyHistory} icon="clock"/></Empty>
         <Item>
           <Card>
             <VStack gap={4}>
               <HStack gap={6} justify="between">
                 <Heading level={3}>{item.name}</Heading>
-                {item.tone && <Text muted className="text-xs uppercase">{item.tone}</Text>}
+                {item.tone && <Badge content={item.tone} color="primary" icon="palette"/>}
               </HStack>
-              <HStack gap={6}>
+              <HStack gap={6} className="items-center">
                 {item.audience && <Text muted className="text-xs">{item.audience}</Text>}
                 {item.platform && <Text muted className="text-xs">#{item.platform}</Text>}
                 {item.created_at && <Text muted className="text-xs">{item.created_at | relative}</Text>}
@@ -68,7 +66,7 @@
               <Divider/>
               <Text className="text-sm whitespace-pre-wrap">{item.output}</Text>
               <HStack justify="end">
-                <Button label="删除" icon="trash" color="danger"
+                <Button label={t.btnDelete} icon="trash" color="danger" size="sm"
                   onClick={() => data.delete({ collection: "history", id: item.id })}/>
               </HStack>
             </VStack>

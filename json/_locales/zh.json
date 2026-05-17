@@ -1,0 +1,10 @@
+{
+  "inputLabel": "输入",
+  "inputPlaceholder": "在这里粘贴 JSON…",
+  "btnFormat": "格式化",
+  "btnMinify": "压缩",
+  "btnValidate": "校验",
+  "btnClear": "清空",
+  "outputTitle": "输出",
+  "errorTitle": "错误"
+}

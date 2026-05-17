@@ -1,0 +1,20 @@
+{
+  "secPinned": "📌 ピン留め",
+  "secPreference": "🧭 preference — 協働の好み",
+  "secFact": "📌 fact — プロジェクトの事実",
+  "secDecision": "✓ decision — 決定事項",
+  "secNote": "📝 note — その他",
+
+  "emptyPinned": "ピン留めのメモリはありません",
+  "emptyPreference": "preference のメモリはありません",
+  "emptyFact": "fact のメモリはありません",
+  "emptyDecision": "decision のメモリはありません",
+  "emptyNote": "note のメモリはありません",
+
+  "menuUnpin": "ピン留め解除",
+  "menuPin": "ピン留め",
+  "menuForget": "忘れる",
+
+  "confirmForgetTitle": "このメモリを永久に削除？",
+  "confirmForgetDesc": "元に戻せません。"
+}

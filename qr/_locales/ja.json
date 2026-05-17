@@ -1,0 +1,9 @@
+{
+  "sectionEncode": "QR を生成",
+  "labelText": "テキスト",
+  "textPlaceholder": "エンコードする文字を入力…",
+  "btnEncode": "生成",
+  "sectionDecode": "QR をデコード（クリップボードの画像から）",
+  "btnPaste": "貼り付けてデコード",
+  "errorTitle": "エラー"
+}

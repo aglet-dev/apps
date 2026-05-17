@@ -1,0 +1,27 @@
+{
+  "tabNow": "生成",
+  "tabHistory": "履歴",
+
+  "labelName": "商品名",
+  "namePlaceholder": "商品名（必須）",
+  "labelSellingPoints": "セールスポイント",
+  "sellingPointsPlaceholder": "セールスポイント / 機能 / 差別化点（1 行 1 つ）",
+  "labelAudience": "ターゲット",
+  "audiencePlaceholder": "ターゲット層",
+  "labelPlatform": "プラットフォーム",
+  "platformPlaceholder": "プラットフォーム",
+  "labelTone": "トーン",
+  "tonePlaceholder": "トーン",
+  "toneProfessional": "プロフェッショナル",
+  "tonePlayful": "親しみやすい",
+  "toneMinimal": "簡潔",
+  "toneStory": "ストーリー",
+
+  "btnClear": "クリア",
+  "btnGenerate": "3 案生成",
+
+  "loading": "生成中…",
+  "errorTitle": "エラー",
+  "emptyHistory": "履歴はありません",
+  "btnDelete": "削除"
+}

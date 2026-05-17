@@ -1,0 +1,24 @@
+{
+  "tabReview": "復習",
+  "tabAll": "全部",
+  "tabAdd": "追加",
+
+  "emptyReviewTitle": "今日復習するカードはありません",
+  "emptyReviewDesc": "「追加」タブからカードを登録してください",
+  "emptyAllTitle": "まだカードがありません",
+
+  "btnAgain": "もう一度",
+  "btnGotIt": "覚えた",
+  "btnReset": "リセット",
+  "btnDelete": "削除",
+  "btnAdd": "追加",
+
+  "labelFront": "表面",
+  "frontPlaceholder": "漢字 / かな",
+  "labelReading": "読み方",
+  "readingPlaceholder": "任意の読み",
+  "labelBack": "意味",
+  "backPlaceholder": "意味 / 例文",
+
+  "levelTag": "レベル"
+}

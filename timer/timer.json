@@ -17,8 +17,20 @@
     "state": {
       "seconds": 60,
       "remaining": 60,
-      "running": false
+      "display": "1:00",
+      "preset": "1m",
+      "running": false,
+      "done": false
     },
+    "timers": [
+      {
+        "id": "tick",
+        "ms": 1000,
+        "scripts": "tick",
+        "while": "/state/running",
+        "stop_when": "/state/done"
+      }
+    ],
     "keys": {
       "Enter":  "toggle",
       " ":      "toggle",

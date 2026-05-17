@@ -1,0 +1,20 @@
+{
+  "secPinned": "📌 已固定",
+  "secPreference": "🧭 preference — 协作偏好",
+  "secFact": "📌 fact — 项目事实",
+  "secDecision": "✓ decision — 决定",
+  "secNote": "📝 note — 其它",
+
+  "emptyPinned": "还没有固定的记忆",
+  "emptyPreference": "还没有 preference 记忆",
+  "emptyFact": "还没有 fact 记忆",
+  "emptyDecision": "还没有 decision 记忆",
+  "emptyNote": "还没有 note 记忆",
+
+  "menuUnpin": "取消固定",
+  "menuPin": "固定",
+  "menuForget": "忘记",
+
+  "confirmForgetTitle": "永久忘记这条记忆？",
+  "confirmForgetDesc": "无法恢复。"
+}

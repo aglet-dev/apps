@@ -1,0 +1,33 @@
+{
+  "tabTodo": "ToDo",
+  "tabDoing": "進行中",
+  "tabDone": "完了",
+
+  "labelTitle": "タイトル",
+  "titlePlaceholder": "タスク名",
+  "labelPriority": "優先度",
+  "priorityPlaceholder": "優先度",
+  "priorityHigh": "高",
+  "priorityMed": "中",
+  "priorityLow": "低",
+  "labelProject": "プロジェクト",
+  "projectPlaceholder": "プロジェクト（任意）",
+  "labelDue": "期限",
+  "duePlaceholder": "YYYY-MM-DD HH:MM（任意）",
+  "labelNotes": "メモ",
+  "notesPlaceholder": "メモ（任意）",
+
+  "btnAdd": "追加",
+  "btnStart": "開始",
+  "btnComplete": "完了",
+  "btnPause": "一時停止",
+  "btnUndo": "戻す",
+  "btnDelete": "削除",
+
+  "emptyTodo": "ToDo は空です",
+  "emptyDoing": "進行中のタスクはありません",
+  "emptyDone": "完了したタスクはありません",
+
+  "metaDue": "期限",
+  "metaCompleted": "完了"
+}

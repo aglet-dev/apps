@@ -1,0 +1,24 @@
+{
+  "tabReview": "Review",
+  "tabAll": "All",
+  "tabAdd": "Add",
+
+  "emptyReviewTitle": "Nothing to review",
+  "emptyReviewDesc": "Add cards in the Add tab",
+  "emptyAllTitle": "No cards yet",
+
+  "btnAgain": "Again",
+  "btnGotIt": "Got it",
+  "btnReset": "Reset",
+  "btnDelete": "Delete",
+  "btnAdd": "Add",
+
+  "labelFront": "Front",
+  "frontPlaceholder": "Kanji or kana",
+  "labelReading": "Reading",
+  "readingPlaceholder": "Optional reading",
+  "labelBack": "Definition",
+  "backPlaceholder": "Meaning / example",
+
+  "levelTag": "Level"
+}

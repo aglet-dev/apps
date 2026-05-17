@@ -1,0 +1,39 @@
+{
+  "cardNew": "New issue",
+  "labelTitle": "Title",
+  "titlePlaceholder": "Describe the issue",
+  "labelStatus": "Status",
+  "statusPlaceholder": "Status",
+  "labelPriority": "Priority",
+  "priorityPlaceholder": "Priority",
+  "labelTags": "Tags",
+  "tagsPlaceholder": "Tags (comma-separated, optional)",
+
+  "statusOpen": "Open",
+  "statusInProgress": "In progress",
+  "statusClosed": "Closed",
+  "priorityHigh": "High",
+  "priorityMedium": "Medium",
+  "priorityLow": "Low",
+  "filterAll": "All",
+
+  "btnCreate": "Create",
+  "btnFilter": "Filter",
+  "filterDesc": "By status / priority; empty = all",
+
+  "createdToast": "Issue created",
+
+  "sectionAll": "All issues",
+  "emptyList": "No issues yet",
+
+  "colTitle": "Title",
+  "colStatus": "Status",
+  "colPriority": "Priority",
+  "colTags": "Tags",
+
+  "menuSetOpen": "Set to Open",
+  "menuStart": "Start",
+  "menuClose": "Close",
+  "menuDelete": "Delete",
+  "confirmDeleteTitle": "Delete this issue?"
+}

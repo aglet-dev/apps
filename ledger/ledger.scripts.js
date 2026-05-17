@@ -40,7 +40,8 @@ export default {
     setState({
       month_income: income,
       month_expense: expense,
-      by_category: lines || "（本月无记录）",
+      // 空时由 UI 端按 locale 显示 t.summaryEmpty —— 不在脚本里硬编码语言
+      by_category: lines,
     });
   },
 };

@@ -1,0 +1,20 @@
+{
+  "sectionRates": "Exchange rates",
+  "rateNotFetched": "Not fetched — tap refresh",
+  "btnRefresh": "Refresh rates",
+
+  "sectionCalc": "Calculate",
+  "labelCost": "Cost",
+  "costPlaceholder": "Cost",
+  "labelPrice": "Price",
+  "pricePlaceholder": "Price",
+  "labelCcy": "Currency",
+  "ccyPlaceholder": "Currency",
+  "labelFees": "Fees",
+  "feesPlaceholder": "Platform fees % (optional)",
+  "btnClear": "Clear",
+  "btnCalc": "Calculate",
+
+  "loading": "Loading…",
+  "errorTitle": "Error"
+}

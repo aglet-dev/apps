@@ -1,0 +1,10 @@
+{
+  "inputLabel": "入力",
+  "inputPlaceholder": "JSON をここに貼り付け…",
+  "btnFormat": "整形",
+  "btnMinify": "圧縮",
+  "btnValidate": "検証",
+  "btnClear": "クリア",
+  "outputTitle": "出力",
+  "errorTitle": "エラー"
+}

@@ -1,0 +1,20 @@
+{
+  "sectionRates": "汇率",
+  "rateNotFetched": "未拉取，先点 ↻",
+  "btnRefresh": "刷新汇率",
+
+  "sectionCalc": "计算",
+  "labelCost": "成本",
+  "costPlaceholder": "成本",
+  "labelPrice": "售价",
+  "pricePlaceholder": "售价",
+  "labelCcy": "币种",
+  "ccyPlaceholder": "币种",
+  "labelFees": "手续费",
+  "feesPlaceholder": "平台手续费 %（可选）",
+  "btnClear": "清空",
+  "btnCalc": "计算",
+
+  "loading": "拉取中…",
+  "errorTitle": "错误"
+}

@@ -1,0 +1,27 @@
+{
+  "tabInbox": "收件箱",
+  "tabArchive": "归档",
+
+  "cardNew": "新建",
+  "labelTitle": "标题",
+  "titlePlaceholder": "想到什么就记下来…",
+  "labelTag": "标签",
+  "tagPlaceholder": "标签（输入查找）",
+  "tagIdea": "💡 灵感",
+  "tagTodo": "✅ 待办",
+  "tagLink": "🔗 链接",
+
+  "btnAdd": "添加",
+  "btnArchive": "归档",
+  "btnRestore": "恢复",
+  "btnDelete": "删除",
+
+  "sectionUnarchived": "未归档",
+  "sectionArchived": "已归档",
+
+  "emptyInbox": "收件箱为空",
+  "emptyArchive": "归档为空",
+
+  "confirmDeleteTitle": "删除这条记录？",
+  "confirmDeleteDesc": "无法恢复。"
+}

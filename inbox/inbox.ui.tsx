@@ -1,17 +1,17 @@
 <Page>
-  <Tabs defaultValue="inbox" position="bottom">
-    <Tab value="inbox" label="收件箱" icon="tray">
-      <Card title="新建">
+  <Tabs id="main" defaultValue="inbox" position="bottom">
+    <Tab value="inbox" label={t.tabInbox} icon="tray">
+      <Card title={t.cardNew}>
         <DataForm collection="notes">
-          <Input name="title" label="" placeholder="想到什么就记下来…"/>
-          <Combobox name="tag" label="" placeholder="标签（输入查找）">
-            <Option value="idea" label="💡 灵感"/>
-            <Option value="todo" label="✅ 待办"/>
-            <Option value="link" label="🔗 链接"/>
+          <Input name="title" label={t.labelTitle} placeholder={t.titlePlaceholder}/>
+          <Combobox name="tag" label={t.labelTag} placeholder={t.tagPlaceholder}>
+            <Option value="idea" label={t.tagIdea}/>
+            <Option value="todo" label={t.tagTodo}/>
+            <Option value="link" label={t.tagLink}/>
           </Combobox>
           <HStack justify="end">
             <Button
-              label="添加"
+              label={t.btnAdd}
               color="primary"
               leftIcon="plus"
               disabled={!form.title}
@@ -29,7 +29,7 @@
         </DataForm>
       </Card>
 
-      <Section title="未归档">
+      <Section title={t.sectionUnarchived}>
         <DataList
           collection="notes"
           query={{
@@ -37,7 +37,7 @@
             orderBy: [{ field: "created_at", direction: "desc" }],
           }}
         >
-          <Empty><EmptyState title="收件箱为空" icon="check-circle"/></Empty>
+          <Empty><EmptyState title={t.emptyInbox} icon="check-circle"/></Empty>
           <Item>
             <Card>
               <HStack justify="between" gap={8}>
@@ -46,7 +46,7 @@
                   {item.tag && <Tag label={item.tag} color="primary"/>}
                 </VStack>
                 <Button
-                  label="归档"
+                  label={t.btnArchive}
                   leftIcon="archive"
                   onClick={() => data.update({
                     collection: "notes",
@@ -61,25 +61,26 @@
       </Section>
     </Tab>
 
-    <Tab value="archive" label="归档" icon="archive">
-      <Section title="已归档">
+    <Tab value="archive" label={t.tabArchive} icon="archive">
+      <Section title={t.sectionArchived}>
         <DataList
           collection="notes"
           query={{ where: { archived: true }, orderBy: [{ field: "created_at", direction: "desc" }] }}
         >
-          <Empty><EmptyState title="归档为空"/></Empty>
+          <Empty><EmptyState title={t.emptyArchive}/></Empty>
           <Item>
             <Card>
               <HStack justify="between" gap={8}>
                 <VStack gap={4}>
-                  <Text muted>✓ {item.title}</Text>
+                  <Text muted className="line-through">{item.title}</Text>
                   {item.tag && <Tag label={item.tag} color="default"/>}
                 </VStack>
                 <HStack gap={4}>
                   <Button
-                    label="恢复"
+                    label={t.btnRestore}
                     color="primary"
                     leftIcon="arrow-counter-clockwise"
+                    size="sm"
                     onClick={() => data.update({
                       collection: "notes",
                       id: item.id,
@@ -87,12 +88,13 @@
                     })}
                   />
                   <Button
-                    label="删除"
+                    label={t.btnDelete}
                     color="danger"
                     leftIcon="trash"
+                    size="sm"
                     onClick={() => app.confirm({
-                      title: "删除这条记录？",
-                      description: "无法恢复。",
+                      title: t.confirmDeleteTitle,
+                      description: t.confirmDeleteDesc,
                       color: "danger",
                       onConfirm: () => data.delete({ collection: "notes", id: item.id }),
                     })}

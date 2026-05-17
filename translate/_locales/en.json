@@ -1,0 +1,17 @@
+{
+  "tabNow": "Translate",
+  "tabHistory": "History",
+
+  "labelTarget": "Target language",
+  "targetPlaceholder": "Target language",
+  "labelInput": "Source text",
+  "inputPlaceholder": "Paste text to translate",
+
+  "btnClear": "Clear",
+  "btnTranslate": "Translate",
+
+  "loading": "Translating…",
+  "errorTitle": "Error",
+  "emptyHistory": "No translations yet",
+  "btnDelete": "Delete"
+}

@@ -1,0 +1,29 @@
+{
+  "tabAdd": "记一笔",
+  "tabList": "流水",
+  "tabSummary": "汇总",
+
+  "kindLabel": "类型",
+  "kindExpense": "支出",
+  "kindIncome": "收入",
+  "amountLabel": "金额",
+  "amountPlaceholder": "0.00",
+  "categoryLabel": "分类",
+  "categoryPlaceholder": "餐饮 / 工资 / 交通…",
+  "noteLabel": "备注",
+  "notePlaceholder": "可选",
+  "dateLabel": "日期",
+  "datePlaceholder": "YYYY-MM-DD（默认今天）",
+
+  "btnRecord": "记账",
+  "btnDelete": "删除",
+  "btnRefresh": "刷新本月",
+
+  "emptyEntries": "还没有任何记录",
+
+  "summaryIncome": "本月收入",
+  "summaryExpense": "本月支出",
+  "summaryNet": "结余",
+  "summaryByCategory": "分类",
+  "summaryEmpty": "本月无记录"
+}

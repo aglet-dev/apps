@@ -1,0 +1,33 @@
+{
+  "tabTodo": "待办",
+  "tabDoing": "进行中",
+  "tabDone": "完成",
+
+  "labelTitle": "标题",
+  "titlePlaceholder": "任务标题",
+  "labelPriority": "优先级",
+  "priorityPlaceholder": "优先级",
+  "priorityHigh": "高",
+  "priorityMed": "中",
+  "priorityLow": "低",
+  "labelProject": "项目",
+  "projectPlaceholder": "项目（可选）",
+  "labelDue": "截止时间",
+  "duePlaceholder": "YYYY-MM-DD HH:MM（可选）",
+  "labelNotes": "备注",
+  "notesPlaceholder": "备注（可选）",
+
+  "btnAdd": "添加",
+  "btnStart": "开始",
+  "btnComplete": "完成",
+  "btnPause": "暂停",
+  "btnUndo": "撤销",
+  "btnDelete": "删除",
+
+  "emptyTodo": "待办空空如也",
+  "emptyDoing": "没有进行中的任务",
+  "emptyDone": "还没完成的任务",
+
+  "metaDue": "截止",
+  "metaCompleted": "完成"
+}

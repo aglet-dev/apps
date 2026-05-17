@@ -1,6 +1,6 @@
 <Page>
-  <Tabs defaultValue="feed" position="bottom">
-    <Tab value="feed" label="首页" icon="fire">
+  <Tabs id="main" defaultValue="feed" position="bottom">
+    <Tab value="feed" label={t.tabFeed} icon="fire">
       <DataList
         collection="stories"
         query={{
@@ -12,8 +12,8 @@
       >
         <Empty>
           <EmptyState
-            title="还没有内容"
-            description="让 Agent 拉一次 HN：「刷新一下 HN」"
+            title={t.emptyFeedTitle}
+            description={t.emptyFeedDesc}
             icon="newspaper"
           />
         </Empty>
@@ -21,7 +21,7 @@
           <Card>
             <VStack gap={6}>
               <HStack justify="between" gap={6}>
-                <Heading level={3}>{item.title_zh}</Heading>
+                <Heading level={3}>{item.title}</Heading>
                 <Badge content={item.points} color="warning" icon="fire"/>
               </HStack>
               <HStack gap="sm">
@@ -30,14 +30,14 @@
                   {item.domain} · {item.author} · {item.age} · 💬 {item.comments}
                 </Text>
               </HStack>
-              <Text>{item.summary_zh}</Text>
+              <Text>{item.summary}</Text>
               <HStack justify="end" gap={8}>
                 <Tooltip content={item.url}>
-                  <Link label="原文" icon="link" href={item.url}/>
+                  <Link label={t.btnSource} icon="link" href={item.url}/>
                 </Tooltip>
-                <Tooltip content="加入喜欢列表（首页隐藏屏蔽列表）">
+                <Tooltip content={t.tipLike}>
                   <Button
-                    label="喜欢"
+                    label={t.btnLike}
                     icon="heart"
                     pressed={item.liked}
                     onClick={() => data.update({
@@ -47,9 +47,9 @@
                     })}
                   />
                 </Tooltip>
-                <Tooltip content="不再在首页看到此条；可在「屏蔽」tab 恢复">
+                <Tooltip content={t.tipBlock}>
                   <Button
-                    label="屏蔽"
+                    label={t.btnBlock}
                     icon="prohibit"
                     color="danger"
                     onClick={() => data.update({
@@ -66,22 +66,22 @@
       </DataList>
     </Tab>
 
-    <Tab value="liked" label="喜欢" icon="heart">
+    <Tab value="liked" label={t.tabLiked} icon="heart">
       <DataList
         collection="stories"
         query={{ where: { liked: true }, orderBy: [{ field: "points", direction: "desc" }] }}
       >
-        <Empty><EmptyState title="还没有喜欢的内容" icon="heart-break"/></Empty>
+        <Empty><EmptyState title={t.emptyLikedTitle} icon="heart-break"/></Empty>
         <Item>
           <Card>
             <VStack gap={4}>
-              <Heading level={3}>{item.title_zh}</Heading>
-              <Text muted>{item.domain} · {item.points} 分</Text>
-              <Text>{item.summary_zh}</Text>
+              <Heading level={3}>{item.title}</Heading>
+              <Text muted>{item.domain} · {item.points} {t.points}</Text>
+              <Text>{item.summary}</Text>
               <HStack justify="end" gap={8}>
-                <Link label="原文" icon="link" href={item.url}/>
+                <Link label={t.btnSource} icon="link" href={item.url}/>
                 <Button
-                  label="取消喜欢"
+                  label={t.btnUnlike}
                   onClick={() => data.update({
                     collection: "stories", id: item.id, patch: { liked: false },
                   })}
@@ -93,18 +93,18 @@
       </DataList>
     </Tab>
 
-    <Tab value="blocked" label="屏蔽" icon="prohibit">
+    <Tab value="blocked" label={t.tabBlocked} icon="prohibit">
       <DataList collection="stories" query={{ where: { disliked: true } }}>
-        <Empty><EmptyState title="屏蔽列表为空"/></Empty>
+        <Empty><EmptyState title={t.emptyBlockedTitle}/></Empty>
         <Item>
           <Card>
             <HStack justify="between" gap={8}>
               <VStack gap={2}>
-                <Text muted>{item.title_zh}</Text>
+                <Text muted>{item.title}</Text>
                 <Text muted>{item.domain}</Text>
               </VStack>
               <Button
-                label="恢复"
+                label={t.btnRestore}
                 color="primary"
                 onClick={() => data.update({
                   collection: "stories", id: item.id, patch: { disliked: false },

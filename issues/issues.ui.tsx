@@ -1,23 +1,23 @@
 <Page title="Issues">
-  <Card title="新建 Issue">
+  <Card title={t.cardNew}>
     <DataForm collection="issues">
-      <Input name="title" label="标题" placeholder="简述问题"/>
+      <Input name="title" label={t.labelTitle} placeholder={t.titlePlaceholder}/>
       <HStack gap={6}>
-        <Select name="status" placeholder="状态">
-          <Option value="open" label="待处理"/>
-          <Option value="in_progress" label="进行中"/>
-          <Option value="closed" label="已关闭"/>
+        <Select name="status" label={t.labelStatus} placeholder={t.statusPlaceholder}>
+          <Option value="open" label={t.statusOpen}/>
+          <Option value="in_progress" label={t.statusInProgress}/>
+          <Option value="closed" label={t.statusClosed}/>
         </Select>
-        <Select name="priority" placeholder="优先级">
-          <Option value="high" label="高"/>
-          <Option value="medium" label="中"/>
-          <Option value="low" label="低"/>
+        <Select name="priority" label={t.labelPriority} placeholder={t.priorityPlaceholder}>
+          <Option value="high" label={t.priorityHigh}/>
+          <Option value="medium" label={t.priorityMedium}/>
+          <Option value="low" label={t.priorityLow}/>
         </Select>
       </HStack>
-      <Input name="tags" label="" placeholder="标签（逗号分隔，可选）"/>
+      <Input name="tags" label={t.labelTags} placeholder={t.tagsPlaceholder}/>
       <HStack justify="end">
         <Button
-          label="创建"
+          label={t.btnCreate}
           color="primary"
           leftIcon="plus"
           disabled={!form.title}
@@ -32,41 +32,41 @@
                 created_at: now,
               },
             });
-            app.toast({ title: "Issue 已创建", color: "success" });
+            app.toast({ title: t.createdToast, color: "success" });
           }}
         />
       </HStack>
     </DataForm>
   </Card>
 
-  <Section title="全部 Issues">
+  <Section title={t.sectionAll}>
     <HStack gap={6} justify="end">
-      <Drawer
-        title="筛选"
-        description="按状态 / 优先级过滤；空 = 全部"
+      <Drawer id="filters"
+        title={t.btnFilter}
+        description={t.filterDesc}
         side="right"
-        trigger={<Button label="筛选" leftIcon="funnel"/>}
+        trigger={<Button label={t.btnFilter} leftIcon="funnel"/>}
       >
-        <Heading level={3} content="状态"/>
+        <Heading level={3} content={t.labelStatus}/>
         <HStack gap={4}>
-          <Button label="全部" size="sm" pressed={!state.filterStatus}
+          <Button value="status_all" label={t.filterAll} size="sm" pressed={!state.filterStatus}
             onClick={() => setState("/state/filterStatus", "")}/>
-          <Button label="待处理" size="sm" pressed={state.filterStatus == "open"}
+          <Button value="status_open" label={t.statusOpen} size="sm" pressed={state.filterStatus == "open"}
             onClick={() => setState("/state/filterStatus", "open")}/>
-          <Button label="进行中" size="sm" pressed={state.filterStatus == "in_progress"}
+          <Button value="status_in_progress" label={t.statusInProgress} size="sm" pressed={state.filterStatus == "in_progress"}
             onClick={() => setState("/state/filterStatus", "in_progress")}/>
-          <Button label="已关闭" size="sm" pressed={state.filterStatus == "closed"}
+          <Button value="status_closed" label={t.statusClosed} size="sm" pressed={state.filterStatus == "closed"}
             onClick={() => setState("/state/filterStatus", "closed")}/>
         </HStack>
-        <Heading level={3} content="优先级"/>
+        <Heading level={3} content={t.labelPriority}/>
         <HStack gap={4}>
-          <Button label="全部" size="sm" pressed={!state.filterPriority}
+          <Button value="priority_all" label={t.filterAll} size="sm" pressed={!state.filterPriority}
             onClick={() => setState("/state/filterPriority", "")}/>
-          <Button label="高" size="sm" pressed={state.filterPriority == "high"}
+          <Button value="priority_high" label={t.priorityHigh} size="sm" pressed={state.filterPriority == "high"}
             onClick={() => setState("/state/filterPriority", "high")}/>
-          <Button label="中" size="sm" pressed={state.filterPriority == "medium"}
+          <Button value="priority_medium" label={t.priorityMedium} size="sm" pressed={state.filterPriority == "medium"}
             onClick={() => setState("/state/filterPriority", "medium")}/>
-          <Button label="低" size="sm" pressed={state.filterPriority == "low"}
+          <Button value="priority_low" label={t.priorityLow} size="sm" pressed={state.filterPriority == "low"}
             onClick={() => setState("/state/filterPriority", "low")}/>
         </HStack>
       </Drawer>
@@ -92,32 +92,32 @@
       }}
       paginate={{ pageSize: 10 }}
     >
-      <Empty><EmptyState title="还没有 Issue" icon="folder-open"/></Empty>
-      <Column key="title" label="标题"/>
-      <Column key="status" label="状态" align="center">
+      <Empty><EmptyState title={t.emptyList} icon="folder-open"/></Empty>
+      <Column key="title" label={t.colTitle}/>
+      <Column key="status" label={t.colStatus} align="center">
         <Badge content={item.status} color="primary"/>
       </Column>
-      <Column key="priority" label="优先级" align="center">
+      <Column key="priority" label={t.colPriority} align="center">
         <Tag label={item.priority} color="warning"/>
       </Column>
-      <Column key="tags" label="标签">
+      <Column key="tags" label={t.colTags}>
         {item.tags && <Text muted>#{item.tags}</Text>}
       </Column>
       <Column key="actions" label="" align="right">
-        <Menu trigger={<Button label="" leftIcon="dots-three-vertical" size="sm"/>}>
-          <MenuItem label="设为待处理" icon="circle-dashed"
+        <Menu id="actions" trigger={<Button label="" leftIcon="dots-three-vertical" size="sm"/>}>
+          <MenuItem value="set_open" label={t.menuSetOpen} icon="circle-dashed"
             disabled={item.status == "open"}
             onClick={() => data.update({ collection: "issues", id: item.id, patch: { status: "open" } })}/>
-          <MenuItem label="开始处理" icon="play"
+          <MenuItem value="start" label={t.menuStart} icon="play"
             disabled={item.status == "in_progress"}
             onClick={() => data.update({ collection: "issues", id: item.id, patch: { status: "in_progress" } })}/>
-          <MenuItem label="关闭" icon="check"
+          <MenuItem value="close" label={t.menuClose} icon="check"
             disabled={item.status == "closed"}
             onClick={() => data.update({ collection: "issues", id: item.id, patch: { status: "closed" } })}/>
           <MenuItem separator/>
-          <MenuItem label="删除" icon="trash" danger
+          <MenuItem value="delete" label={t.menuDelete} icon="trash" danger
             onClick={() => app.confirm({
-              title: "删除该 Issue？",
+              title: t.confirmDeleteTitle,
               color: "danger",
               onConfirm: () => data.delete({ collection: "issues", id: item.id }),
             })}/>

@@ -1,22 +1,22 @@
 <Page>
-  <Tabs defaultValue="todo" position="bottom">
-    <Tab value="todo" label="待办" icon="circle">
+  <Tabs id="main" defaultValue="todo" position="bottom">
+    <Tab value="todo" label={t.tabTodo} icon="circle">
       <Card>
         <DataForm collection="items">
-          <Input name="title" label="" placeholder="任务标题"/>
+          <Input name="title" label={t.labelTitle} placeholder={t.titlePlaceholder}/>
           <HStack gap={6}>
-            <Select name="priority" placeholder="优先级">
-              <Option value="high" label="高"/>
-              <Option value="med" label="中"/>
-              <Option value="low" label="低"/>
+            <Select name="priority" label={t.labelPriority} placeholder={t.priorityPlaceholder}>
+              <Option value="high" label={t.priorityHigh}/>
+              <Option value="med" label={t.priorityMed}/>
+              <Option value="low" label={t.priorityLow}/>
             </Select>
-            <Input name="project" label="" placeholder="项目（可选）"/>
+            <Input name="project" label={t.labelProject} placeholder={t.projectPlaceholder}/>
           </HStack>
-          <Input name="due_at" label="" placeholder="截止时间（可选）：YYYY-MM-DD HH:MM"/>
-          <Textarea name="notes" label="" placeholder="备注（可选）" rows={2}/>
+          <Input name="due_at" label={t.labelDue} placeholder={t.duePlaceholder}/>
+          <Textarea name="notes" label={t.labelNotes} placeholder={t.notesPlaceholder} rows={2}/>
           <HStack justify="end">
             <Button
-              label="添加"
+              label={t.btnAdd}
               color="primary"
               icon="plus"
               disabled={!form.title}
@@ -41,31 +41,33 @@
         collection="items"
         query={{ where: { status: "todo" }, orderBy: [{ field: "due_at", direction: "asc" }] }}
       >
-        <Empty><EmptyState title="待办空空如也" icon="check-circle"/></Empty>
+        <Empty><EmptyState title={t.emptyTodo} icon="check-circle"/></Empty>
         <Item>
           <Card>
             <HStack justify="between" gap={8}>
-              <VStack gap={4}>
-                <HStack gap={6}>
-                  {item.priority && <Text muted className="text-xs uppercase">{item.priority}</Text>}
+              <VStack gap={4} className="flex-1">
+                <HStack gap={6} className="items-center">
+                  {item.priority && <Badge content={item.priority} color="warning"/>}
                   {item.project && <Text muted className="text-xs">#{item.project}</Text>}
                 </HStack>
                 <Heading level={3}>{item.title}</Heading>
                 {item.notes && <Text muted className="text-xs">{item.notes}</Text>}
-                {item.due_at && <Text muted className="text-xs">截止 {item.due_at | relative}</Text>}
+                {item.due_at && <Text muted className="text-xs">{t.metaDue} {item.due_at | relative}</Text>}
               </VStack>
               <HStack gap={4}>
                 <Button
-                  label="开始"
+                  label={t.btnStart}
                   icon="play"
+                  size="sm"
                   onClick={() => data.update({
                     collection: "items", id: item.id, patch: { status: "doing" },
                   })}
                 />
                 <Button
-                  label="完成"
+                  label={t.btnComplete}
                   icon="check"
                   color="primary"
+                  size="sm"
                   onClick={() => data.update({
                     collection: "items", id: item.id, patch: { status: "done", completed_at: now },
                   })}
@@ -77,35 +79,37 @@
       </DataList>
     </Tab>
 
-    <Tab value="doing" label="进行中" icon="play-circle">
+    <Tab value="doing" label={t.tabDoing} icon="play-circle">
       <DataList
         collection="items"
         query={{ where: { status: "doing" }, orderBy: [{ field: "due_at", direction: "asc" }] }}
       >
-        <Empty><EmptyState title="没有进行中的任务" icon="coffee"/></Empty>
+        <Empty><EmptyState title={t.emptyDoing} icon="coffee"/></Empty>
         <Item>
           <Card>
             <HStack justify="between" gap={8}>
-              <VStack gap={4}>
-                <HStack gap={6}>
-                  {item.priority && <Text muted className="text-xs uppercase">{item.priority}</Text>}
+              <VStack gap={4} className="flex-1">
+                <HStack gap={6} className="items-center">
+                  {item.priority && <Badge content={item.priority} color="warning"/>}
                   {item.project && <Text muted className="text-xs">#{item.project}</Text>}
                 </HStack>
                 <Heading level={3}>{item.title}</Heading>
-                {item.due_at && <Text muted className="text-xs">截止 {item.due_at | relative}</Text>}
+                {item.due_at && <Text muted className="text-xs">{t.metaDue} {item.due_at | relative}</Text>}
               </VStack>
               <HStack gap={4}>
                 <Button
-                  label="暂停"
+                  label={t.btnPause}
                   icon="pause"
+                  size="sm"
                   onClick={() => data.update({
                     collection: "items", id: item.id, patch: { status: "todo" },
                   })}
                 />
                 <Button
-                  label="完成"
+                  label={t.btnComplete}
                   icon="check"
                   color="primary"
+                  size="sm"
                   onClick={() => data.update({
                     collection: "items", id: item.id, patch: { status: "done", completed_at: now },
                   })}
@@ -117,31 +121,36 @@
       </DataList>
     </Tab>
 
-    <Tab value="done" label="完成" icon="check-circle">
+    <Tab value="done" label={t.tabDone} icon="check-circle">
       <DataList
         collection="items"
         query={{ where: { status: "done" }, orderBy: [{ field: "completed_at", direction: "desc" }] }}
       >
-        <Empty><EmptyState title="还没完成的任务" icon="trophy"/></Empty>
+        <Empty><EmptyState title={t.emptyDone} icon="trophy"/></Empty>
         <Item>
           <Card>
             <HStack justify="between" gap={8}>
-              <VStack gap={4}>
-                <Text muted>✓ {item.title}</Text>
-                {item.completed_at && <Text muted className="text-xs">{item.completed_at | relative} 完成</Text>}
+              <VStack gap={4} className="flex-1">
+                <HStack gap={4} className="items-center">
+                  <Badge content="" color="success" icon="check"/>
+                  <Text muted className="line-through">{item.title}</Text>
+                </HStack>
+                {item.completed_at && <Text muted className="text-xs">{item.completed_at | relative}</Text>}
               </VStack>
               <HStack gap={4}>
                 <Button
-                  label="撤销"
+                  label={t.btnUndo}
                   icon="arrow-counter-clockwise"
+                  size="sm"
                   onClick={() => data.update({
                     collection: "items", id: item.id, patch: { status: "todo", completed_at: "" },
                   })}
                 />
                 <Button
-                  label="删除"
+                  label={t.btnDelete}
                   icon="trash"
                   color="danger"
+                  size="sm"
                   onClick={() => data.delete({ collection: "items", id: item.id })}
                 />
               </HStack>

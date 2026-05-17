@@ -1,0 +1,27 @@
+{
+  "cardNew": "New profile",
+  "labelName": "Name",
+  "namePlaceholder": "Ada Lovelace",
+  "labelAvatar": "Avatar URL",
+  "avatarPlaceholder": "https://…",
+  "labelBirthday": "Birthday",
+  "labelTheme": "Theme",
+  "themeLight": "Light",
+  "themeDark": "Dark",
+  "themeAuto": "Follow system",
+  "labelVolume": "Volume",
+  "labelBio": "Bio",
+  "bioPlaceholder": "Optional",
+
+  "btnSave": "Save",
+  "btnDelete": "Delete",
+
+  "savedToast": "Saved",
+
+  "sectionSaved": "Saved",
+  "emptyList": "No profiles yet",
+
+  "metaTheme": "Theme",
+  "confirmDeleteTitle": "Delete this profile?",
+  "confirmDeleteDesc": "Cannot be undone."
+}

@@ -1,0 +1,21 @@
+{
+  "tabFeed": "Feed",
+  "tabLiked": "Liked",
+  "tabBlocked": "Blocked",
+
+  "emptyFeedTitle": "No stories yet",
+  "emptyFeedDesc": "Ask the agent: \"refresh HN\"",
+  "emptyLikedTitle": "Nothing liked yet",
+  "emptyBlockedTitle": "Block list is empty",
+
+  "btnSource": "Source",
+  "btnLike": "Like",
+  "btnBlock": "Block",
+  "btnUnlike": "Unlike",
+  "btnRestore": "Restore",
+
+  "tipLike": "Add to favorites; blocked items hidden from feed",
+  "tipBlock": "Hide from feed; restore in Blocked tab",
+
+  "points": "points"
+}

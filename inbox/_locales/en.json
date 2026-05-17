@@ -1,0 +1,27 @@
+{
+  "tabInbox": "Inbox",
+  "tabArchive": "Archive",
+
+  "cardNew": "New",
+  "labelTitle": "Title",
+  "titlePlaceholder": "Capture something…",
+  "labelTag": "Tag",
+  "tagPlaceholder": "Tag (search)",
+  "tagIdea": "💡 Idea",
+  "tagTodo": "✅ Todo",
+  "tagLink": "🔗 Link",
+
+  "btnAdd": "Add",
+  "btnArchive": "Archive",
+  "btnRestore": "Restore",
+  "btnDelete": "Delete",
+
+  "sectionUnarchived": "Unarchived",
+  "sectionArchived": "Archived",
+
+  "emptyInbox": "Inbox is empty",
+  "emptyArchive": "No archived notes",
+
+  "confirmDeleteTitle": "Delete this note?",
+  "confirmDeleteDesc": "Cannot be undone."
+}

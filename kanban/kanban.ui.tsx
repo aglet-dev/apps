@@ -1,7 +1,7 @@
 <Page title="Kanban">
   <HStack justify="between" gap={6}>
     <Text muted>{t.intro}</Text>
-    <Drawer
+    <Drawer id="filters"
       title={t.filter}
       description={t.filterDesc}
       side="right"
@@ -41,7 +41,7 @@
     )}
   </HStack>
 
-  <Accordion defaultOpen={["new"]}>
+  <Accordion id="cards" defaultOpen={["new"]}>
     <AccordionItem value="new" header={t.newCard} icon="plus-circle">
       <DataForm collection="cards">
         <Input name="title" label="" placeholder={t.titlePh}/>
@@ -124,7 +124,7 @@
                   <Button label={t.start} size="sm" leftIcon="play"
                     onClick={() => data.update({ collection: "cards", id: item.id, patch: { status: "doing" } })}/>
                 </Tooltip>
-                <Menu trigger={<Button label="" leftIcon="dots-three-vertical" size="sm"/>}>
+                <Menu id="actions" trigger={<Button label="" leftIcon="dots-three-vertical" size="sm"/>}>
                   <MenuItem label={t.moveToDone} icon="check"
                     onClick={() => data.update({ collection: "cards", id: item.id, patch: { status: "done", completed_at: now } })}/>
                   <MenuItem separator/>
@@ -178,7 +178,7 @@
                   <Button label={t.finish} size="sm" color="primary" leftIcon="check"
                     onClick={() => data.update({ collection: "cards", id: item.id, patch: { status: "done", completed_at: now } })}/>
                 </Tooltip>
-                <Menu trigger={<Button label="" leftIcon="dots-three-vertical" size="sm"/>}>
+                <Menu id="actions" trigger={<Button label="" leftIcon="dots-three-vertical" size="sm"/>}>
                   <MenuItem label={t.moveToBacklog} icon="arrow-left"
                     onClick={() => data.update({ collection: "cards", id: item.id, patch: { status: "backlog" } })}/>
                   <MenuItem separator/>
@@ -222,7 +222,7 @@
                 {item.assignee && <Text muted>{t.by} {item.assignee}</Text>}
                 {item.completed_at && <Text muted>{item.completed_at | relative}</Text>}
               </VStack>
-              <Menu trigger={<Button label="" leftIcon="dots-three-vertical" size="sm"/>}>
+              <Menu id="actions" trigger={<Button label="" leftIcon="dots-three-vertical" size="sm"/>}>
                 <MenuItem label={t.reopen} icon="arrow-counter-clockwise"
                   onClick={() => data.update({ collection: "cards", id: item.id, patch: { status: "doing", completed_at: "" } })}/>
                 <MenuItem separator/>

@@ -1,0 +1,9 @@
+{
+  "sectionEncode": "生成 QR",
+  "labelText": "文字",
+  "textPlaceholder": "输入要编码的文字…",
+  "btnEncode": "生成",
+  "sectionDecode": "解码 QR（剪贴板里有 QR 图片）",
+  "btnPaste": "粘贴解码",
+  "errorTitle": "错误"
+}

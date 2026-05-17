@@ -1,0 +1,29 @@
+{
+  "tabAdd": "Add",
+  "tabList": "Entries",
+  "tabSummary": "Summary",
+
+  "kindLabel": "Kind",
+  "kindExpense": "Expense",
+  "kindIncome": "Income",
+  "amountLabel": "Amount",
+  "amountPlaceholder": "0.00",
+  "categoryLabel": "Category",
+  "categoryPlaceholder": "Food / Salary / Transport…",
+  "noteLabel": "Note",
+  "notePlaceholder": "Optional",
+  "dateLabel": "Date",
+  "datePlaceholder": "YYYY-MM-DD (defaults to today)",
+
+  "btnRecord": "Record",
+  "btnDelete": "Delete",
+  "btnRefresh": "Refresh month",
+
+  "emptyEntries": "No entries yet",
+
+  "summaryIncome": "Income",
+  "summaryExpense": "Expense",
+  "summaryNet": "Net",
+  "summaryByCategory": "By category",
+  "summaryEmpty": "No entries this month"
+}

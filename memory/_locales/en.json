@@ -1,0 +1,20 @@
+{
+  "secPinned": "📌 Pinned",
+  "secPreference": "🧭 preference — collaboration prefs",
+  "secFact": "📌 fact — project facts",
+  "secDecision": "✓ decision — decisions",
+  "secNote": "📝 note — other",
+
+  "emptyPinned": "No pinned memories",
+  "emptyPreference": "No preference memories",
+  "emptyFact": "No fact memories",
+  "emptyDecision": "No decision memories",
+  "emptyNote": "No note memories",
+
+  "menuUnpin": "Unpin",
+  "menuPin": "Pin",
+  "menuForget": "Forget",
+
+  "confirmForgetTitle": "Forget this memory permanently?",
+  "confirmForgetDesc": "Cannot be undone."
+}

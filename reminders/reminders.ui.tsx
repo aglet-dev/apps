@@ -1,14 +1,14 @@
 <Page>
-  <Tabs defaultValue="active" position="bottom">
-    <Tab value="active" label="待办" icon="list-checks">
+  <Tabs id="main" defaultValue="active" position="bottom">
+    <Tab value="active" label={t.tabActive} icon="list-checks">
       <Card>
         <DataForm collection="items">
-          <Input name="title" label="" placeholder="加一条提醒…"/>
-          <Textarea name="notes" label="" placeholder="备注（可选）" rows={2}/>
-          <Input name="due_at" label="" placeholder="截止时间（可选）：YYYY-MM-DD HH:MM"/>
+          <Input name="title" label={t.labelTitle} placeholder={t.titlePlaceholder}/>
+          <Textarea name="notes" label={t.labelNotes} placeholder={t.notesPlaceholder} rows={2}/>
+          <Input name="due_at" label={t.labelDue} placeholder={t.duePlaceholder}/>
           <HStack justify="end">
             <Button
-              label="添加"
+              label={t.btnAdd}
               color="primary"
               icon="plus"
               disabled={!form.title}
@@ -31,18 +31,23 @@
         collection="items"
         query={{ where: { completed: false }, orderBy: [{ field: "due_at", direction: "asc" }] }}
       >
-        <Empty><EmptyState title="清单空空如也" icon="check-circle"/></Empty>
+        <Empty><EmptyState title={t.emptyActive} icon="check-circle"/></Empty>
         <Item>
           <Card>
             <HStack justify="between" gap={8}>
-              <VStack gap={4}>
+              <VStack gap={4} className="flex-1">
                 <Heading level={3}>{item.title}</Heading>
-                {item.notes && <Text muted>{item.notes}</Text>}
-                {item.due_at && <Text muted>截止 {item.due_at | relative}</Text>}
+                {item.notes && <Text muted className="text-sm">{item.notes}</Text>}
+                {item.due_at && (
+                  <HStack gap={4} className="items-center">
+                    <Badge content={item.due_at | relative} color="warning" icon="clock"/>
+                  </HStack>
+                )}
               </VStack>
               <Button
-                label="完成"
+                label={t.btnComplete}
                 icon="check"
+                color="primary"
                 onClick={() => data.update({
                   collection: "items", id: item.id, patch: { completed: true, completed_at: now },
                 })}
@@ -53,31 +58,38 @@
       </DataList>
     </Tab>
 
-    <Tab value="done" label="完成" icon="check">
+    <Tab value="done" label={t.tabDone} icon="check">
       <DataList
         collection="items"
         query={{ where: { completed: true }, orderBy: [{ field: "completed_at", direction: "desc" }] }}
       >
-        <Empty><EmptyState title="还没有完成的提醒" icon="trophy"/></Empty>
+        <Empty><EmptyState title={t.emptyDone} icon="trophy"/></Empty>
         <Item>
           <Card>
             <HStack justify="between" gap={8}>
-              <VStack gap={4}>
-                <Text muted>✓ {item.title}</Text>
-                {item.completed_at && <Text muted>{item.completed_at | relative} 完成</Text>}
+              <VStack gap={4} className="flex-1">
+                <HStack gap={4} className="items-center">
+                  <Badge content={t.tagCompleted} color="success" icon="check"/>
+                  <Text muted className="line-through">{item.title}</Text>
+                </HStack>
+                {item.completed_at && (
+                  <Text muted className="text-xs">{item.completed_at | relative}</Text>
+                )}
               </VStack>
               <HStack gap={4}>
                 <Button
-                  label="撤销"
+                  label={t.btnUndo}
                   icon="arrow-counter-clockwise"
+                  size="sm"
                   onClick={() => data.update({
                     collection: "items", id: item.id, patch: { completed: false, completed_at: "" },
                   })}
                 />
                 <Button
-                  label="删除"
+                  label={t.btnDelete}
                   icon="trash"
                   color="danger"
+                  size="sm"
                   onClick={() => data.delete({ collection: "items", id: item.id })}
                 />
               </HStack>

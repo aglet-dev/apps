@@ -1,0 +1,17 @@
+{
+  "tabNow": "翻訳",
+  "tabHistory": "履歴",
+
+  "labelTarget": "対象言語",
+  "targetPlaceholder": "対象言語",
+  "labelInput": "原文",
+  "inputPlaceholder": "翻訳する文字を貼り付け",
+
+  "btnClear": "クリア",
+  "btnTranslate": "翻訳",
+
+  "loading": "翻訳中…",
+  "errorTitle": "エラー",
+  "emptyHistory": "翻訳履歴はありません",
+  "btnDelete": "削除"
+}

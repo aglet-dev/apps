@@ -1,0 +1,27 @@
+{
+  "tabNow": "Generate",
+  "tabHistory": "History",
+
+  "labelName": "Product",
+  "namePlaceholder": "Product name (required)",
+  "labelSellingPoints": "Selling points",
+  "sellingPointsPlaceholder": "Selling points / features / differentiators (one per line)",
+  "labelAudience": "Audience",
+  "audiencePlaceholder": "Target audience",
+  "labelPlatform": "Platform",
+  "platformPlaceholder": "Platform",
+  "labelTone": "Tone",
+  "tonePlaceholder": "Tone",
+  "toneProfessional": "Professional",
+  "tonePlayful": "Playful",
+  "toneMinimal": "Minimal",
+  "toneStory": "Story",
+
+  "btnClear": "Clear",
+  "btnGenerate": "Generate 3 copies",
+
+  "loading": "Generating…",
+  "errorTitle": "Error",
+  "emptyHistory": "No history yet",
+  "btnDelete": "Delete"
+}

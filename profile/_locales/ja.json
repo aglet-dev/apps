@@ -1,0 +1,27 @@
+{
+  "cardNew": "新規プロフィール",
+  "labelName": "名前",
+  "namePlaceholder": "Ada Lovelace",
+  "labelAvatar": "アバター URL",
+  "avatarPlaceholder": "https://…",
+  "labelBirthday": "誕生日",
+  "labelTheme": "テーマ",
+  "themeLight": "ライト",
+  "themeDark": "ダーク",
+  "themeAuto": "システムに従う",
+  "labelVolume": "音量",
+  "labelBio": "自己紹介",
+  "bioPlaceholder": "任意",
+
+  "btnSave": "保存",
+  "btnDelete": "削除",
+
+  "savedToast": "保存しました",
+
+  "sectionSaved": "保存済み",
+  "emptyList": "プロフィールはまだありません",
+
+  "metaTheme": "テーマ",
+  "confirmDeleteTitle": "このプロフィールを削除？",
+  "confirmDeleteDesc": "元に戻せません。"
+}

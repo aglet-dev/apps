@@ -1,0 +1,27 @@
+{
+  "cardNew": "新建资料",
+  "labelName": "姓名",
+  "namePlaceholder": "Ada Lovelace",
+  "labelAvatar": "头像 URL",
+  "avatarPlaceholder": "https://…",
+  "labelBirthday": "生日",
+  "labelTheme": "主题",
+  "themeLight": "浅色",
+  "themeDark": "深色",
+  "themeAuto": "跟随系统",
+  "labelVolume": "音量",
+  "labelBio": "自我介绍",
+  "bioPlaceholder": "可选",
+
+  "btnSave": "保存",
+  "btnDelete": "删除",
+
+  "savedToast": "已保存",
+
+  "sectionSaved": "已保存",
+  "emptyList": "还没有资料",
+
+  "metaTheme": "主题",
+  "confirmDeleteTitle": "删除该资料？",
+  "confirmDeleteDesc": "无法恢复。"
+}

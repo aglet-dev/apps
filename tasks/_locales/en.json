@@ -1,0 +1,33 @@
+{
+  "tabTodo": "Todo",
+  "tabDoing": "Doing",
+  "tabDone": "Done",
+
+  "labelTitle": "Title",
+  "titlePlaceholder": "Task title",
+  "labelPriority": "Priority",
+  "priorityPlaceholder": "Priority",
+  "priorityHigh": "High",
+  "priorityMed": "Medium",
+  "priorityLow": "Low",
+  "labelProject": "Project",
+  "projectPlaceholder": "Project (optional)",
+  "labelDue": "Due",
+  "duePlaceholder": "YYYY-MM-DD HH:MM (optional)",
+  "labelNotes": "Notes",
+  "notesPlaceholder": "Notes (optional)",
+
+  "btnAdd": "Add",
+  "btnStart": "Start",
+  "btnComplete": "Complete",
+  "btnPause": "Pause",
+  "btnUndo": "Undo",
+  "btnDelete": "Delete",
+
+  "emptyTodo": "Nothing to do",
+  "emptyDoing": "Nothing in progress",
+  "emptyDone": "No completed tasks yet",
+
+  "metaDue": "Due",
+  "metaCompleted": "completed"
+}

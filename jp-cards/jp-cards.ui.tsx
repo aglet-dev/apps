@@ -1,24 +1,31 @@
 <Page>
-  <Tabs defaultValue="review" position="bottom">
-    <Tab value="review" label="复习" icon="cards-three">
+  <Tabs id="main" defaultValue="review" position="bottom">
+    <Tab value="review" label={t.tabReview} icon="cards-three">
       <DataList
         collection="cards"
         query={{ where: { level: 0 }, orderBy: [{ field: "created_at", direction: "asc" }] }}
       >
-        <Empty><EmptyState title="今天没有要复习的卡" description="先到 添加 tab 录入" icon="check-circle"/></Empty>
+        <Empty>
+          <EmptyState
+            title={t.emptyReviewTitle}
+            description={t.emptyReviewDesc}
+            icon="check-circle"/>
+        </Empty>
         <Item>
           <Card>
             <VStack gap={6}>
-              <Heading level={1} className="text-3xl text-center">{item.front}</Heading>
-              {item.reading && <Text muted className="text-center text-sm">{item.reading}</Text>}
+              <VStack gap={2} className="items-center py-6">
+                <Heading level={1} className="text-4xl text-center">{item.front}</Heading>
+                {item.reading && <Text muted className="text-sm">{item.reading}</Text>}
+              </VStack>
               <Divider/>
-              <Text className="text-center whitespace-pre-wrap">{item.back}</Text>
+              <Text className="text-center whitespace-pre-wrap py-4">{item.back}</Text>
               <HStack justify="between" gap={8}>
-                <Button label="再来一遍" icon="arrow-counter-clockwise"
+                <Button label={t.btnAgain} icon="arrow-counter-clockwise"
                   onClick={() => data.update({
                     collection: "cards", id: item.id, patch: { level: 0 },
                   })}/>
-                <Button label="记得" color="primary" icon="check"
+                <Button label={t.btnGotIt} color="primary" icon="check"
                   onClick={() => data.update({
                     collection: "cards", id: item.id, patch: { level: 1, next_review: now },
                   })}/>
@@ -29,29 +36,30 @@
       </DataList>
     </Tab>
 
-    <Tab value="all" label="全部" icon="list">
+    <Tab value="all" label={t.tabAll} icon="list">
       <DataList
         collection="cards"
         query={{ orderBy: [{ field: "level", direction: "asc" }], limit: 200 }}
       >
-        <Empty><EmptyState title="还没有任何卡" icon="cards"/></Empty>
+        <Empty><EmptyState title={t.emptyAllTitle} icon="cards"/></Empty>
         <Item>
           <Card>
             <HStack justify="between" gap={8}>
-              <VStack gap={4}>
-                <HStack gap={6}>
+              <VStack gap={4} className="flex-1">
+                <HStack gap={6} className="items-center">
                   <Heading level={3}>{item.front}</Heading>
                   {item.reading && <Text muted className="text-xs">{item.reading}</Text>}
+                  <Badge content={item.level} color={item.level == 0 ? "warning" : "success"}
+                    icon={item.level == 0 ? "circle" : "check-circle"}/>
                 </HStack>
                 <Text muted className="text-xs whitespace-pre-wrap">{item.back}</Text>
-                <Text muted className="text-xs">level {item.level}</Text>
               </VStack>
               <HStack gap={4}>
-                <Button label="重置" icon="arrow-counter-clockwise"
+                <Button label={t.btnReset} icon="arrow-counter-clockwise" size="sm"
                   onClick={() => data.update({
                     collection: "cards", id: item.id, patch: { level: 0 },
                   })}/>
-                <Button label="删除" icon="trash" color="danger"
+                <Button label={t.btnDelete} icon="trash" color="danger" size="sm"
                   onClick={() => data.delete({ collection: "cards", id: item.id })}/>
               </HStack>
             </HStack>
@@ -60,15 +68,15 @@
       </DataList>
     </Tab>
 
-    <Tab value="add" label="添加" icon="plus">
+    <Tab value="add" label={t.tabAdd} icon="plus">
       <Card>
         <DataForm collection="cards">
-          <Input name="front" label="" placeholder="正面（汉字 / 假名）"/>
-          <Input name="reading" label="" placeholder="读法（可选）"/>
-          <Textarea name="back" label="" placeholder="背面（释义 / 例句）" rows={3}/>
+          <Input name="front" label={t.labelFront} placeholder={t.frontPlaceholder}/>
+          <Input name="reading" label={t.labelReading} placeholder={t.readingPlaceholder}/>
+          <Textarea name="back" label={t.labelBack} placeholder={t.backPlaceholder} rows={3}/>
           <HStack justify="end">
             <Button
-              label="添加"
+              label={t.btnAdd}
               color="primary"
               icon="plus"
               disabled={!form.front}

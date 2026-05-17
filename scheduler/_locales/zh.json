@@ -1,0 +1,17 @@
+{
+  "title": "调度器",
+  "subtitle": "所有 miniapp 的周期触发。toggle 关掉 = 跳过这一项。",
+  "emptyTitle": "还没有调度",
+  "emptyDesc": "先 `corelet scheduler install` 装 launchd plist，scheduler 会在下次 tick 自动发现已装的 background 脚本",
+
+  "tagEnabled": "启用",
+  "tagDisabled": "停用",
+
+  "metaEvery": "每",
+  "metaSeconds": "秒",
+  "metaNext": "下次",
+  "metaLast": "上次",
+
+  "btnEnable": "启用",
+  "btnRunNow": "立即执行"
+}

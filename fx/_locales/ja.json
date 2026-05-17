@@ -1,0 +1,20 @@
+{
+  "sectionRates": "為替レート",
+  "rateNotFetched": "未取得 — 更新ボタンをタップ",
+  "btnRefresh": "レート更新",
+
+  "sectionCalc": "計算",
+  "labelCost": "原価",
+  "costPlaceholder": "原価",
+  "labelPrice": "売価",
+  "pricePlaceholder": "売価",
+  "labelCcy": "通貨",
+  "ccyPlaceholder": "通貨",
+  "labelFees": "手数料",
+  "feesPlaceholder": "プラットフォーム手数料 %（任意）",
+  "btnClear": "クリア",
+  "btnCalc": "計算",
+
+  "loading": "取得中…",
+  "errorTitle": "エラー"
+}

@@ -1,0 +1,17 @@
+{
+  "tabReview": "Review",
+  "tabMine": "我的",
+  "tabAll": "全部",
+
+  "emptyReviewTitle": "没有等你 review 的 PR",
+  "emptyReviewDesc": "等下一轮 scheduler tick 刷新",
+  "emptyMineTitle": "你没有 open 状态的 PR",
+  "emptyAllTitle": "暂无 open PR",
+
+  "draftTag": "草稿",
+  "byAuthor": "作者",
+  "comments": "评论",
+
+  "btnOpenGithub": "在 GitHub 打开",
+  "btnView": "查看"
+}

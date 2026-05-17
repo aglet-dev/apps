@@ -1,0 +1,24 @@
+{
+  "tabReview": "复习",
+  "tabAll": "全部",
+  "tabAdd": "添加",
+
+  "emptyReviewTitle": "今天没有要复习的卡",
+  "emptyReviewDesc": "先到「添加」tab 录入",
+  "emptyAllTitle": "还没有任何卡",
+
+  "btnAgain": "再来一遍",
+  "btnGotIt": "记得",
+  "btnReset": "重置",
+  "btnDelete": "删除",
+  "btnAdd": "添加",
+
+  "labelFront": "正面",
+  "frontPlaceholder": "汉字 / 假名",
+  "labelReading": "读法",
+  "readingPlaceholder": "可选读法",
+  "labelBack": "释义",
+  "backPlaceholder": "释义 / 例句",
+
+  "levelTag": "级别"
+}

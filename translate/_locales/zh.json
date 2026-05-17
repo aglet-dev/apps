@@ -1,0 +1,17 @@
+{
+  "tabNow": "翻译",
+  "tabHistory": "历史",
+
+  "labelTarget": "目标语言",
+  "targetPlaceholder": "目标语言",
+  "labelInput": "原文",
+  "inputPlaceholder": "粘贴要翻译的文字",
+
+  "btnClear": "清空结果",
+  "btnTranslate": "翻译",
+
+  "loading": "翻译中…",
+  "errorTitle": "错误",
+  "emptyHistory": "还没有翻译记录",
+  "btnDelete": "删除"
+}

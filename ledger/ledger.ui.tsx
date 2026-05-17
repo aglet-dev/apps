@@ -1,19 +1,19 @@
 <Page>
-  <Tabs defaultValue="add" position="bottom">
-    <Tab value="add" label="记一笔" icon="plus-circle">
+  <Tabs id="main" defaultValue="add" position="bottom">
+    <Tab value="add" label={t.tabAdd} icon="plus-circle">
       <Card>
         <DataForm collection="entries">
-          <Select name="kind" placeholder="收支">
-            <Option value="expense" label="支出"/>
-            <Option value="income" label="收入"/>
+          <Select name="kind" label={t.kindLabel}>
+            <Option value="expense" label={t.kindExpense}/>
+            <Option value="income" label={t.kindIncome}/>
           </Select>
-          <Input name="amount" type="number" label="" placeholder="金额"/>
-          <Input name="category" label="" placeholder="分类（餐饮 / 工资 / 交通…）"/>
-          <Input name="note" label="" placeholder="备注（可选）"/>
-          <Input name="date" label="" placeholder="日期（YYYY-MM-DD，默认今天）"/>
+          <Input name="amount" type="number" label={t.amountLabel} placeholder={t.amountPlaceholder}/>
+          <Input name="category" label={t.categoryLabel} placeholder={t.categoryPlaceholder}/>
+          <Input name="note" label={t.noteLabel} placeholder={t.notePlaceholder}/>
+          <Input name="date" label={t.dateLabel} placeholder={t.datePlaceholder}/>
           <HStack justify="end">
             <Button
-              label="记账"
+              label={t.btnRecord}
               color="primary"
               icon="check"
               disabled={!form.amount}
@@ -33,26 +33,27 @@
       </Card>
     </Tab>
 
-    <Tab value="list" label="流水" icon="list">
+    <Tab value="list" label={t.tabList} icon="list">
       <DataList
         collection="entries"
         query={{ orderBy: [{ field: "date", direction: "desc" }], limit: 100 }}
       >
-        <Empty><EmptyState title="还没有任何记录" icon="wallet"/></Empty>
+        <Empty><EmptyState title={t.emptyEntries} icon="wallet"/></Empty>
         <Item>
           <Card>
             <HStack justify="between" gap={8}>
               <VStack gap={4}>
-                <HStack gap={6}>
-                  <Text muted className="text-xs uppercase">{item.kind}</Text>
+                <HStack gap={6} className="items-center">
+                  <Badge content={item.kind} color={item.kind == "income" ? "success" : "danger"}
+                    icon={item.kind == "income" ? "arrow-up-right" : "arrow-down-right"}/>
                   {item.category && <Text muted className="text-xs">#{item.category}</Text>}
                 </HStack>
-                <Heading level={3}>{item.amount}</Heading>
+                <Heading level={2} className="tabular-nums">{item.amount}</Heading>
                 {item.note && <Text muted className="text-xs">{item.note}</Text>}
                 {item.date && <Text muted className="text-xs">{item.date}</Text>}
               </VStack>
               <Button
-                label="删除"
+                label={t.btnDelete}
                 icon="trash"
                 color="danger"
                 onClick={() => data.delete({ collection: "entries", id: item.id })}
@@ -63,25 +64,37 @@
       </DataList>
     </Tab>
 
-    <Tab value="summary" label="汇总" icon="chart-pie">
-      <Card>
-        <HStack justify="end">
-          <Button label="刷新本月" color="primary" icon="arrow-clockwise"
-            onClick={() => scripts.refresh()}/>
-        </HStack>
-        <VStack gap={4}>
-          <Text>本月收入：{state.month_income}</Text>
-          <Text>本月支出：{state.month_expense}</Text>
-          <Text>结余：{state.month_income - state.month_expense}</Text>
+    <Tab value="summary" label={t.tabSummary} icon="chart-pie">
+      <HStack justify="end">
+        <Button label={t.btnRefresh} color="primary" icon="arrow-clockwise" size="sm"
+          onClick={() => scripts.refresh()}/>
+      </HStack>
+      <HStack gap={6} className="mt-4">
+        <Card className="flex-1">
+          <VStack gap={2}>
+            <Text muted className="text-xs uppercase">{t.summaryIncome}</Text>
+            <Heading level={1} className="tabular-nums text-emerald-600 dark:text-emerald-400">{state.month_income}</Heading>
+          </VStack>
+        </Card>
+        <Card className="flex-1">
+          <VStack gap={2}>
+            <Text muted className="text-xs uppercase">{t.summaryExpense}</Text>
+            <Heading level={1} className="tabular-nums text-rose-600 dark:text-rose-400">{state.month_expense}</Heading>
+          </VStack>
+        </Card>
+      </HStack>
+      <Card className="mt-4">
+        <VStack gap={2}>
+          <Text muted className="text-xs uppercase">{t.summaryNet}</Text>
+          <Heading level={1} className="tabular-nums">{state.month_income - state.month_expense}</Heading>
         </VStack>
       </Card>
 
-      {state.by_category && (
+      <Section title={t.summaryByCategory}>
         <Card>
-          <Heading level={3}>分类</Heading>
-          <Text className="font-mono text-xs whitespace-pre-wrap">{state.by_category}</Text>
+          <Text className="font-mono text-xs whitespace-pre-wrap">{state.by_category || t.summaryEmpty}</Text>
         </Card>
-      )}
+      </Section>
     </Tab>
   </Tabs>
 </Page>

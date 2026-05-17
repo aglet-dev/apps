@@ -1,0 +1,27 @@
+{
+  "tabNow": "生成",
+  "tabHistory": "历史",
+
+  "labelName": "商品名",
+  "namePlaceholder": "商品名（必填）",
+  "labelSellingPoints": "卖点",
+  "sellingPointsPlaceholder": "卖点 / 功能 / 差异点（一行一条）",
+  "labelAudience": "受众",
+  "audiencePlaceholder": "目标受众",
+  "labelPlatform": "平台",
+  "platformPlaceholder": "平台",
+  "labelTone": "语调",
+  "tonePlaceholder": "语调",
+  "toneProfessional": "专业",
+  "tonePlayful": "活泼",
+  "toneMinimal": "简洁",
+  "toneStory": "故事化",
+
+  "btnClear": "清空",
+  "btnGenerate": "生成 3 条",
+
+  "loading": "生成中…",
+  "errorTitle": "错误",
+  "emptyHistory": "还没有生成记录",
+  "btnDelete": "删除"
+}

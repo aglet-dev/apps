@@ -1,0 +1,9 @@
+{
+  "sectionEncode": "Generate QR",
+  "labelText": "Text",
+  "textPlaceholder": "Enter text to encode…",
+  "btnEncode": "Generate",
+  "sectionDecode": "Decode QR (from clipboard image)",
+  "btnPaste": "Paste & decode",
+  "errorTitle": "Error"
+}
