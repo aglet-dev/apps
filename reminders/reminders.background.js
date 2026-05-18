@@ -22,7 +22,7 @@ function parseDue(s) {
   return isNaN(t) ? 0 : t;
 }
 
-const list = corelet.data.list(APP_ID, "items", {
+const list = aglet.data.list(APP_ID, "items", {
   where: { completed: false },
   limit: 500,
 });
@@ -41,13 +41,13 @@ for (const row of list.items) {
     if (notifMs >= dueMs) { skipped++; continue; }
   }
   // 触发系统通知
-  corelet.bridge(APP_ID, "app.notify", {
+  aglet.bridge(APP_ID, "app.notify", {
     title: "⏰ " + d.title,
     body: d.notes || "到点了",
-    url: "corelet://reminders/",
+    url: "aglet://reminders/",
   });
   // 标记 notified_at 防重复
-  corelet.data.update(APP_ID, "items", row.id, { notified_at: nowIso });
+  aglet.data.update(APP_ID, "items", row.id, { notified_at: nowIso });
   notified++;
   fired.push({ id: row.id, title: d.title, due_at: d.due_at });
 }

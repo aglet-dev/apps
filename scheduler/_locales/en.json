@@ -2,7 +2,7 @@
   "title": "Scheduler",
   "subtitle": "Periodic triggers for all miniapps. Toggle off to skip an entry.",
   "emptyTitle": "No schedules yet",
-  "emptyDesc": "Run `corelet scheduler install` to add the launchd plist; scheduler will discover installed background scripts on next tick.",
+  "emptyDesc": "Run `aglet scheduler install` to add the launchd plist; scheduler will discover installed background scripts on next tick.",
 
   "tagEnabled": "Enabled",
   "tagDisabled": "Disabled",

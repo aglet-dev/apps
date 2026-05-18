@@ -51,7 +51,7 @@ for (const id of ids) {
   const item = JSON.parse(r.body);
   if (!item || item.type !== "story" || !item.title) continue;
 
-  const existing = corelet.data.list(APP_ID, "stories", {
+  const existing = aglet.data.list(APP_ID, "stories", {
     where: { hn_id: id },
     limit: 1,
   });
@@ -74,13 +74,13 @@ for (const id of ids) {
       const szh = llmcall(SUMMARY_SYSTEM, item.title);
       if (szh) patch.summary_zh = szh;
     }
-    corelet.data.update(APP_ID, "stories", ex.id, patch);
+    aglet.data.update(APP_ID, "stories", ex.id, patch);
     updated++;
   } else {
     const tzh = llmcall(TITLE_SYSTEM, item.title);
     const szh = llmcall(SUMMARY_SYSTEM, item.title);
     if (tzh) translated++;
-    corelet.data.create(APP_ID, "stories", {
+    aglet.data.create(APP_ID, "stories", {
       hn_id: id,
       title_en: item.title,
       title_zh: tzh,

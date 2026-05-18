@@ -1,6 +1,6 @@
 [
-  { "collection": "items", "data": { "title": "Polish A 档 miniapp 文档", "priority": "high", "project": "corelet", "status": "doing", "created_at": "2026-05-16T08:00:00Z" } },
-  { "collection": "items", "data": { "title": "升级 web-runtime tailwind 4", "priority": "med", "project": "corelet", "status": "todo", "due_at": "2026-05-20 18:00", "created_at": "2026-05-16T08:10:00Z" } },
+  { "collection": "items", "data": { "title": "Polish A 档 miniapp 文档", "priority": "high", "project": "aglet", "status": "doing", "created_at": "2026-05-16T08:00:00Z" } },
+  { "collection": "items", "data": { "title": "升级 web-runtime tailwind 4", "priority": "med", "project": "aglet", "status": "todo", "due_at": "2026-05-20 18:00", "created_at": "2026-05-16T08:10:00Z" } },
   { "collection": "items", "data": { "title": "回 Alice 邮件", "priority": "low", "status": "todo", "created_at": "2026-05-16T09:00:00Z" } },
   { "collection": "items", "data": { "title": "买咖啡豆", "priority": "low", "status": "done", "created_at": "2026-05-15T10:00:00Z", "completed_at": "2026-05-15T18:00:00Z" } }
 ]

@@ -40,7 +40,7 @@ function ingest(pr, kind /* "review" | "mine" */) {
   let reviewed = kind === "review";
   let authored = kind === "mine";
 
-  const existing = corelet.data.list(APP_ID, "prs", { where: { pr_id }, limit: 1 });
+  const existing = aglet.data.list(APP_ID, "prs", { where: { pr_id }, limit: 1 });
   if (existing.items.length > 0) {
     const ex = existing.items[0].data;
     if (ex.reviewed_by_me) reviewed = true;
@@ -64,10 +64,10 @@ function ingest(pr, kind /* "review" | "mine" */) {
   };
 
   if (existing.items.length > 0) {
-    corelet.data.update(APP_ID, "prs", existing.items[0].id, data);
+    aglet.data.update(APP_ID, "prs", existing.items[0].id, data);
     updated++;
   } else {
-    corelet.data.create(APP_ID, "prs", data);
+    aglet.data.create(APP_ID, "prs", data);
     added++;
   }
 }
@@ -76,10 +76,10 @@ for (const pr of reviews) ingest(pr, "review");
 for (const pr of mine)    ingest(pr, "mine");
 
 // 清理：上一轮存在但本轮 search 未命中（PR 关闭/合并/被 dismiss）→ 删
-const all = corelet.data.list(APP_ID, "prs", { limit: 500 });
+const all = aglet.data.list(APP_ID, "prs", { limit: 500 });
 for (const row of all.items) {
   if (!seen.has(row.data.pr_id)) {
-    corelet.data.delete(APP_ID, "prs", row.id);
+    aglet.data.delete(APP_ID, "prs", row.id);
     removed++;
   }
 }
