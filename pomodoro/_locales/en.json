@@ -1,0 +1,9 @@
+{
+  "phaseWork": "Focus",
+  "phaseBreak": "Break",
+  "cyclesDone": "Cycles",
+  "btnStart": "Start",
+  "btnPause": "Pause",
+  "btnReset": "Reset",
+  "btnSkip": "Skip phase"
+}
