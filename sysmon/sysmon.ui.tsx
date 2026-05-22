@@ -20,14 +20,16 @@
       <Text className="text-sm font-semibold tabular-nums">{{op:"state", path:"/state/mem_pct_text"}}</Text>
     </HStack>
 
-    {/* recent 历史小窗 —— sparkline 还没有，先用 tiny text row 替代（≤5 条） */}
+    {/* CPU sparkline —— Chart line mode 紧凑高度，最近 60 个点（≈ 60s @ 1Hz） */}
     <VStack gap={1} className="mt-2">
-      <Text className="text-xs uppercase tracking-wider text-zinc-400">Recent</Text>
-      <DataList collection="metrics">
-        <Item>
-          <Text className="text-xs tabular-nums text-zinc-500">CPU {{op:"bind_item", field:"cpu_pct"}}%</Text>
-        </Item>
-      </DataList>
+      <Text className="text-xs uppercase tracking-wider text-zinc-400">CPU history</Text>
+      <Chart collection="metrics"
+             query={{orderBy:[{field:"ts",direction:"asc"}], limit:60}}
+             xField="ts"
+             yField="cpu_pct"
+             kind="line"
+             sparkline={true}
+             height={36}/>
     </VStack>
   </VStack>
 </Page>
