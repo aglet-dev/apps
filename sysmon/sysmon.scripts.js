@@ -19,6 +19,11 @@ export default {
         mem_total: mem.total_bytes,
       },
     });
+    // iStat-style menubar live title (Phase 2)：CPU% 直接显示在 NSStatusItem。
+    // 非 menubar style 调用 host noop —— 跨 style 共用同份 scripts.js 安全。
+    await ctx.dispatch("window.setMenubarTitle", {
+      title: `CPU ${cpu.used_pct.toFixed(0)}%`,
+    });
   },
   // Phase C6 event-bus demo：sysinfo.cpu() 每次采样后 emit sysinfo.cpu_sampled，
   // 该 handler 被 plugin_events dispatcher 触发。**不可调 sysinfo.cpu** —— 否则
