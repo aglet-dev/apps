@@ -1,7 +1,8 @@
 <Page>
-  {/* <Tray> 多 statusItem：CPU / MEM 各一个 icon，click 共用此 popover (Phase A) */}
-  <Tray id="cpu" title={{op:"state", path:"/state/cpu_text"}} icon="cpu"/>
-  <Tray id="mem" title={{op:"state", path:"/state/mem_pct_text"}} icon="memorychip"/>
+  {/* 一个 aglet 最多一个 <Tray>（philosophy: multi-icon = multi-aglet）。
+      sysmon 想分 CPU/MEM 各自 menubar icon → 拆 sysmon-cpu / sysmon-mem 两个 aglet。
+      title 含 \n → host 自动渲多行 attributedTitle (10pt mono)。 */}
+  <Tray id="main" title={{op:"state", path:"/state/menubar_title"}} icon="cpu"/>
 
   <VStack gap={6} className="px-3 py-3 select-none">
 
