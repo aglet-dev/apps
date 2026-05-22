@@ -22,7 +22,14 @@
     "icon": "https://api.iconify.design/ph/fire-fill.svg?color=%23ff6600&width=256",
     "permissions": ["data:read", "data:write", "notifications:post"],
     "window": { "style": "phone", "width": 420, "height": 880 },
-    "background": { "js_path": "hn.background.js" },
+    "jobs": [
+      {
+        "id": "ingest",
+        "trigger": { "kind": "interval", "ms": 900000 },
+        "while": "always",
+        "handler": "ingest"
+      }
+    ],
     "collections": {
       "stories": {
         "schema": {
@@ -43,5 +50,6 @@
       }
     }
   },
-  "ui": "hn.ui.tsx"
+  "ui": "hn.ui.tsx",
+  "scripts": "hn.scripts.js"
 }

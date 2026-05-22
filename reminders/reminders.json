@@ -30,9 +30,14 @@
       "width": 380,
       "height": 640
     },
-    "background": {
-      "js_path": "reminders.background.js"
-    },
+    "jobs": [
+      {
+        "id": "due_scan",
+        "trigger": { "kind": "interval", "ms": 60000 },
+        "while": "always",
+        "handler": "dueScan"
+      }
+    ],
     "collections": {
       "items": {
         "schema": {
@@ -48,5 +53,6 @@
       }
     }
   },
-  "ui": "reminders.ui.tsx"
+  "ui": "reminders.ui.tsx",
+  "scripts": "reminders.scripts.js"
 }

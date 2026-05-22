@@ -31,9 +31,14 @@
       "width": 440,
       "height": 760
     },
-    "background": {
-      "js_path": "gh.background.js"
-    },
+    "jobs": [
+      {
+        "id": "ingest",
+        "trigger": { "kind": "interval", "ms": 900000 },
+        "while": "always",
+        "handler": "ingest"
+      }
+    ],
     "collections": {
       "prs": {
         "schema": {
@@ -55,5 +60,6 @@
       }
     }
   },
-  "ui": "gh.ui.tsx"
+  "ui": "gh.ui.tsx",
+  "scripts": "gh.scripts.js"
 }

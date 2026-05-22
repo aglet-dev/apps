@@ -22,7 +22,14 @@
     "icon": "https://api.iconify.design/ph/book-open-fill.svg?color=%231a73e8&width=256",
     "permissions": ["data:read", "data:write", "notifications:post"],
     "window": { "style": "phone", "width": 480, "height": 880 },
-    "background": { "js_path": "reader.background.js" },
+    "jobs": [
+      {
+        "id": "ingest",
+        "trigger": { "kind": "interval", "ms": 60000 },
+        "while": "always",
+        "handler": "ingest"
+      }
+    ],
     "collections": {
       "articles": {
         "schema": {
@@ -47,5 +54,6 @@
       "activeId": ""
     }
   },
-  "ui": "reader.ui.tsx"
+  "ui": "reader.ui.tsx",
+  "scripts": "reader.scripts.js"
 }
