@@ -20,4 +20,13 @@ export default {
       },
     });
   },
+  // Phase C6 event-bus demo：sysinfo.cpu() 每次采样后 emit sysinfo.cpu_sampled，
+  // 该 handler 被 plugin_events dispatcher 触发。**不可调 sysinfo.cpu** —— 否则
+  // emit → handler → emit 死循环。ctx.scope 携带 {event, source} 元信息。
+  async onCpuSampled(_, ctx) {
+    await ctx.dispatch("data.create", {
+      collection: "events",
+      data: { ts: Date.now(), event: ctx.scope.event || "" },
+    });
+  },
 };

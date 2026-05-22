@@ -33,6 +33,17 @@
             "type": "integer"
           }
         }
+      },
+      "events": {
+        "storage": "memory",
+        "schema": {
+          "ts": {
+            "type": "integer"
+          },
+          "event": {
+            "type": "string"
+          }
+        }
       }
     },
     "jobs": [
@@ -41,6 +52,12 @@
         "trigger": { "kind": "interval", "ms": 1000 },
         "while": "window_open",
         "handler": "collectMetrics"
+      },
+      {
+        "id": "on_cpu_tick",
+        "trigger": { "kind": "event", "event": "sysinfo.cpu_sampled" },
+        "while": "window_open",
+        "handler": "onCpuSampled"
       }
     ],
     "window": {
