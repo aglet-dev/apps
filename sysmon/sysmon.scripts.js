@@ -23,10 +23,11 @@ export default {
         mem_total: mem.total_bytes,
       },
     });
-    // iStat-style live title (Phase 2)：NSStatusItem 上显示 CPU%。
+    // iStat-style live title (Phase 2)：NSStatusItem 上双行显示 CPU/MEM。
+    // host 检 \n 自动切多行 attributedTitle（10pt mono + tight 行距）。
     // 非 menubar style 调用 host noop —— 跨 style 共用同份 scripts.js 安全。
     await ctx.dispatch("window.setMenubarTitle", {
-      title: `CPU ${cpuPct.toFixed(0)}%`,
+      title: `CPU ${cpuPct.toFixed(0)}%\nMEM ${memPct.toFixed(0)}%`,
     });
     // Phase 3：popover UI 紧凑行靠 state 绑定，setState 让上方 3 行 live 更新。
     // 无活窗口时 session_id=0，setState 自动 no-op（scripts.zig prelude 保护）。
