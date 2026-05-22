@@ -1,4 +1,8 @@
 <Page>
+  {/* <Tray> 多 statusItem：CPU / MEM 各一个 icon，click 共用此 popover (Phase A) */}
+  <Tray id="cpu" title={{op:"state", path:"/state/cpu_text"}} icon="cpu"/>
+  <Tray id="mem" title={{op:"state", path:"/state/mem_pct_text"}} icon="memorychip"/>
+
   <VStack gap={6} className="px-3 py-3 select-none">
 
     {/* iStat-style 紧凑行：左 label 右 value，tabular-nums 防数字抖动 */}
