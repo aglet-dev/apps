@@ -23,23 +23,16 @@ export default {
         mem_total: mem.total_bytes,
       },
     });
-    // iStat-style live title (Phase 2)：NSStatusItem 上双行显示 CPU/MEM。
-    // host 检 \n 自动切多行 attributedTitle（10pt mono + tight 行距）。
-    // 两条 path：
-    //   - window.setMenubarTitle bridge action → manifest.window.style="menubar"
-    //     创的主 statusItem (跟 main popover 绑)
-    //   - state.menubar_title → <Tray> title prop binding → Tray statusItem
-    // 两者都更新同样 title 字符串，让两个 statusItem (主+Tray) 一致。
-    // Phase 3：popover UI 紧凑行靠 state 绑定，setState 让上方 3 行 live 更新。
+    // Phase C：<TrayLabel> 内 <Text> 绑 state.menubar_title。setState 更新触发
+    // emitStateChanged event mirror → React re-render → Tray useEffect 检 title
+    // 变化 → dispatch tray.upsert → native NSStatusItem.button title 实时更新。
     // 无活窗口时 session_id=0，setState 自动 no-op（scripts.zig prelude 保护）。
-    const menubarTitle = `CPU ${cpuPct.toFixed(0)}%\nMEM ${memPct.toFixed(0)}%`;
     ctx.setState({
       cpu_text: `${cpuPct.toFixed(1)}%`,
       mem_text: `${memUsedGB.toFixed(1)} / ${memTotalGB.toFixed(1)} GB`,
       mem_pct_text: `${memPct.toFixed(0)}%`,
-      menubar_title: menubarTitle,
+      menubar_title: `CPU ${cpuPct.toFixed(0)}%\nMEM ${memPct.toFixed(0)}%`,
     });
-    await ctx.dispatch("window.setMenubarTitle", { title: menubarTitle });
   },
   // Phase C6 event-bus demo：sysinfo.cpu() 每次采样后 emit sysinfo.cpu_sampled，
   // 该 handler 被 plugin_events dispatcher 触发。**不可调 sysinfo.cpu** —— 否则

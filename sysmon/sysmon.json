@@ -62,8 +62,7 @@
     ],
     "window": {
       "width": 360,
-      "height": 280,
-      "style": "menubar"
+      "height": 280
     }
   },
   "ui": "sysmon.ui.tsx",
