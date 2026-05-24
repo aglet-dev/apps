@@ -1,0 +1,71 @@
+name: Publish
+
+# Trigger: tag push `<aglet>-v<version>` (e.g. reminders-v0.1.0)
+# 流程：aglet validate → aglet publish → 开 PR 到 agent-rt/aglet-registry/aglets/
+#
+# 复用 agent-rt org GH_DIST_TOKEN（aglet release.yml 同款），scope 含
+# aglet-registry contents:write + pull_requests:write。
+
+on:
+  push:
+    tags:
+      - '*-v*'
+  workflow_dispatch:
+    inputs:
+      app:
+        description: 'Aglet id (e.g. reminders)'
+        required: true
+      version:
+        description: 'Version (e.g. 0.1.0; from <id>.json manifest.version)'
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    name: Publish to registry
+    runs-on: macos-26
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Resolve aglet + version
+        id: target
+        run: |
+          set -e
+          if [ -n "${{ github.event.inputs.app }}" ]; then
+            APP="${{ github.event.inputs.app }}"
+            VERSION="${{ github.event.inputs.version }}"
+          else
+            TAG="${GITHUB_REF#refs/tags/}"
+            APP="${TAG%-v*}"
+            VERSION="${TAG##*-v}"
+          fi
+          manifest="$APP/$APP.json"
+          if [ ! -f "$manifest" ]; then
+            echo "✗ aglet '$APP' has no $manifest"; exit 1
+          fi
+          MANIFEST_VER=$(jq -r '.manifest.version // .version' "$manifest")
+          if [ "$MANIFEST_VER" != "$VERSION" ]; then
+            echo "✗ tag version $VERSION ≠ manifest.version $MANIFEST_VER"
+            exit 1
+          fi
+          echo "app=$APP"         >> "$GITHUB_OUTPUT"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Install aglet CLI
+        run: |
+          brew tap agent-rt/tap
+          brew install agent-rt/tap/aglet
+          aglet --version
+
+      - name: aglet publish
+        env:
+          GH_TOKEN: ${{ secrets.GH_DIST_TOKEN }}
+        run: |
+          set -e
+          gh auth setup-git
+          export AGLET_REGISTRY_URL="https://github.com/agent-rt/aglet-registry.git"
+          # 用户 aglet 走 `aglet publish` (aglets/<id>/<ver>.aglet)；
+          # 不要用 `aglet plugin publish` 那是 plugin 包路径。
+          aglet publish "${{ steps.target.outputs.app }}/${{ steps.target.outputs.app }}.json"

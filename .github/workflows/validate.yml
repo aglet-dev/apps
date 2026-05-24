@@ -1,0 +1,90 @@
+name: Validate
+
+# On PR / push to main：检测改动的 aglet 目录，跑 `aglet validate <app>.json`
+# 跟 `aglet pack ... --dry-run`。不 publish 任何东西。
+#
+# aglet CLI 来自 agent-rt/tap formula。
+
+on:
+  pull_request:
+    paths:
+      - "**/*.json"
+      - "**/*.scripts.js"
+      - "**/*.ui.tsx"
+      - "**/_locales/**"
+      - "**/screenshots/**"
+      - ".github/workflows/validate.yml"
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Validate aglets
+    runs-on: macos-26   # 跟 aglet 0.2.0 runner 对齐；formula 限 :macos + arm64
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Detect changed aglet dirs
+        id: changes
+        run: |
+          set -e
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            base="${{ github.event.pull_request.base.sha }}"
+            head="${{ github.event.pull_request.head.sha }}"
+          else
+            base="${{ github.event.before }}"
+            head="${{ github.sha }}"
+          fi
+          if [ "$base" = "0000000000000000000000000000000000000000" ] || [ -z "$base" ]; then
+            # 首次 / shallow → 列全部含 <id>.json 的目录
+            apps=$(for d in */; do
+              id="${d%/}"
+              [ -f "$id/$id.json" ] && echo "$id"
+            done | sort -u)
+          else
+            apps=$(git diff --name-only "$base" "$head" \
+              | awk -F/ 'NF>=2 && $1!=".github" { print $1 }' \
+              | sort -u \
+              | while read d; do [ -f "$d/$d.json" ] && echo "$d"; done)
+          fi
+          if [ -z "$apps" ]; then
+            echo "No aglet dirs touched; skipping."
+            echo "apps=" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          echo "To validate:"
+          printf '  %s\n' $apps
+          echo "apps<<EOF" >> "$GITHUB_OUTPUT"
+          printf '%s\n' $apps >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
+
+      - name: Install aglet CLI
+        if: steps.changes.outputs.apps != ''
+        run: |
+          brew tap agent-rt/tap
+          brew install agent-rt/tap/aglet
+          aglet --version
+
+      - name: Validate each aglet
+        if: steps.changes.outputs.apps != ''
+        env:
+          APPS: ${{ steps.changes.outputs.apps }}
+        run: |
+          set -euo pipefail
+          fail=0
+          for id in $APPS; do
+            echo "::group::validate $id"
+            manifest="$id/$id.json"
+            if [ ! -f "$manifest" ]; then
+              echo "(skip) $manifest missing"; echo "::endgroup::"; continue
+            fi
+            aglet validate "$manifest" || { fail=1; echo "✗ $id validate failed"; }
+            # pack --dry-run 顺带验整 tarball pipeline (TSX/CSS/IR)
+            aglet publish "$manifest" --dry-run --no-git --no-push --no-pr \
+              || { fail=1; echo "✗ $id pack failed"; }
+            echo "::endgroup::"
+          done
+          exit $fail
