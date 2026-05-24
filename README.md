@@ -1,76 +1,84 @@
 # aglet-apps
 
-Source repository for community-curated [aglet](https://github.com/agent-rt/aglet)
-miniapps. Each subdirectory is a self-contained miniapp; you can pack and
-install it locally, or publish to
-[aglet-registry](https://github.com/agent-rt/aglet-registry) so others
-can `aglet install <id>[@<version>]`.
+Source aglets for [Aglet](https://github.com/agent-rt/aglet) — small
+declarative apps that run inside the host. Each subdirectory packs into
+a `.aglet` tarball published to
+[aglet-registry](https://github.com/agent-rt/aglet-registry).
 
 ## Layout
 
 ```
 <id>/
-  <id>.json              # manifest (state / collections / permissions / metadata)
-  <id>.ui.tsx            # UI tree, TSX subset → JSON IR at install
-  <id>.background.js     # optional QuickJS background worker
+  <id>.json              # manifest
+  <id>.ui.tsx            # UI (TSX subset → JSON IR)
   <id>.scripts.js        # optional in-page scripts
-  _locales/              # optional i18n bundle (Chrome-ext-style)
-    en/messages.json
-    zh/messages.json
-  icon.png               # optional bundled icon (relative path in manifest)
+  <id>.background.js     # optional QuickJS worker (legacy; prefer manifest.jobs)
+  _locales/              # optional Chrome-ext-style i18n
+  icon.png               # optional bundled icon
   screenshots/           # optional bundled screenshots
-    1.png
 ```
 
-See [aglet/AGENTS.md](https://github.com/agent-rt/aglet/blob/main/AGENTS.md)
-or run `aglet agents-md` for the full authoring reference.
+See `aglet agents-md` for the authoring reference, or
+[aglet/AGENTS.md](https://github.com/agent-rt/aglet/blob/main/AGENTS.md).
 
-## Apps in this repo
-
-| id | description |
-|---|---|
-| calc | Simple calculator with state management |
-| gh | GitHub notifications inbox (uses `gh` CLI via background job) |
-| jira | Jira ticket viewer (a7n CLI integration) |
-| qr | QR scanner, in-page `scripts.js` calling Web APIs |
-| reminders | Local reminders with due-time notifications |
-| watch-demo | `manifest.watch` derived-state demo |
-
-## Local iteration
+## Local dev
 
 ```sh
 cd calc
-aglet validate calc.json --json     # check shape
-aglet build calc.json --emit ui     # inspect compiled IR
-aglet install calc.json              # persist to SQLite for the running Aglet.app
-aglet uninstall calc                 # cleanup
+aglet validate calc.json            # check shape
+aglet install calc.json             # install into running Aglet.app
+aglet uninstall calc
 ```
 
-## Publishing
+## Publish
+
+Tag `<id>-v<version>` and push; CI runs `aglet publish` against
+aglet-registry.
 
 ```sh
-aglet publish ./calc/calc.json --json
+git tag calc-v0.1.0
+git push --tags
 ```
 
-This packs to a `.aglet` tarball, computes sha256, clones (or syncs)
-[aglet-registry](https://github.com/agent-rt/aglet-registry), writes the
-artifact + `meta.json` / `index.json`, commits a `publish/<id>-<version>`
-branch, pushes, and opens a PR via `gh`. A maintainer reviews and merges;
-Cloudflare Pages auto-deploys; `aglet install <id>` works within ~30s of
-merge.
+`aglet publish --dry-run` shows what would be sent.
 
-See `aglet publish --help` for non-PR (`--no-pr`, `--dry-run`) modes.
+## Apps
 
-## Contributing a new app
+| id | description |
+|---|---|
+| `calc` | iOS-style calculator |
+| `copywriter` | LLM-generated product copy |
+| `footprint` | Visited places on a map |
+| `fx` | Currency conversion + landed-cost |
+| `gh` | GitHub review queue (uses `gh` CLI) |
+| `hn` | HackerNews reader with translation |
+| `img-convert` | Convert PNG/JPEG/WebP/BMP |
+| `inbox` | Quick capture + archive notebook |
+| `issues` | Lightweight issue tracker |
+| `jp-cards` | Japanese SRS flashcards |
+| `json` | Format / minify / validate JSON |
+| `kanban` | Backlog / In Progress / Done board |
+| `ledger` | Income + expense tracking |
+| `memory` | Agent long-term memory store |
+| `pomodoro` | 25/5 timer |
+| `profile` | Profile form (DatePicker/Slider/RadioGroup demo) |
+| `qr` | QR encode + decode |
+| `reader` | URL → markdown + AI summary |
+| `reminders` | Reminders with due-time notifications |
+| `sysmon-{cpu,mem,net}` | Menubar system monitors |
+| `tasks` | Task list with priority + project |
+| `timer` | Countdown timer |
+| `tip` | Tip + split calculator |
+| `translate` | LLM-powered translator |
+| `weight` | Daily weight log with chart |
 
-1. Fork this repo.
-2. Add `<id>/<id>.json` + `<id>/<id>.ui.tsx` (run `aglet new <id>` for a
-   skeleton).
-3. `aglet validate ./<id>/<id>.json` — must pass cleanly.
-4. Open PR with the new directory. Once merged, you (or a maintainer) can
-   run `aglet publish` against it to land in the binary registry.
+## Contributing
+
+1. Fork.
+2. Add `<id>/<id>.json` + `<id>/<id>.ui.tsx` (or `aglet new <id>` for a skeleton).
+3. `aglet validate ./<id>/<id>.json` must pass.
+4. Open PR. CI validates; a maintainer merges; tag to publish.
 
 ## License
 
-Each subdirectory carries its own `manifest.license` field. The repository
-itself is MIT.
+Each app declares its own `manifest.license`. The repo itself is MIT.
