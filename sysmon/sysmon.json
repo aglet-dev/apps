@@ -2,13 +2,13 @@
   "manifest": {
     "id": "sysmon",
     "name": "System Monitor",
-    "description": "OS CPU / memory / disk dogfood. Pulls host metrics from the `sysmon` stdio plugin (long-lived zig subprocess; macOS Mach API) at 1Hz and shows them in the menubar + a compact popover.",
-    "version": "0.2.0",
+    "description": "OS CPU / memory / disk dogfood. Subscribes to the `sysmon` stdio plugin's `cpu` resource — plugin pushes a sample every 1s, the host fans it out to `onCpuSample` via the plugin event bus. No polling.",
+    "version": "0.3.0",
     "runtime": "web",
     "requires": [
       {
         "plugin": "sysmon",
-        "version": ">=0.1"
+        "version": ">=0.2"
       }
     ],
     "permissions": [
@@ -37,10 +37,10 @@
     },
     "jobs": [
       {
-        "id": "collect",
-        "trigger": { "kind": "interval", "ms": 1000 },
-        "while": "window_open",
-        "handler": "collectMetrics"
+        "id": "on_cpu",
+        "trigger": { "kind": "event", "event": "sysmon.cpu" },
+        "while": "always",
+        "handler": "onCpuSample"
       }
     ],
     "window": {
