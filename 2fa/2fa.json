@@ -1,6 +1,6 @@
 {
   "manifest": {
-    "id": "totp",
+    "id": "2fa",
     "name": {
       "default": "2FA",
       "zh": "两步验证",
@@ -23,12 +23,17 @@
       {
         "plugin": "crypto",
         "version": ">=0.1.1"
+      },
+      {
+        "plugin": "encoding",
+        "version": ">=0.1.0"
       }
     ],
     "permissions": [
       "data:read",
       "data:write",
-      "crypto:hash"
+      "crypto:hash",
+      "encoding:decode"
     ],
     "window": {
       "style": "phone",
@@ -53,13 +58,12 @@
           "digits":      { "type": "number" },
           "period":      { "type": "number" },
           "created_at":  { "type": "string" },
-          "current_code":{ "type": "string" },
-          "remaining":   { "type": "number" }
+          "current_code":{ "type": "string" }
         },
         "indexes": ["issuer", "created_at"]
       }
     }
   },
-  "ui": "totp.ui.tsx",
-  "scripts": "totp.scripts.js"
+  "ui": "2fa.ui.tsx",
+  "scripts": "2fa.scripts.js"
 }

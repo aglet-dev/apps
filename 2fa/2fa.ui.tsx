@@ -3,7 +3,6 @@
     <VStack gap={6}>
       <Heading level={3}>{t.addTitle}</Heading>
       <Textarea
-        name="add_uri"
         bind="/state/add_uri"
         placeholder="otpauth://totp/GitHub:alice?secret=JBSW...&issuer=GitHub"
         rows={2}/>
@@ -37,9 +36,8 @@
             <Text className="text-2xl font-mono tabular-nums tracking-widest">{item.current_code}</Text>
           </VStack>
           <VStack gap={4} className="items-end">
-            <Badge content={item.remaining} color="primary" icon="clock"/>
+            <Badge content={$countdown(item.period)} color="primary" icon="clock"/>
             <Button
-              label=""
               icon="trash"
               variant="ghost"
               onClick={() => scripts.remove({ id: item.id })}/>
