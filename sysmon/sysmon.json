@@ -2,13 +2,13 @@
   "manifest": {
     "id": "sysmon",
     "name": "System Monitor",
-    "description": "OS CPU / memory dogfood for C1 memory storage + C2 sysinfo plugin + C7 declarative jobs",
-    "version": "0.1.0",
+    "description": "OS CPU / memory / disk dogfood. Pulls host metrics from the `sysmon` stdio plugin (long-lived zig subprocess; macOS Mach API) at 1Hz and shows them in the menubar + a compact popover.",
+    "version": "0.2.0",
     "runtime": "web",
     "requires": [
       {
-        "plugin": "sysinfo",
-        "version": ">=1.0"
+        "plugin": "sysmon",
+        "version": ">=0.1"
       }
     ],
     "permissions": [
@@ -33,17 +33,6 @@
             "type": "integer"
           }
         }
-      },
-      "events": {
-        "storage": "memory",
-        "schema": {
-          "ts": {
-            "type": "integer"
-          },
-          "event": {
-            "type": "string"
-          }
-        }
       }
     },
     "jobs": [
@@ -52,12 +41,6 @@
         "trigger": { "kind": "interval", "ms": 1000 },
         "while": "window_open",
         "handler": "collectMetrics"
-      },
-      {
-        "id": "on_cpu_tick",
-        "trigger": { "kind": "event", "event": "sysinfo.cpu_sampled" },
-        "while": "window_open",
-        "handler": "onCpuSampled"
       }
     ],
     "window": {

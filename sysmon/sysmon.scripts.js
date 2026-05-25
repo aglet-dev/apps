@@ -1,26 +1,26 @@
 // sysmon scripts.js —— scheduler-driven 单次采样
 //
-// 旧形态：Page onEnter 起 setInterval、onLeave clearInterval。
-// 新形态：manifest.jobs 声明 1Hz interval job + while:"window_open"
-//        → scheduler 自动按窗口存活态调用 collectMetrics 一次一条。
-// 好处：循环逻辑下沉到 runtime；Page UI 纯展示，不再持 timer 状态；
-//      while:"window_open" 让 background 时停采，省 CPU。
+// 1Hz interval job + while:"window_open" → scheduler 在窗口存活时调
+// collectMetrics 一次/秒；background 自动停采。
+//
+// 数据源走 `sysmon` stdio plugin（长寿命 zig 子进程，macOS Mach API、
+// 跨调用持 prior-tick CPU 状态）。一次 sysmon.snapshot 拿齐 cpu/memory/disk，
+// 比拆两次 cpu+memory call 省一次 IPC round-trip。
 
 export default {
   async collectMetrics(_, ctx) {
-    const cpu = await ctx.plugins.sysinfo.cpu();
-    const mem = await ctx.plugins.sysinfo.memory();
-    const cpuPct = cpu.used_pct;
-    const memUsedGB = mem.used_bytes / 1e9;
-    const memTotalGB = mem.total_bytes / 1e9;
-    const memPct = mem.total_bytes > 0 ? (mem.used_bytes / mem.total_bytes) * 100 : 0;
+    const snap = await ctx.plugins.sysmon.snapshot();
+    const cpuPct = snap.cpu.used_pct;
+    const memUsedGB = snap.memory.used_bytes / 1e9;
+    const memTotalGB = snap.memory.total_bytes / 1e9;
+    const memPct = snap.memory.used_pct;
     await ctx.dispatch("data.create", {
       collection: "metrics",
       data: {
         ts: Date.now(),
         cpu_pct: cpuPct,
-        mem_used: mem.used_bytes,
-        mem_total: mem.total_bytes,
+        mem_used: snap.memory.used_bytes,
+        mem_total: snap.memory.total_bytes,
       },
     });
     // Phase C：<TrayLabel> 内 <Text> 绑 state.menubar_title。setState 更新触发
@@ -32,15 +32,6 @@ export default {
       mem_text: `${memUsedGB.toFixed(1)} / ${memTotalGB.toFixed(1)} GB`,
       mem_pct_text: `${memPct.toFixed(0)}%`,
       menubar_title: `CPU ${cpuPct.toFixed(0)}%\nMEM ${memPct.toFixed(0)}%`,
-    });
-  },
-  // Phase C6 event-bus demo：sysinfo.cpu() 每次采样后 emit sysinfo.cpu_sampled，
-  // 该 handler 被 plugin_events dispatcher 触发。**不可调 sysinfo.cpu** —— 否则
-  // emit → handler → emit 死循环。ctx.scope 携带 {event, source} 元信息。
-  async onCpuSampled(_, ctx) {
-    await ctx.dispatch("data.create", {
-      collection: "events",
-      data: { ts: Date.now(), event: ctx.scope.event || "" },
     });
   },
 };
