@@ -1,0 +1,44 @@
+{
+  "manifest": {
+    "id": "tokstat",
+    "name": "Claude Usage",
+    "description": "Claude session + weekly usage in your menu bar. Subscribes to the `tokstat` stdio plugin's `sample` resource; the plugin spawns the `claude` CLI in a PTY every minute, sends `/usage`, and parses the rendered panel. v0.1 — Claude only.",
+    "version": "0.1.0",
+    "runtime": "web",
+    "requires": [
+      { "plugin": "tokstat", "version": ">=0.1" }
+    ],
+    "permissions": [
+      "data:read",
+      "data:write"
+    ],
+    "collections": {
+      "samples": {
+        "storage": "persistent",
+        "schema": {
+          "ts": { "type": "integer" },
+          "ok": { "type": "boolean" },
+          "session_pct": { "type": "integer" },
+          "weekly_pct": { "type": "integer" },
+          "session_resets_ms": { "type": "integer" },
+          "weekly_resets_ms": { "type": "integer" },
+          "total_cost_usd": { "type": "number" }
+        }
+      }
+    },
+    "jobs": [
+      {
+        "id": "on_sample",
+        "trigger": { "kind": "event", "event": "tokstat.sample" },
+        "while": "always",
+        "handler": "onSample"
+      }
+    ],
+    "window": {
+      "width": 320,
+      "height": 220
+    }
+  },
+  "ui": "tokstat.ui.tsx",
+  "scripts": "tokstat.scripts.js"
+}
