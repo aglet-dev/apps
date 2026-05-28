@@ -5,9 +5,9 @@
   </TrayLabel>
 
   <TrayPopover>
-    <VStack gap={10} className="px-3 py-3 select-none w-[280px]">
+    <VStack gap={12} className="px-3 py-3 select-none w-[320px]">
 
-      <VStack gap={4}>
+      <VStack gap={6}>
         <HStack className="items-center">
           <Text className="text-xs font-semibold uppercase tracking-wider">Claude</Text>
           <Spacer/>
@@ -19,7 +19,23 @@
             <Spacer/>
             <Text className="text-sm font-semibold tabular-nums">{{op:"state", path:"/state/claude_session_pct_text"}}</Text>
           </HStack>
-          <Text className="font-mono text-[11px] tracking-tight">{{op:"state", path:"/state/claude_session_bar"}}</Text>
+          <Chart
+            collection="samples"
+            query={{ where:{source:"claude"}, orderBy:[{field:"ts",direction:"asc"}], limit:60 }}
+            kind="bar"
+            xField="ts"
+            yField="session_pct"
+            yUnit="%"
+            yMin={0}
+            yMax={100}
+            baseline={0}
+            threshold={80}
+            thresholdColor="warning"
+            color="accent"
+            xFormat="relative"
+            height={36}
+            sparkline
+          />
           <Text className="text-[10px] text-zinc-500">resets {{op:"state", path:"/state/claude_session_reset_text"}}</Text>
         </VStack>
         <VStack gap={2}>
@@ -28,13 +44,29 @@
             <Spacer/>
             <Text className="text-sm font-semibold tabular-nums">{{op:"state", path:"/state/claude_weekly_pct_text"}}</Text>
           </HStack>
-          <Text className="font-mono text-[11px] tracking-tight">{{op:"state", path:"/state/claude_weekly_bar"}}</Text>
+          <Chart
+            collection="samples"
+            query={{ where:{source:"claude"}, orderBy:[{field:"ts",direction:"asc"}], limit:60 }}
+            kind="bar"
+            xField="ts"
+            yField="weekly_pct"
+            yUnit="%"
+            yMin={0}
+            yMax={100}
+            baseline={0}
+            threshold={80}
+            thresholdColor="warning"
+            color="accent"
+            xFormat="relative"
+            height={36}
+            sparkline
+          />
           <Text className="text-[10px] text-zinc-500">resets {{op:"state", path:"/state/claude_weekly_reset_text"}}</Text>
         </VStack>
         <Text className="text-[10px] text-amber-500">{{op:"state", path:"/state/claude_err"}}</Text>
       </VStack>
 
-      <VStack gap={4}>
+      <VStack gap={6}>
         <HStack className="items-center gap-2">
           <Text className="text-xs font-semibold uppercase tracking-wider">Codex</Text>
           <Text className="text-[10px] uppercase text-zinc-400">{{op:"state", path:"/state/codex_source_text"}}</Text>
@@ -48,7 +80,23 @@
             <Spacer/>
             <Text className="text-sm font-semibold tabular-nums">{{op:"state", path:"/state/codex_session_pct_text"}}</Text>
           </HStack>
-          <Text className="font-mono text-[11px] tracking-tight">{{op:"state", path:"/state/codex_session_bar"}}</Text>
+          <Chart
+            collection="samples"
+            query={{ where:{source:"codex"}, orderBy:[{field:"ts",direction:"asc"}], limit:60 }}
+            kind="bar"
+            xField="ts"
+            yField="session_pct"
+            yUnit="%"
+            yMin={0}
+            yMax={100}
+            baseline={0}
+            threshold={80}
+            thresholdColor="warning"
+            color="info"
+            xFormat="relative"
+            height={36}
+            sparkline
+          />
           <Text className="text-[10px] text-zinc-500">resets {{op:"state", path:"/state/codex_session_reset_text"}}</Text>
         </VStack>
         <VStack gap={2}>
@@ -57,7 +105,23 @@
             <Spacer/>
             <Text className="text-sm font-semibold tabular-nums">{{op:"state", path:"/state/codex_weekly_pct_text"}}</Text>
           </HStack>
-          <Text className="font-mono text-[11px] tracking-tight">{{op:"state", path:"/state/codex_weekly_bar"}}</Text>
+          <Chart
+            collection="samples"
+            query={{ where:{source:"codex"}, orderBy:[{field:"ts",direction:"asc"}], limit:60 }}
+            kind="bar"
+            xField="ts"
+            yField="weekly_pct"
+            yUnit="%"
+            yMin={0}
+            yMax={100}
+            baseline={0}
+            threshold={80}
+            thresholdColor="warning"
+            color="info"
+            xFormat="relative"
+            height={36}
+            sparkline
+          />
           <Text className="text-[10px] text-zinc-500">resets {{op:"state", path:"/state/codex_weekly_reset_text"}}</Text>
         </VStack>
         <Text className="text-[10px] text-amber-500">{{op:"state", path:"/state/codex_err"}}</Text>

@@ -8,12 +8,6 @@
 // Claude 走 PTY 起 CLI（昂贵）；codex 直接读 ~/.codex/sessions rollout JSONL
 // （便宜）。两边都不准时 emit ok=false + error 字段。
 
-function bar(pct, width = 16) {
-  if (typeof pct !== "number" || !isFinite(pct)) return "─".repeat(width);
-  const filled = Math.max(0, Math.min(width, Math.round((pct / 100) * width)));
-  return "█".repeat(filled) + "░".repeat(width - filled);
-}
-
 function pctText(pct) {
   return typeof pct === "number" ? `${pct}%` : "—";
 }
@@ -109,15 +103,16 @@ export default {
     if (xOk) lines.push(menubarLine("CX", xSp, xWp));
     else lines.push("CX ?");
 
+    // 注：*_bar (ASCII) 字段已删 —— UI 现在用 <Chart kind="bar"> 直接订阅
+    // samples collection 渲染，不再走 state 镜像。当前百分比 / reset 文字仍
+    // 走 state（Chart 显示历史，文字显示 current value + 下次 reset 时间）。
     ctx.setState({
       // Claude
       claude_ok: cOk,
       claude_err: cOk ? "" : claude.error || "no data",
       claude_session_pct_text: pctText(cSp),
-      claude_session_bar: bar(cSp),
       claude_session_reset_text: resetLine(cSess.resets_at_raw, cSess.resets_at_ms),
       claude_weekly_pct_text: pctText(cWp),
-      claude_weekly_bar: bar(cWp),
       claude_weekly_reset_text: resetLine(cWeek.resets_at_raw, cWeek.resets_at_ms),
       claude_cost_text: cost !== null ? `$${cost.toFixed(4)}` : "—",
 
@@ -125,10 +120,8 @@ export default {
       codex_ok: xOk,
       codex_err: xOk ? "" : codex.error || "no data",
       codex_session_pct_text: pctText(xSp),
-      codex_session_bar: bar(xSp),
       codex_session_reset_text: resetLine(null, xSess.resets_at_ms),
       codex_weekly_pct_text: pctText(xWp),
-      codex_weekly_bar: bar(xWp),
       codex_weekly_reset_text: resetLine(null, xWeek.resets_at_ms),
       codex_plan_text: xPlan ? xPlan : "—",
       codex_source_text: xSource ? xSource : "—",
