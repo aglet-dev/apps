@@ -21,7 +21,7 @@
           <Card>
             <VStack gap={6}>
               <HStack justify="between" gap={6}>
-                <Heading level={3}>{item.title}</Heading>
+                <Heading level={3}>🎯 {item.title || item.title_en}</Heading>
                 <Badge content={item.points} color="warning" icon="fire"/>
               </HStack>
               <HStack gap="sm">
@@ -75,7 +75,7 @@
         <Item>
           <Card>
             <VStack gap={4}>
-              <Heading level={3}>{item.title}</Heading>
+              <Heading level={3}>{item.title || item.title_en}</Heading>
               <Text muted>{item.domain} · {item.points} {t.points}</Text>
               <Text>{item.summary}</Text>
               <HStack justify="end" gap={8}>
@@ -100,7 +100,7 @@
           <Card>
             <HStack justify="between" gap={8}>
               <VStack gap={2}>
-                <Text muted>{item.title}</Text>
+                <Text muted>{item.title || item.title_en}</Text>
                 <Text muted>{item.domain}</Text>
               </VStack>
               <Button

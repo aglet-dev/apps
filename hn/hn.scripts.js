@@ -5,8 +5,10 @@
 //   - https://hacker-news.firebaseio.com/v0/item/<id>.json    → 单条详情
 //
 // 翻译：title_en → title + 一句 summary，走 llmctl (local provider)。
-// 幂等：按 hn_id dedup。
-// 用户字段 liked/disliked 只在 create 时初始化。
+// 幂等：用原子 `data.upsert(by_field: "hn_id")` 替代 list-then-create dedup
+//       —— Phase A 并发治理，避免两个并发 worker 同时 list 都未命中 → 都 create
+//       → 同 hn_id 双插入。SQLite 单写事务保证 dedup 原子性。
+// 用户字段 liked/disliked 只在 create 时初始化（upsert.upserted=="created" 分支）。
 
 const APP_ID = "hn";
 const DEFAULT_MAX = 30;
@@ -50,46 +52,46 @@ export default {
       const item = JSON.parse(r.body);
       if (!item || item.type !== "story" || !item.title) continue;
 
-      const existing = aglet.data.list(APP_ID, "stories", {
-        where: { hn_id: id },
-        limit: 1,
+      // 原子 dedup：单 SQLite tx 内 SELECT by hn_id + INSERT/UPDATE。
+      // 仅写"稳定 / 每次 ingest 都该刷新"字段；title/summary/liked/disliked 等
+      // 走第二段 update —— 既保留已翻译内容，也不覆盖用户操作。
+      const up = aglet.data.upsert(APP_ID, "stories", "hn_id", {
+        hn_id: id,
+        title_en: item.title,
+        url: item.url || `https://news.ycombinator.com/item?id=${id}`,
+        domain: domainOf(item.url),
+        author: item.by || "",
+        points: item.score || 0,
+        comments: item.descendants || 0,
       });
 
-      if (existing.items.length > 0) {
-        const ex = existing.items[0];
-        const patch = {
-          points: item.score || 0,
-          comments: item.descendants || 0,
-        };
-        if (!ex.data.title) {
-          const tzh = llmcall(TITLE_SYSTEM, item.title);
-          if (tzh) { patch.title = tzh; translated++; }
-        }
-        if (!ex.data.summary) {
-          const szh = llmcall(SUMMARY_SYSTEM, item.title);
-          if (szh) patch.summary = szh;
-        }
-        aglet.data.update(APP_ID, "stories", ex.id, patch);
-        updated++;
-      } else {
+      if (up.upserted === "created") {
+        // 初次见到：translate + 初始化 user fields。
         const tzh = llmcall(TITLE_SYSTEM, item.title);
         const szh = llmcall(SUMMARY_SYSTEM, item.title);
         if (tzh) translated++;
-        aglet.data.create(APP_ID, "stories", {
-          hn_id: id,
-          title_en: item.title,
+        aglet.data.update(APP_ID, "stories", up.id, {
           title: tzh,
-          url: item.url || `https://news.ycombinator.com/item?id=${id}`,
-          domain: domainOf(item.url),
           summary: szh,
-          points: item.score || 0,
-          comments: item.descendants || 0,
-          author: item.by || "",
           age: "",
           liked: false,
           disliked: false,
         });
         added++;
+      } else {
+        // 已存在：仅在缺翻译时补，绝不覆盖已有 title/summary 或用户 like 状态。
+        if (!up.data.title) {
+          const tzh = llmcall(TITLE_SYSTEM, item.title);
+          if (tzh) {
+            aglet.data.update(APP_ID, "stories", up.id, { title: tzh });
+            translated++;
+          }
+        }
+        if (!up.data.summary) {
+          const szh = llmcall(SUMMARY_SYSTEM, item.title);
+          if (szh) aglet.data.update(APP_ID, "stories", up.id, { summary: szh });
+        }
+        updated++;
       }
     }
 
