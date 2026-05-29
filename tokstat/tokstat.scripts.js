@@ -103,15 +103,26 @@ export default {
     if (xOk) lines.push(menubarLine("CX", xSp, xWp));
     else lines.push("CX ?");
 
-    // 注：*_bar (ASCII) 字段已删 —— UI 现在用 <Chart kind="bar"> 直接订阅
-    // samples collection 渲染，不再走 state 镜像。当前百分比 / reset 文字仍
-    // 走 state（Chart 显示历史，文字显示 current value + 下次 reset 时间）。
+    // <Progress> 需要数值 value + color token；阈值染色靠 bg 算好下发。
+    // 80% / 95% 两档：低于 80 用 primary（蓝/品牌色）；80–95 warning（黄）；
+    // 95+ danger（红）。文字仍走 *_pct_text。
+    function pctColor(pct) {
+      if (typeof pct !== "number") return "default";
+      if (pct >= 95) return "danger";
+      if (pct >= 80) return "warning";
+      return "primary";
+    }
+
     ctx.setState({
       // Claude
       claude_ok: cOk,
       claude_err: cOk ? "" : claude.error || "no data",
+      claude_session_pct: typeof cSp === "number" ? cSp : 0,
+      claude_session_color: pctColor(cSp),
       claude_session_pct_text: pctText(cSp),
       claude_session_reset_text: resetLine(cSess.resets_at_raw, cSess.resets_at_ms),
+      claude_weekly_pct: typeof cWp === "number" ? cWp : 0,
+      claude_weekly_color: pctColor(cWp),
       claude_weekly_pct_text: pctText(cWp),
       claude_weekly_reset_text: resetLine(cWeek.resets_at_raw, cWeek.resets_at_ms),
       claude_cost_text: cost !== null ? `$${cost.toFixed(4)}` : "—",
@@ -119,8 +130,12 @@ export default {
       // Codex
       codex_ok: xOk,
       codex_err: xOk ? "" : codex.error || "no data",
+      codex_session_pct: typeof xSp === "number" ? xSp : 0,
+      codex_session_color: pctColor(xSp),
       codex_session_pct_text: pctText(xSp),
       codex_session_reset_text: resetLine(null, xSess.resets_at_ms),
+      codex_weekly_pct: typeof xWp === "number" ? xWp : 0,
+      codex_weekly_color: pctColor(xWp),
       codex_weekly_pct_text: pctText(xWp),
       codex_weekly_reset_text: resetLine(null, xWeek.resets_at_ms),
       codex_plan_text: xPlan ? xPlan : "—",

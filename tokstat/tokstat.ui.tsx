@@ -19,22 +19,11 @@
             <Spacer/>
             <Text className="text-sm font-semibold tabular-nums">{{op:"state", path:"/state/claude_session_pct_text"}}</Text>
           </HStack>
-          <Chart
-            collection="samples"
-            query={{ where:{source:"claude"}, orderBy:[{field:"ts",direction:"asc"}], limit:60 }}
-            kind="bar"
-            xField="ts"
-            yField="session_pct"
-            yUnit="%"
-            yMin={0}
-            yMax={100}
-            baseline={0}
-            threshold={80}
-            thresholdColor="warning"
-            color="accent"
-            xFormat="relative"
-            height={36}
-            sparkline
+          <Progress
+            value={{op:"state", path:"/state/claude_session_pct"}}
+            max={100}
+            color={{op:"state", path:"/state/claude_session_color"}}
+            size="md"
           />
           <Text className="text-[10px] text-zinc-500">resets {{op:"state", path:"/state/claude_session_reset_text"}}</Text>
         </VStack>
@@ -44,22 +33,11 @@
             <Spacer/>
             <Text className="text-sm font-semibold tabular-nums">{{op:"state", path:"/state/claude_weekly_pct_text"}}</Text>
           </HStack>
-          <Chart
-            collection="samples"
-            query={{ where:{source:"claude"}, orderBy:[{field:"ts",direction:"asc"}], limit:60 }}
-            kind="bar"
-            xField="ts"
-            yField="weekly_pct"
-            yUnit="%"
-            yMin={0}
-            yMax={100}
-            baseline={0}
-            threshold={80}
-            thresholdColor="warning"
-            color="accent"
-            xFormat="relative"
-            height={36}
-            sparkline
+          <Progress
+            value={{op:"state", path:"/state/claude_weekly_pct"}}
+            max={100}
+            color={{op:"state", path:"/state/claude_weekly_color"}}
+            size="md"
           />
           <Text className="text-[10px] text-zinc-500">resets {{op:"state", path:"/state/claude_weekly_reset_text"}}</Text>
         </VStack>
@@ -80,22 +58,11 @@
             <Spacer/>
             <Text className="text-sm font-semibold tabular-nums">{{op:"state", path:"/state/codex_session_pct_text"}}</Text>
           </HStack>
-          <Chart
-            collection="samples"
-            query={{ where:{source:"codex"}, orderBy:[{field:"ts",direction:"asc"}], limit:60 }}
-            kind="bar"
-            xField="ts"
-            yField="session_pct"
-            yUnit="%"
-            yMin={0}
-            yMax={100}
-            baseline={0}
-            threshold={80}
-            thresholdColor="warning"
-            color="info"
-            xFormat="relative"
-            height={36}
-            sparkline
+          <Progress
+            value={{op:"state", path:"/state/codex_session_pct"}}
+            max={100}
+            color={{op:"state", path:"/state/codex_session_color"}}
+            size="md"
           />
           <Text className="text-[10px] text-zinc-500">resets {{op:"state", path:"/state/codex_session_reset_text"}}</Text>
         </VStack>
@@ -105,22 +72,11 @@
             <Spacer/>
             <Text className="text-sm font-semibold tabular-nums">{{op:"state", path:"/state/codex_weekly_pct_text"}}</Text>
           </HStack>
-          <Chart
-            collection="samples"
-            query={{ where:{source:"codex"}, orderBy:[{field:"ts",direction:"asc"}], limit:60 }}
-            kind="bar"
-            xField="ts"
-            yField="weekly_pct"
-            yUnit="%"
-            yMin={0}
-            yMax={100}
-            baseline={0}
-            threshold={80}
-            thresholdColor="warning"
-            color="info"
-            xFormat="relative"
-            height={36}
-            sparkline
+          <Progress
+            value={{op:"state", path:"/state/codex_weekly_pct"}}
+            max={100}
+            color={{op:"state", path:"/state/codex_weekly_color"}}
+            size="md"
           />
           <Text className="text-[10px] text-zinc-500">resets {{op:"state", path:"/state/codex_weekly_reset_text"}}</Text>
         </VStack>
