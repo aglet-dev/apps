@@ -1,4 +1,4 @@
-<Page className="min-h-screen overflow-y-auto bg-[var(--cl-bg)] text-[var(--cl-fg)]">
+<Page className="min-h-screen overflow-y-auto bg-[var(--ag-bg)] text-[var(--ag-fg)]">
   <VStack gap={5} className="mx-auto max-w-3xl px-6 py-7">
 
     {/* ── Header ─────────────────────────────────────────────── */}
@@ -9,6 +9,38 @@
       </HStack>
       <Text content="每个组件 × 状态/变体的可视化验收台。改样式 / 调主题后，对着它截图做回归。" muted size="sm"/>
     </VStack>
+
+    {/* ── Design Tokens ──────────────────────────────────────── */}
+    <Card title="Design Tokens" description="theme.css 单一真理源 · 前缀 --ag- · 跟随系统 light/dark">
+      <VStack gap={3}>
+        <Text content="语义色" muted size="sm"/>
+        <HStack gap={3} className="flex-wrap">
+          <VStack gap={1} align="center"><HStack className="h-12 w-20 rounded-md border border-[var(--ag-border)] bg-[var(--ag-primary)]"/><Text content="primary" size="sm"/></VStack>
+          <VStack gap={1} align="center"><HStack className="h-12 w-20 rounded-md border border-[var(--ag-border)] bg-[var(--ag-secondary)]"/><Text content="secondary" size="sm"/></VStack>
+          <VStack gap={1} align="center"><HStack className="h-12 w-20 rounded-md border border-[var(--ag-border)] bg-[var(--ag-success)]"/><Text content="success" size="sm"/></VStack>
+          <VStack gap={1} align="center"><HStack className="h-12 w-20 rounded-md border border-[var(--ag-border)] bg-[var(--ag-warning)]"/><Text content="warning" size="sm"/></VStack>
+          <VStack gap={1} align="center"><HStack className="h-12 w-20 rounded-md border border-[var(--ag-border)] bg-[var(--ag-danger)]"/><Text content="danger" size="sm"/></VStack>
+          <VStack gap={1} align="center"><HStack className="h-12 w-20 rounded-md border border-[var(--ag-border)] bg-[var(--ag-info)]"/><Text content="info" size="sm"/></VStack>
+        </HStack>
+        <Text content="结构色" muted size="sm"/>
+        <HStack gap={3} className="flex-wrap">
+          <VStack gap={1} align="center"><HStack className="h-12 w-20 rounded-md border border-[var(--ag-border)] bg-[var(--ag-bg)]"/><Text content="bg" size="sm"/></VStack>
+          <VStack gap={1} align="center"><HStack className="h-12 w-20 rounded-md border border-[var(--ag-border)] bg-[var(--ag-surface)]"/><Text content="surface" size="sm"/></VStack>
+          <VStack gap={1} align="center"><HStack className="h-12 w-20 rounded-md border border-[var(--ag-border)] bg-[var(--ag-surface-alt)]"/><Text content="surface-alt" size="sm"/></VStack>
+          <VStack gap={1} align="center"><HStack className="h-12 w-20 rounded-md border border-[var(--ag-border)] bg-[var(--ag-border)]"/><Text content="border" size="sm"/></VStack>
+          <VStack gap={1} align="center"><HStack className="h-12 w-20 rounded-md border border-[var(--ag-border)] bg-[var(--ag-muted)]"/><Text content="muted" size="sm"/></VStack>
+        </HStack>
+        <Text content="圆角 · 阴影" muted size="sm"/>
+        <HStack gap={3} className="flex-wrap" align="center">
+          <HStack className="h-12 w-16 items-center justify-center rounded-[var(--ag-radius-sm)] bg-[var(--ag-surface-alt)]"><Text content="sm" size="sm" muted/></HStack>
+          <HStack className="h-12 w-16 items-center justify-center rounded-[var(--ag-radius)] bg-[var(--ag-surface-alt)]"><Text content="md" size="sm" muted/></HStack>
+          <HStack className="h-12 w-16 items-center justify-center rounded-[var(--ag-radius-lg)] bg-[var(--ag-surface-alt)]"><Text content="lg" size="sm" muted/></HStack>
+          <HStack className="h-12 w-20 items-center justify-center rounded-md bg-[var(--ag-surface)] shadow-[var(--ag-shadow-sm)]"><Text content="shadow" size="sm" muted/></HStack>
+          <HStack className="h-12 w-20 items-center justify-center rounded-md bg-[var(--ag-surface)] shadow-[var(--ag-shadow)]"><Text content="shadow" size="sm" muted/></HStack>
+          <HStack className="h-12 w-20 items-center justify-center rounded-md bg-[var(--ag-surface)] shadow-[var(--ag-shadow-lg)]"><Text content="shadow-lg" size="sm" muted/></HStack>
+        </HStack>
+      </VStack>
+    </Card>
 
     {/* ── Typography ─────────────────────────────────────────── */}
     <Card title="Typography">
@@ -196,7 +228,7 @@
     <Card title="Layout">
       <VStack gap={3}>
         <Text content="HStack / justify" muted size="sm"/>
-        <HStack gap={2} justify="between" className="rounded-md bg-[var(--cl-surface-alt)] p-2">
+        <HStack gap={2} justify="between" className="rounded-md bg-[var(--ag-surface-alt)] p-2">
           <Badge content="left"/>
           <Badge content="center"/>
           <Badge content="right"/>
