@@ -1,0 +1,142 @@
+{
+  "id": "calc",
+  "name": {
+    "default": "Calculator",
+    "zh": "计算器",
+    "ja": "電卓"
+  },
+  "description": {
+    "default": "iOS-style calculator with keyboard input",
+    "zh": "iOS 风格计算器，支持键盘输入",
+    "ja": "iOS 風電卓、キーボード入力対応"
+  },
+  "version": "1.1.0",
+  "runtime": "auto",
+  "permissions": [],
+  "author": "agent-rt",
+  "category": "utilities",
+  "keywords": [
+    "calculator",
+    "math",
+    "ios"
+  ],
+  "icon": "https://api.iconify.design/ph/calculator-fill.svg?color=%23ef6f5f&width=256",
+  "screenshots": [
+    {
+      "url": "screenshots/01.png",
+      "caption": "iOS-style display"
+    }
+  ],
+  "window": {
+    "style": "phone",
+    "width": 320,
+    "height": 504
+  },
+  "keys": {
+    "0": {
+      "script": "digit",
+      "args": {
+        "n": 0
+      }
+    },
+    "1": {
+      "script": "digit",
+      "args": {
+        "n": 1
+      }
+    },
+    "2": {
+      "script": "digit",
+      "args": {
+        "n": 2
+      }
+    },
+    "3": {
+      "script": "digit",
+      "args": {
+        "n": 3
+      }
+    },
+    "4": {
+      "script": "digit",
+      "args": {
+        "n": 4
+      }
+    },
+    "5": {
+      "script": "digit",
+      "args": {
+        "n": 5
+      }
+    },
+    "6": {
+      "script": "digit",
+      "args": {
+        "n": 6
+      }
+    },
+    "7": {
+      "script": "digit",
+      "args": {
+        "n": 7
+      }
+    },
+    "8": {
+      "script": "digit",
+      "args": {
+        "n": 8
+      }
+    },
+    "9": {
+      "script": "digit",
+      "args": {
+        "n": 9
+      }
+    },
+    ".": "dot",
+    "+": {
+      "script": "op",
+      "args": {
+        "o": "+"
+      }
+    },
+    "-": {
+      "script": "op",
+      "args": {
+        "o": "-"
+      }
+    },
+    "*": {
+      "script": "op",
+      "args": {
+        "o": "*"
+      }
+    },
+    "/": {
+      "script": "op",
+      "args": {
+        "o": "/"
+      }
+    },
+    "x": {
+      "script": "op",
+      "args": {
+        "o": "*"
+      }
+    },
+    "Enter": "equals",
+    "=": "equals",
+    "Backspace": "backspace",
+    "Escape": "clear",
+    "c": "clear",
+    "C": "clear",
+    "%": "percent"
+  },
+  "state": {
+    "display": "0",
+    "pending": "",
+    "op": "",
+    "fresh": true,
+    "expr": ""
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "id": "issues",
+  "name": {
+    "default": "Issues",
+    "zh": "工单",
+    "ja": "イシュー"
+  },
+  "description": {
+    "default": "Lightweight issue tracker — showcases Table / Badge / Tag / Pagination.",
+    "zh": "轻量工单追踪：表格 + 状态徽章 + 分页。"
+  },
+  "version": "1.0.0",
+  "runtime": "auto",
+  "author": "agent-rt",
+  "category": "productivity",
+  "keywords": [
+    "issues",
+    "tracker",
+    "table",
+    "kanban"
+  ],
+  "icon": "https://api.iconify.design/ph/list-bullets-fill.svg?color=%233a6ea5&width=256",
+  "permissions": [
+    "data:read",
+    "data:write"
+  ],
+  "window": {
+    "style": "desktop",
+    "width": 960,
+    "height": 720
+  },
+  "state": {
+    "filterStatus": "",
+    "filterPriority": ""
+  },
+  "collections": {
+    "issues": {
+      "schema": {
+        "title": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "open",
+            "in_progress",
+            "closed"
+          ]
+        },
+        "priority": {
+          "type": "string",
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "tags": {
+          "type": "string"
+        },
+        "created_at": {
+          "type": "string"
+        }
+      },
+      "indexes": [
+        "status",
+        "priority",
+        "created_at"
+      ]
+    }
+  }
+}

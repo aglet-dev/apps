@@ -1,0 +1,93 @@
+{
+  "id": "2fa",
+  "name": {
+    "default": "2FA",
+    "zh": "两步验证",
+    "ja": "二要素認証"
+  },
+  "description": {
+    "default": "Time-based one-time passwords (TOTP) compatible with Google Authenticator. Paste otpauth:// URIs to add accounts.",
+    "zh": "TOTP 一次性密码，兼容 Google Authenticator。粘贴 otpauth:// 链接添加账号。",
+    "ja": "TOTP ワンタイムパスワード。Google Authenticator 互換。otpauth:// URI を貼って追加。"
+  },
+  "version": "0.1.0",
+  "runtime": "auto",
+  "author": "agent-rt",
+  "category": "utilities",
+  "keywords": [
+    "2fa",
+    "totp",
+    "otp",
+    "authenticator",
+    "mfa"
+  ],
+  "icon": "https://api.iconify.design/ph/shield-check-fill.svg?color=%233a6ea5&width=256",
+  "license": "MIT",
+  "homepage": "https://github.com/agent-rt/aglet-apps",
+  "requires": [
+    {
+      "plugin": "crypto",
+      "version": ">=0.1.1"
+    },
+    {
+      "plugin": "encoding",
+      "version": ">=0.1.0"
+    }
+  ],
+  "permissions": [
+    "data:read",
+    "data:write",
+    "crypto:hash",
+    "encoding:decode"
+  ],
+  "window": {
+    "style": "phone",
+    "width": 380,
+    "height": 640
+  },
+  "jobs": [
+    {
+      "id": "tick",
+      "trigger": {
+        "kind": "interval",
+        "ms": 1000
+      },
+      "while": "window_open",
+      "handler": "tick"
+    }
+  ],
+  "collections": {
+    "accounts": {
+      "schema": {
+        "issuer": {
+          "type": "string"
+        },
+        "account": {
+          "type": "string"
+        },
+        "secret_b32": {
+          "type": "string"
+        },
+        "algo": {
+          "type": "string"
+        },
+        "digits": {
+          "type": "number"
+        },
+        "period": {
+          "type": "number"
+        },
+        "created_at": {
+          "type": "string"
+        },
+        "current_code": {
+          "type": "string"
+        }
+      },
+      "indexes": [
+        "issuer",
+        "created_at"
+      ]
+    }
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "id": "json",
+  "name": {
+    "default": "JSON",
+    "zh": "JSON 工具",
+    "ja": "JSON ツール"
+  },
+  "description": {
+    "default": "Format, minify, and validate JSON. Pretty-prints with errors pointing at line:col.",
+    "zh": "JSON 格式化 / 压缩 / 校验，错误定位行列。",
+    "ja": "JSON のフォーマット / 圧縮 / 検証、エラー位置表示。"
+  },
+  "version": "1.0.0",
+  "runtime": "auto",
+  "author": "agent-rt",
+  "category": "developer-tools",
+  "keywords": [
+    "json",
+    "format",
+    "pretty",
+    "validator"
+  ],
+  "icon": "https://api.iconify.design/ph/brackets-curly-fill.svg?color=%233a6ea5&width=256",
+  "permissions": [],
+  "window": {
+    "style": "phone",
+    "width": 480,
+    "height": 720
+  },
+  "scripts": null,
+  "collections": {
+    "scratch": {
+      "schema": {
+        "input": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "state": {
+    "input": "",
+    "output": "",
+    "error": "",
+    "info": ""
+  },
+  "keys": {
+    "Enter": {
+      "script": "format",
+      "args": {}
+    }
+  }
+}

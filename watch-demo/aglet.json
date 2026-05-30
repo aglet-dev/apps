@@ -1,0 +1,62 @@
+{
+  "id": "watch-demo",
+  "name": {
+    "default": "Watch Demo"
+  },
+  "description": {
+    "default": "验证 json-render watch 配置：a 变化时自动派生 b 与 c"
+  },
+  "version": "1.0.0",
+  "runtime": "auto",
+  "permissions": [],
+  "window": {
+    "style": "phone",
+    "width": 320,
+    "height": 480
+  },
+  "state": {
+    "a": 0,
+    "double": 0,
+    "label": "zero",
+    "xs": [
+      "alpha",
+      "beta",
+      "gamma"
+    ]
+  },
+  "watch": {
+    "/state/a": [
+      {
+        "action": "setState",
+        "params": {
+          "statePath": "/state/double",
+          "value": {
+            "$math": "multiply",
+            "a": {
+              "$state": "/state/a"
+            },
+            "b": 2
+          }
+        }
+      },
+      {
+        "action": "setState",
+        "params": {
+          "statePath": "/state/label",
+          "value": {
+            "$cond": {
+              "$eq": [
+                {
+                  "$state": "/state/a"
+                },
+                0
+              ]
+            },
+            "$then": "zero",
+            "$else": "non-zero"
+          }
+        }
+      }
+    ]
+  }
+}

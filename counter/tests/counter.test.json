@@ -1,0 +1,140 @@
+{
+  "name": "counter — inc/dec/reset handlers + click flow",
+  "aglet": "..",
+  "steps": [
+    {
+      "action": "scripts.call",
+      "params": {
+        "fn": "inc",
+        "fixture": {
+          "state": {
+            "count": 0
+          }
+        }
+      },
+      "expect": {
+        "ok": true,
+        "data_eq": {
+          "patch": {
+            "count": 1
+          }
+        }
+      }
+    },
+    {
+      "action": "scripts.call",
+      "params": {
+        "fn": "inc",
+        "fixture": {
+          "state": {
+            "count": 41
+          }
+        }
+      },
+      "expect": {
+        "ok": true,
+        "data_eq": {
+          "patch": {
+            "count": 42
+          }
+        }
+      }
+    },
+    {
+      "action": "scripts.call",
+      "params": {
+        "fn": "dec",
+        "fixture": {
+          "state": {
+            "count": 0
+          }
+        }
+      },
+      "expect": {
+        "ok": true,
+        "data_eq": {
+          "patch": {
+            "count": -1
+          }
+        }
+      }
+    },
+    {
+      "action": "scripts.call",
+      "params": {
+        "fn": "reset",
+        "fixture": {
+          "state": {
+            "count": 99
+          }
+        }
+      },
+      "expect": {
+        "ok": true,
+        "data_eq": {
+          "patch": {
+            "count": 0
+          }
+        }
+      }
+    },
+    {
+      "action": "intent.fire",
+      "select": {
+        "role": "button",
+        "nth": 2
+      }
+    },
+    {
+      "action": "intent.fire",
+      "select": {
+        "role": "button",
+        "nth": 2
+      }
+    },
+    {
+      "action": "state.waitfor",
+      "expect": {
+        "data": {
+          "state": {
+            "count": 2
+          }
+        }
+      }
+    },
+    {
+      "action": "intent.fire",
+      "select": {
+        "role": "button",
+        "nth": 0
+      }
+    },
+    {
+      "action": "state.waitfor",
+      "expect": {
+        "data": {
+          "state": {
+            "count": 1
+          }
+        }
+      }
+    },
+    {
+      "action": "intent.fire",
+      "select": {
+        "role": "button",
+        "nth": 1
+      }
+    },
+    {
+      "action": "state.waitfor",
+      "expect": {
+        "data": {
+          "state": {
+            "count": 0
+          }
+        }
+      }
+    }
+  ]
+}

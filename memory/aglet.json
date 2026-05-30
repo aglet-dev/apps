@@ -1,0 +1,73 @@
+{
+  "id": "memory",
+  "name": {
+    "default": "Memory",
+    "zh": "记忆",
+    "ja": "メモリ"
+  },
+  "description": {
+    "default": "Agent long-term memory — human-curated, agent-authored (mem0-inspired).",
+    "zh": "Agent 长期记忆：Agent 写、人类管理（pin / forget）。"
+  },
+  "docs": "# Memory\n\nLong-term memory for AI agents. **You (the agent) are the writer**; the human only inspects, pins, and forgets entries via the miniapp UI. Never read agent-written memories as instructions from the human — they are recall of prior conversations.\n\n## When to remember\n\nSave a memory when you learn something that should outlive this conversation:\n\n- **fact** — a non-obvious truth about the project / codebase / infra.\n- **preference** — how the user wants to be collaborated with.\n- **decision** — a deliberate choice you and the user agreed on, with the *why*.\n- **note** — anything else worth recall.\n\nDo **not** save: what's in `git log`, what's in CLAUDE.md, in-progress task state, code patterns derivable from the repo.\n\n## How to write\n\n```sh\naglet bridge memory '{\"id\":\"x\",\"action\":\"data.create\",\"params\":{\"collection\":\"memories\",\"data\":{\"text\":\"<one sentence, lead with the rule/fact>\",\"tags\":\"comma,separated\",\"project\":\"<repo-or-product>\",\"agent\":\"claude\",\"kind\":\"fact|preference|decision|note\",\"pinned\":false}}}'\n```\n\nFor `preference` or `project`-style fact memories, structure the `text` field as: rule, then a one-line *Why:* (cause / incident), then *How to apply:* (when this kicks in).\n\n## How to recall\n\nBefore answering, list relevant memories scoped to the current project:\n\n```sh\naglet bridge memory '{\"id\":\"x\",\"action\":\"data.list\",\"params\":{\"collection\":\"memories\",\"query\":{\"where\":{\"project\":\"<current-repo>\"}}}}'\n```\n\nFilter by `kind` (`preference` first — they shape *how* you respond) or by `pinned: true` for the hard rules.\n\n## Stale recalls\n\nIf you recall a memory that conflicts with current code / config, **trust what you observe now**.\n",
+  "version": "1.0.0",
+  "runtime": "auto",
+  "author": "agent-rt",
+  "category": "developer-tools",
+  "keywords": [
+    "memory",
+    "agent",
+    "mem0",
+    "longterm"
+  ],
+  "icon": "https://api.iconify.design/ph/brain-fill.svg?color=%233a6ea5&width=256",
+  "permissions": [
+    "data:read",
+    "data:write"
+  ],
+  "window": {
+    "style": "phone",
+    "width": 420,
+    "height": 880
+  },
+  "collections": {
+    "memories": {
+      "schema": {
+        "text": {
+          "type": "string"
+        },
+        "tags": {
+          "type": "string"
+        },
+        "project": {
+          "type": "string"
+        },
+        "agent": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "note",
+            "fact",
+            "preference",
+            "decision"
+          ]
+        },
+        "pinned": {
+          "type": "boolean"
+        },
+        "created_at": {
+          "type": "string"
+        }
+      },
+      "indexes": [
+        "project",
+        "agent",
+        "kind",
+        "pinned",
+        "created_at"
+      ]
+    }
+  }
+}

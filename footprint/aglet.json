@@ -1,0 +1,61 @@
+{
+  "id": "footprint",
+  "name": {
+    "default": "Footprint",
+    "en": "Footprint",
+    "zh": "足迹",
+    "ja": "足跡"
+  },
+  "description": {
+    "default": "Visited places on a map, ordered by visit date.",
+    "en": "Visited places on a map, ordered by visit date.",
+    "zh": "去过的地方在地图上画一条线。",
+    "ja": "訪れた場所を地図上に時系列で記録。"
+  },
+  "docs": "# Footprint\n\n去过的地方打卡。每条 = {name, lat, lng, visited_at, note}。\n按 visited_at 升序连线展示足迹路线。\n\n经纬度获取：当前没有定位接口，需要自己手动填（从地图 app 复制 / Geocoding）。\n后续 v2 可以加 `app.locate` bridge action。\n",
+  "version": "1.0.0",
+  "runtime": "auto",
+  "author": "agent-rt",
+  "category": "utilities",
+  "keywords": [
+    "travel",
+    "map",
+    "places",
+    "footprint"
+  ],
+  "icon": "https://api.iconify.design/ph/map-pin-fill.svg?color=%23e91e63&width=256",
+  "permissions": [
+    "data:read",
+    "data:write"
+  ],
+  "window": {
+    "style": "phone",
+    "width": 480,
+    "height": 920
+  },
+  "collections": {
+    "places": {
+      "schema": {
+        "name": {
+          "type": "string"
+        },
+        "lat": {
+          "type": "number"
+        },
+        "lng": {
+          "type": "number"
+        },
+        "visited_at": {
+          "type": "number"
+        },
+        "note": {
+          "type": "string"
+        }
+      },
+      "indexes": [
+        "visited_at",
+        "name"
+      ]
+    }
+  }
+}

@@ -1,0 +1,87 @@
+{
+  "name": "todo — data crud + per-row delete binding",
+  "aglet": "..",
+  "steps": [
+    {
+      "action": "data.create",
+      "params": {
+        "collection": "todos",
+        "data": {
+          "title": "AAA-first",
+          "done": false,
+          "created_at": "100"
+        }
+      },
+      "expect": {
+        "ok": true
+      }
+    },
+    {
+      "action": "data.create",
+      "params": {
+        "collection": "todos",
+        "data": {
+          "title": "BBB-second",
+          "done": false,
+          "created_at": "200"
+        }
+      },
+      "expect": {
+        "ok": true
+      }
+    },
+    {
+      "action": "data.list",
+      "params": {
+        "collection": "todos"
+      },
+      "expect": {
+        "ok": true,
+        "items_len": 2
+      }
+    },
+    {
+      "action": "view.refs"
+    },
+    {
+      "action": "intent.fire",
+      "select": {
+        "role": "button",
+        "props": {
+          "color": "danger"
+        },
+        "nth": 0
+      }
+    },
+    {
+      "action": "data.list",
+      "params": {
+        "collection": "todos",
+        "query": {
+          "where": {
+            "title": "BBB-second"
+          }
+        }
+      },
+      "expect": {
+        "ok": true,
+        "items_len": 0
+      }
+    },
+    {
+      "action": "data.list",
+      "params": {
+        "collection": "todos",
+        "query": {
+          "where": {
+            "title": "AAA-first"
+          }
+        }
+      },
+      "expect": {
+        "ok": true,
+        "items_len": 1
+      }
+    }
+  ]
+}

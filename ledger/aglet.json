@@ -1,0 +1,65 @@
+{
+  "id": "ledger",
+  "name": {
+    "default": "Ledger",
+    "zh": "记账本",
+    "ja": "家計簿"
+  },
+  "description": {
+    "default": "Track income & expense with category. Monthly + category summaries.",
+    "zh": "收入支出记账，分类汇总。",
+    "ja": "収支家計簿、カテゴリ集計。"
+  },
+  "version": "1.0.0",
+  "runtime": "auto",
+  "author": "agent-rt",
+  "category": "productivity",
+  "keywords": [
+    "ledger",
+    "finance",
+    "budget",
+    "money"
+  ],
+  "icon": "https://api.iconify.design/ph/wallet-fill.svg?color=%23ef6f5f&width=256",
+  "permissions": [
+    "data:read",
+    "data:write"
+  ],
+  "window": {
+    "style": "phone",
+    "width": 420,
+    "height": 720
+  },
+  "scripts": null,
+  "state": {
+    "month_income": 0,
+    "month_expense": 0,
+    "by_category": ""
+  },
+  "collections": {
+    "entries": {
+      "schema": {
+        "kind": {
+          "type": "string"
+        },
+        "amount": {
+          "type": "number"
+        },
+        "category": {
+          "type": "string"
+        },
+        "note": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string"
+        }
+      },
+      "indexes": [
+        "kind",
+        "category",
+        "date"
+      ]
+    }
+  }
+}

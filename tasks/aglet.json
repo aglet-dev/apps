@@ -1,0 +1,69 @@
+{
+  "id": "tasks",
+  "name": {
+    "default": "Tasks",
+    "zh": "任务管理",
+    "ja": "タスク管理"
+  },
+  "description": {
+    "default": "Lightweight task manager with priority, project and status tabs.",
+    "zh": "轻量任务管理：优先级 / 项目 / 状态分类。",
+    "ja": "軽量タスク管理。優先度・プロジェクト・状態タブ。"
+  },
+  "version": "1.0.0",
+  "runtime": "auto",
+  "author": "agent-rt",
+  "category": "productivity",
+  "keywords": [
+    "tasks",
+    "todo",
+    "kanban",
+    "productivity"
+  ],
+  "icon": "https://api.iconify.design/ph/list-checks-fill.svg?color=%233a6ea5&width=256",
+  "permissions": [
+    "data:read",
+    "data:write"
+  ],
+  "window": {
+    "style": "phone",
+    "width": 420,
+    "height": 720
+  },
+  "collections": {
+    "items": {
+      "schema": {
+        "title": {
+          "type": "string"
+        },
+        "notes": {
+          "type": "string"
+        },
+        "project": {
+          "type": "string"
+        },
+        "priority": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "due_at": {
+          "type": "string"
+        },
+        "created_at": {
+          "type": "string"
+        },
+        "completed_at": {
+          "type": "string"
+        }
+      },
+      "indexes": [
+        "status",
+        "priority",
+        "project",
+        "due_at"
+      ]
+    }
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "id": "todo",
+  "name": {
+    "default": "Todo",
+    "zh": "待办"
+  },
+  "description": {
+    "default": "Dogfood: todo with data collection + list + fill + toggle + delete, driven via aglet automation."
+  },
+  "version": "0.1.0",
+  "runtime": "web",
+  "category": "productivity",
+  "permissions": [
+    "data:read",
+    "data:write"
+  ],
+  "collections": {
+    "todos": {
+      "schema": {
+        "title": {
+          "type": "string"
+        },
+        "done": {
+          "type": "boolean"
+        },
+        "created_at": {
+          "type": "string"
+        }
+      },
+      "indexes": [
+        "done"
+      ]
+    }
+  },
+  "window": {
+    "style": "phone",
+    "width": 380,
+    "height": 600
+  }
+}

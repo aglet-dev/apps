@@ -1,0 +1,49 @@
+{
+  "id": "pomodoro",
+  "name": {
+    "default": "Pomodoro",
+    "zh": "番茄钟",
+    "ja": "ポモドーロ"
+  },
+  "description": {
+    "default": "Classic 25/5 Pomodoro. Focus, break, repeat.",
+    "zh": "经典 25/5 番茄工作法。专注、休息、循环。",
+    "ja": "25/5のポモドーロ。集中、休憩、繰り返し。"
+  },
+  "version": "0.1.0",
+  "runtime": "auto",
+  "permissions": [],
+  "author": "agent-rt",
+  "category": "productivity",
+  "keywords": [
+    "pomodoro",
+    "focus",
+    "timer"
+  ],
+  "window": {
+    "style": "phone",
+    "width": 320,
+    "height": 520
+  },
+  "state": {
+    "phase": "work",
+    "remaining": 1500,
+    "display": "25:00",
+    "running": false,
+    "cycles": 0
+  },
+  "timers": [
+    {
+      "id": "tick",
+      "ms": 1000,
+      "scripts": "tick",
+      "while": "/state/running"
+    }
+  ],
+  "keys": {
+    " ": "toggle",
+    "Enter": "toggle",
+    "Escape": "reset",
+    "n": "skip"
+  }
+}

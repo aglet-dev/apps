@@ -1,0 +1,49 @@
+{
+  "id": "sysmon-net",
+  "name": "Network Monitor",
+  "description": "menubar network throughput live (rx/tx bytes/sec) + history sparkline",
+  "version": "0.1.0",
+  "runtime": "web",
+  "requires": [
+    {
+      "plugin": "sysinfo",
+      "version": ">=1.0"
+    }
+  ],
+  "permissions": [
+    "system:read",
+    "data:read",
+    "data:write"
+  ],
+  "collections": {
+    "metrics": {
+      "storage": "memory",
+      "schema": {
+        "ts": {
+          "type": "integer"
+        },
+        "rx_kbps": {
+          "type": "number"
+        },
+        "tx_kbps": {
+          "type": "number"
+        }
+      }
+    }
+  },
+  "jobs": [
+    {
+      "id": "collect",
+      "trigger": {
+        "kind": "interval",
+        "ms": 1000
+      },
+      "while": "window_open",
+      "handler": "collectNet"
+    }
+  ],
+  "window": {
+    "width": 320,
+    "height": 200
+  }
+}

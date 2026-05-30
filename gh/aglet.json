@@ -1,0 +1,104 @@
+{
+  "id": "gh",
+  "name": {
+    "default": "GitHub PRs",
+    "zh": "GitHub PR 看板",
+    "ja": "GitHub PR ボード"
+  },
+  "description": {
+    "default": "Review queue + my open PRs, synced via `gh search prs --json`.",
+    "zh": "Review 队列 + 我的 open PR，靠 `gh` CLI 后台同步。",
+    "ja": "レビュー待ち + 自分の open PR、`gh` CLI でバックグラウンド同期。"
+  },
+  "docs": "# GitHub PR 看板\n\n本地化的 PR review / 我的 PR 列表。数据通过 `gh` CLI 同步进来。\n\n## 工作流\n\n```sh\naglet scheduler tick           # 每 60 秒一次（plist 已装）\n```\n\n后台脚本跑：\n\n```sh\ngh search prs --review-requested=@me --state=open --json …\ngh search prs --author=@me         --state=open --json …\n```\n\n两批结果合并写入 `prs` 集合；上一轮存在但本轮未命中的 PR 视为关闭/合并，自动删掉。\n\n## Tabs\n\n- **Review**：被 request review 的 open PR\n- **我的**：我作为 author 的 open PR\n- **全部**：所有 open PR\n\n## 同 PR 多分类\n\n一个 PR 可能同时是 review queue 和 mine（自己 author 自己 review）。schema 用两个 bool 字段而非 category 字符串，ingest dedup 时 merge 旗标。\n\n## 不写入字段\n\n这是只读看板：Agent 写库，用户只浏览 + 跳 GitHub。\n",
+  "version": "1.0.0",
+  "runtime": "auto",
+  "author": "agent-rt",
+  "category": "developer-tools",
+  "keywords": [
+    "github",
+    "pr",
+    "review",
+    "code"
+  ],
+  "icon": "https://api.iconify.design/ph/git-pull-request-fill.svg?color=%231f883d&width=256",
+  "screenshots": [
+    {
+      "url": "screenshots/01.png",
+      "caption": "Review queue + your open PRs"
+    }
+  ],
+  "permissions": [
+    "data:read",
+    "data:write",
+    "notifications:post"
+  ],
+  "window": {
+    "style": "phone",
+    "width": 440,
+    "height": 760
+  },
+  "jobs": [
+    {
+      "id": "ingest",
+      "trigger": {
+        "kind": "interval",
+        "ms": 900000
+      },
+      "while": "always",
+      "handler": "ingest"
+    }
+  ],
+  "collections": {
+    "prs": {
+      "schema": {
+        "pr_id": {
+          "type": "string"
+        },
+        "number": {
+          "type": "number"
+        },
+        "title": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        },
+        "repo": {
+          "type": "string"
+        },
+        "author": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        },
+        "is_draft": {
+          "type": "boolean"
+        },
+        "reviewed_by_me": {
+          "type": "boolean"
+        },
+        "authored_by_me": {
+          "type": "boolean"
+        },
+        "comments_count": {
+          "type": "number"
+        },
+        "labels": {
+          "type": "string"
+        },
+        "updated_at": {
+          "type": "string"
+        }
+      },
+      "indexes": [
+        "pr_id",
+        "reviewed_by_me",
+        "authored_by_me",
+        "state",
+        "updated_at"
+      ]
+    }
+  }
+}

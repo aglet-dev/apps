@@ -1,0 +1,94 @@
+{
+  "id": "kanban",
+  "name": {
+    "default": "Kanban",
+    "zh": "看板",
+    "ja": "カンバン"
+  },
+  "description": {
+    "default": "Stage-based task board — Backlog / In Progress / Done with assignees, priority and effort estimates.",
+    "zh": "阶段式任务看板：待办 / 进行 / 完成；含负责人、优先级、估时。",
+    "ja": "ステージ別タスクボード。担当・優先度・見積りつき。"
+  },
+  "version": "1.0.0",
+  "runtime": "auto",
+  "default_locale": "en",
+  "author": "agent-rt",
+  "category": "productivity",
+  "keywords": [
+    "kanban",
+    "tasks",
+    "board",
+    "workflow"
+  ],
+  "icon": "https://api.iconify.design/ph/kanban-fill.svg?color=%233a6ea5&width=256",
+  "permissions": [
+    "data:read",
+    "data:write"
+  ],
+  "window": {
+    "style": "desktop",
+    "width": 1100,
+    "height": 760
+  },
+  "state": {
+    "filterAssignee": "",
+    "filterPriority": ""
+  },
+  "collections": {
+    "cards": {
+      "schema": {
+        "title": {
+          "type": "string"
+        },
+        "notes": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "backlog",
+            "doing",
+            "done"
+          ]
+        },
+        "priority": {
+          "type": "string",
+          "enum": [
+            "high",
+            "medium",
+            "low"
+          ]
+        },
+        "assignee": {
+          "type": "string"
+        },
+        "effort": {
+          "type": "number"
+        },
+        "created_at": {
+          "type": "string"
+        },
+        "completed_at": {
+          "type": "string"
+        }
+      },
+      "indexes": [
+        "status",
+        "priority",
+        "assignee",
+        "created_at"
+      ]
+    },
+    "people": {
+      "schema": {
+        "name": {
+          "type": "string"
+        },
+        "avatar": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
