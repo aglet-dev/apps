@@ -1,0 +1,84 @@
+{
+  "name": "2fa — RFC 6238 TOTP 测试向量 (SHA1, seed 12345678901234567890)",
+  "aglet": "..",
+  "steps": [
+    {
+      "action": "data.create",
+      "params": {
+        "collection": "accounts",
+        "data": {
+          "issuer": "RFC",
+          "account": "test",
+          "secret_b32": "GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQ",
+          "algo": "SHA1",
+          "digits": 6,
+          "period": 30
+        }
+      },
+      "expect": {
+        "ok": true
+      }
+    },
+    {
+      "action": "scripts.call",
+      "params": {
+        "fn": "tick",
+        "fixture": {
+          "now": 59000
+        }
+      },
+      "expect": {
+        "ok": true
+      }
+    },
+    {
+      "action": "data.list",
+      "params": {
+        "collection": "accounts"
+      },
+      "expect": {
+        "ok": true,
+        "items_len": 1,
+        "data_eq": {
+          "items": [
+            {
+              "data": {
+                "current_code": "287082"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "action": "scripts.call",
+      "params": {
+        "fn": "tick",
+        "fixture": {
+          "now": 1111111109000
+        }
+      },
+      "expect": {
+        "ok": true
+      }
+    },
+    {
+      "action": "data.list",
+      "params": {
+        "collection": "accounts"
+      },
+      "expect": {
+        "ok": true,
+        "data_eq": {
+          "items": [
+            {
+              "data": {
+                "current_code": "081804"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

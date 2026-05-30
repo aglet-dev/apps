@@ -1,0 +1,35 @@
+{
+  "name": "fx — calc: 无汇率守卫 + 有汇率换算/利润",
+  "aglet": "..",
+  "steps": [
+    {
+      "action": "scripts.call",
+      "params": {
+        "fn": "calc",
+        "args": { "cost": 100, "cost_ccy": "CNY", "price": 20, "price_ccy": "USD", "fees_pct": 5 },
+        "fixture": { "state": { "rates_json": "" } }
+      },
+      "expect": {
+        "ok": true,
+        "data_eq": { "patch": { "error": "请先 '刷新汇率'" } }
+      }
+    },
+    {
+      "action": "scripts.call",
+      "params": {
+        "fn": "calc",
+        "args": { "cost": 100, "cost_ccy": "CNY", "price": 20, "price_ccy": "USD", "fees_pct": 5 },
+        "fixture": { "state": { "rates_json": "{\"CNY\":6.78}" } }
+      },
+      "expect": {
+        "ok": true,
+        "data_eq": {
+          "patch": {
+            "error": "",
+            "result": "成本：100 CNY (= 14.75 USD)\n售价：20 USD (= 20.00 USD)\n扣除手续费 5%：净售价 19.00 USD\n利润：4.25 USD\n利润率：21.25%"
+          }
+        }
+      }
+    }
+  ]
+}

@@ -5,7 +5,7 @@
         <Input name="src_dataurl" label="Image data URL" placeholder="data:image/...;base64,..."/>
       </DataForm>
       {form.src_dataurl && <Image src={form.src_dataurl} fit="contain" className="max-w-full max-h-48 mx-auto"/>}
-      {state.src_meta && <Text content={state.src_meta} className="text-sm text-muted"/>}
+      {state.src_meta && <Text content={state.src_meta} muted className="text-sm"/>}
     </Section>
 
     <Section title="Convert">
@@ -31,7 +31,7 @@
     {state.out_dataurl && (
       <Section title="Result">
         <Image src={state.out_dataurl} fit="contain" className="max-w-full max-h-48 mx-auto"/>
-        <Text content={state.out_meta} className="text-sm text-muted"/>
+        <Text content={state.out_meta} muted className="text-sm"/>
         <HStack justify="end">
           <Button label="Copy to clipboard" icon="copy" onClick={() => scripts.copyOut()}/>
         </HStack>
