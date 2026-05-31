@@ -35,10 +35,10 @@
   },
   "jobs": [
     {
-      "id": "poll",
-      "trigger": { "kind": "interval", "ms": 1500 },
+      "id": "on_change",
+      "trigger": { "kind": "event", "event": "clipboard.changed" },
       "while": "always",
-      "handler": "pollClip"
+      "handler": "onClip"
     }
   ],
   "window": {
