@@ -1,16 +1,16 @@
 // clips —— 剪贴板历史。
 //
-// pollClip：interval bg job（1.5s）。读当前剪贴板文本，与最近一条去重后入库，
-//   裁到上限。**剪贴板没 watch/事件流**（clipboard 插件只 read-on-demand），故轮询——
-//   这是 Aglet 的能力缺口（理想是 clipboard.watch 走 NSPasteboard.changeCount 推事件，
-//   同 sysmon 的 emit 模型）。MVP 先轮询。
+// onClip：event bg job，订阅 `clipboard.changed`（daemon 侧 watcher 监
+//   NSPasteboard.changeCount，变更时 emit；同 sysmon 的 emit 模型）。事件到了
+//   才 readText 取内容，与最近一条去重后入库，裁到上限——不再每秒轮询读全文。
+//   payload 形如 {changeCount:N}，这里用不到（只关心「变了，去读」）。
 // copy / togglePin：UI 行点击调用（onClick={() => scripts.copy({id})}）。
 
 const APP_ID = "clips";
 const MAX_UNPINNED = 100; // 非置顶历史上限，超出删最旧
 
 export default {
-  async pollClip(_args, ctx) {
+  async onClip(_event, ctx) {
     const res = await ctx.plugins.clipboard.readText();
     const text = res && res.found ? (res.text || "") : "";
     if (!text || text.trim() === "") return { skipped: "empty" };
