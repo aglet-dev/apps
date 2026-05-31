@@ -3,7 +3,7 @@
   "name": "Memory Monitor",
   "description": "menubar memory usage live + 60s history sparkline",
   "version": "0.1.0",
-  "runtime": "web",
+  "renderer": "web",
   "requires": [
     {
       "plugin": "sysinfo",

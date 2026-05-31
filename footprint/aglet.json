@@ -14,7 +14,7 @@
   },
   "docs": "# Footprint\n\n去过的地方打卡。每条 = {name, lat, lng, visited_at, note}。\n按 visited_at 升序连线展示足迹路线。\n\n经纬度获取：当前没有定位接口，需要自己手动填（从地图 app 复制 / Geocoding）。\n后续 v2 可以加 `app.locate` bridge action。\n",
   "version": "1.0.0",
-  "runtime": "auto",
+  "renderer": "auto",
   "author": "agent-rt",
   "category": "utilities",
   "keywords": [

@@ -3,7 +3,7 @@
   "name": "System Monitor",
   "description": "OS CPU / memory / disk dogfood. Subscribes to the `sysmon` stdio plugin's `cpu` resource — plugin pushes a sample every 1s, the host fans it out to `onCpuSample` via the plugin event bus. No polling.",
   "version": "0.3.0",
-  "runtime": "web",
+  "renderer": "web",
   "requires": [
     {
       "plugin": "sysmon",

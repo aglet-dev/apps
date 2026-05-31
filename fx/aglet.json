@@ -11,7 +11,7 @@
     "ja": "為替換算と仕入原価・利益率の計算。"
   },
   "version": "1.0.0",
-  "runtime": "auto",
+  "renderer": "auto",
   "author": "agent-rt",
   "category": "utilities",
   "keywords": [

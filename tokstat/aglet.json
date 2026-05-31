@@ -3,7 +3,7 @@
   "name": "AI Token Usage",
   "description": "Claude + Codex session/weekly usage in your menu bar. Claude: PTY-spawns `claude /usage` per minute. Codex: reads ~/.codex/sessions rollout JSONL (no subprocess). Menubar shows two lines `CL <s>·<w>` and `CX <s>·<w>`; popover breaks each side out with progress bars + reset countdowns.",
   "version": "0.2.0",
-  "runtime": "web",
+  "renderer": "web",
   "requires": [
     {
       "plugin": "tokstat",

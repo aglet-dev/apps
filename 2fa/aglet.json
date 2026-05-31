@@ -11,7 +11,7 @@
     "ja": "TOTP ワンタイムパスワード。Google Authenticator 互換。otpauth:// URI を貼って追加。"
   },
   "version": "0.1.0",
-  "runtime": "auto",
+  "renderer": "auto",
   "author": "agent-rt",
   "category": "utilities",
   "keywords": [

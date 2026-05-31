@@ -11,7 +11,7 @@
     "ja": "ローカル LLM 翻訳。"
   },
   "version": "1.0.0",
-  "runtime": "auto",
+  "renderer": "auto",
   "author": "agent-rt",
   "category": "utilities",
   "keywords": [

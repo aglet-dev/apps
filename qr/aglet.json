@@ -11,7 +11,7 @@
     "ja": "テキストを QR にエンコード、画像貼り付けでデコード"
   },
   "version": "1.1.0",
-  "runtime": "auto",
+  "renderer": "auto",
   "requires": [
     {
       "plugin": "barcode",

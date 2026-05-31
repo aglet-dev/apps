@@ -14,7 +14,7 @@
   },
   "docs": "# Weight\n\n按天记体重，看趋势。简单数据 + Chart 组件 dogfood。\n\n## 模型\n\n- `entries` 表：{ date YYYY-MM-DD, weight number, unit \"kg\"|\"lb\", note string, created_at }\n- 同一天可多次录入（不去重）；Chart 按 date 升序连线\n\n## UI\n\n- 顶卡：DatePicker (default today) + NumberField + Input note → Add\n- Chart line：最近 90 天\n- 历史 DataList：倒序，每行 Delete\n",
   "version": "1.0.0",
-  "runtime": "auto",
+  "renderer": "auto",
   "author": "agent-rt",
   "category": "utilities",
   "keywords": [

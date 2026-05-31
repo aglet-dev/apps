@@ -8,7 +8,7 @@
     "default": "Dogfood: interactive counter driven end-to-end via aglet app automation."
   },
   "version": "0.1.0",
-  "runtime": "web",
+  "renderer": "web",
   "default_locale": "en",
   "category": "productivity",
   "permissions": [],

@@ -11,7 +11,7 @@
     "ja": "メモ・ToDo・リンクの即時キャプチャ。"
   },
   "version": "1.0.0",
-  "runtime": "auto",
+  "renderer": "auto",
   "author": "agent-rt",
   "category": "productivity",
   "keywords": [
