@@ -1,18 +1,33 @@
-// sysmon scripts.js —— event-driven CPU sampling
+// sysmon scripts.js —— event-driven 系统监控采样
 //
-// The `sysmon` stdio plugin pushes a `cpu` notification every 1s; the host
-// fans it out to the `onCpuSample` handler via the `sysmon.cpu` event.
-// Memory is pulled once per tick by an explicit plugin call (the CPU
-// notification only carries CPU fields).
+// `sysmon` stdio 插件每 1s 推一条 `cpu` notification；host 经 `sysmon.cpu`
+// 事件 fan-out 到 onCpuSample。CPU notification 只带 CPU 字段，其余每 tick
+// 显式拉：memory / disk(/) / gpu / battery（都是便宜的 syscall / IOKit 读）。
+
+// 利用率 → color token（绿<60，黄<85，红≥85）。
+function pctColor(p) {
+  if (p >= 85) return "danger";
+  if (p >= 60) return "warning";
+  return "success";
+}
+const fmtGB = (bytes) => (bytes / 1e9).toFixed(1);
 
 export default {
   async onCpuSample(payload, ctx) {
     const cpu = payload?.contents ?? {};
     const cpuPct = cpu.used_pct ?? 0;
+
     const mem = await ctx.plugins.sysmon.memory();
-    const memUsedGB = mem.used_bytes / 1e9;
-    const memTotalGB = mem.total_bytes / 1e9;
-    const memPct = mem.used_pct;
+    const memPct = mem.used_pct ?? 0;
+
+    const disk = await ctx.plugins.sysmon.disk({ path: "/" });
+    const diskPct = disk.used_pct ?? 0;
+
+    const gpu = await ctx.plugins.sysmon.gpu();
+    const gpuPct = gpu.util_pct ?? 0;
+
+    const batt = await ctx.plugins.sysmon.battery();
+
     await ctx.dispatch("data.create", {
       collection: "metrics",
       data: {
@@ -20,13 +35,48 @@ export default {
         cpu_pct: cpuPct,
         mem_used: mem.used_bytes,
         mem_total: mem.total_bytes,
+        disk_pct: diskPct,
+        gpu_pct: gpuPct,
       },
     });
+
+    // 电池：充电 → primary，低电 → danger，无电池(台式) → secondary + "—"。
+    const battText = batt.present
+      ? `${batt.percent.toFixed(0)}%${batt.charging ? " ⚡" : ""}`
+      : "—";
+    const battColor = !batt.present
+      ? "secondary"
+      : batt.charging
+        ? "primary"
+        : batt.percent <= 20
+          ? "danger"
+          : "success";
+
     ctx.setState({
       cpu_text: `${cpuPct.toFixed(1)}%`,
-      mem_text: `${memUsedGB.toFixed(1)} / ${memTotalGB.toFixed(1)} GB`,
-      mem_pct_text: `${memPct.toFixed(0)}%`,
-      menubar_title: `CPU ${cpuPct.toFixed(0)}%\nMEM ${memPct.toFixed(0)}%`,
+      cpu_pct: cpuPct,
+      cpu_color: pctColor(cpuPct),
+
+      mem_text: `${fmtGB(mem.used_bytes)} / ${fmtGB(mem.total_bytes)} GB`,
+      mem_pct: memPct,
+      mem_color: pctColor(memPct),
+
+      disk_text: `${fmtGB(disk.used_bytes)} / ${fmtGB(disk.total_bytes)} GB`,
+      disk_pct: diskPct,
+      disk_color: pctColor(diskPct),
+
+      gpu_text: `${gpuPct.toFixed(0)}%`,
+      gpu_pct: gpuPct,
+      gpu_color: pctColor(gpuPct),
+
+      batt_present: batt.present,
+      batt_text: battText,
+      batt_pct: batt.present ? batt.percent : 0,
+      batt_color: battColor,
+
+      menubar_title:
+        `CPU ${cpuPct.toFixed(0)}%\nMEM ${memPct.toFixed(0)}%` +
+        (batt.present ? `\nBAT ${batt.percent.toFixed(0)}%` : ""),
     });
   },
 };
