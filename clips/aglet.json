@@ -1,0 +1,48 @@
+{
+  "id": "clips",
+  "name": {
+    "default": "Clipboard",
+    "zh": "剪贴板",
+    "ja": "クリップボード"
+  },
+  "description": {
+    "default": "Clipboard history in the menubar — auto-captures copied text, search and re-copy with a click, pin favorites.",
+    "zh": "菜单栏剪贴板历史：自动记录复制的文本，搜索后一键重新复制，常用项可置顶。",
+    "ja": "メニューバーのクリップボード履歴：コピーしたテキストを自動記録、検索してワンクリックで再コピー、よく使う項目はピン留め。"
+  },
+  "version": "1.0.0",
+  "renderer": "web",
+  "author": "agent-rt",
+  "category": "utilities",
+  "keywords": ["clipboard", "history", "paste", "menubar", "productivity"],
+  "icon": "https://api.iconify.design/ph/clipboard-text-fill.svg?color=%233a6ea5&width=256",
+  "requires": [
+    { "plugin": "clipboard", "version": ">=0.1" }
+  ],
+  "permissions": ["clipboard:read", "clipboard:write", "data:read", "data:write"],
+  "collections": {
+    "clips": {
+      "schema": {
+        "text": { "type": "string" },
+        "ts": { "type": "integer" },
+        "pinned": { "type": "boolean" }
+      },
+      "indexes": ["ts", "pinned"]
+    }
+  },
+  "state": {
+    "search": ""
+  },
+  "jobs": [
+    {
+      "id": "poll",
+      "trigger": { "kind": "interval", "ms": 1500 },
+      "while": "always",
+      "handler": "pollClip"
+    }
+  ],
+  "window": {
+    "width": 360,
+    "height": 480
+  }
+}
