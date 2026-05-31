@@ -85,8 +85,8 @@
       collection="issues"
       query={{
         where: {
-          status: state.filterStatus,
-          priority: state.filterPriority,
+          ...(state.filterStatus && { status: state.filterStatus }),
+          ...(state.filterPriority && { priority: state.filterPriority }),
         },
         orderBy: [{ field: "created_at", direction: "desc" }],
       }}
