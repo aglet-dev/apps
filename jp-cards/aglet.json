@@ -11,7 +11,7 @@
     "ja": "日本語単語カード、Leitner 方式の間隔反復。"
   },
   "version": "1.0.0",
-  "runtime": "auto",
+  "renderer": "auto",
   "author": "agent-rt",
   "category": "education",
   "keywords": [

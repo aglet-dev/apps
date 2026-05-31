@@ -11,7 +11,7 @@
     "ja": "画像を貼り付けて PNG / JPEG / WebP / BMP に変換"
   },
   "version": "1.0.0",
-  "runtime": "auto",
+  "renderer": "auto",
   "requires": [
     {
       "plugin": "image",

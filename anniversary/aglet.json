@@ -3,7 +3,7 @@
   "name": { "default": "Anniversary", "zh": "纪念日" },
   "description": { "default": "Track anniversaries (birthdays, milestones) with a live countdown to the next occurrence." },
   "version": "0.1.0",
-  "runtime": "web",
+  "renderer": "web",
   "default_locale": "en",
   "category": "utilities",
   "permissions": ["data:read", "data:write"],

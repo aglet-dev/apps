@@ -10,7 +10,7 @@
     "zh": "个人资料管理：含日期 / 滑块 / 单选 / 图片 / 确认弹窗。"
   },
   "version": "1.0.0",
-  "runtime": "auto",
+  "renderer": "auto",
   "author": "agent-rt",
   "category": "other",
   "keywords": [

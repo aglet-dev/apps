@@ -6,12 +6,12 @@
     "ja": "コンポーネント"
   },
   "description": {
-    "default": "Visual gallery of every Aglet UI component × states/variants — the web-runtime design acceptance surface.",
-    "zh": "Aglet 全部 UI 组件 × 状态/变体的可视化展廊 —— web-runtime 设计验收台。",
-    "ja": "Aglet の全 UI コンポーネント × 状態/バリアントの一覧 —— web-runtime デザイン検収台。"
+    "default": "Visual gallery of every Aglet UI component × states/variants — the web-renderer design acceptance surface.",
+    "zh": "Aglet 全部 UI 组件 × 状态/变体的可视化展廊 —— web renderer 设计验收台。",
+    "ja": "Aglet の全 UI コンポーネント × 状態/バリアントの一覧 —— web renderer デザイン検収台。"
   },
   "version": "0.1.0",
-  "runtime": "web",
+  "renderer": "web",
   "permissions": [],
   "author": "agent-rt",
   "category": "developer-tools",

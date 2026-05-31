@@ -11,7 +11,7 @@
     "ja": "25/5のポモドーロ。集中、休憩、繰り返し。"
   },
   "version": "0.1.0",
-  "runtime": "auto",
+  "renderer": "auto",
   "permissions": [],
   "author": "agent-rt",
   "category": "productivity",

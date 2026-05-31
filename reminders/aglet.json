@@ -11,7 +11,7 @@
     "ja": "軽量リマインダー、任意で締切時刻。バックグラウンドが到来時にシステム通知。"
   },
   "version": "1.0.0",
-  "runtime": "auto",
+  "renderer": "auto",
   "author": "agent-rt",
   "category": "productivity",
   "keywords": [

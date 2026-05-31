@@ -11,7 +11,7 @@
     "ja": "商品コピー：名前 / 売り / 対象 → 3 案。"
   },
   "version": "1.0.0",
-  "runtime": "auto",
+  "renderer": "auto",
   "author": "agent-rt",
   "category": "utilities",
   "keywords": [
