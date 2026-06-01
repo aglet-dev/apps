@@ -15,15 +15,15 @@
   "requires": [
     {
       "plugin": "barcode",
-      "version": ">=1.0"
+      "version": ">=0.1"
     },
     {
       "plugin": "clipboard",
-      "version": ">=1.0"
+      "version": ">=0.1"
     },
     {
       "plugin": "image",
-      "version": ">=1.0"
+      "version": ">=0.1"
     }
   ],
   "permissions": [
