@@ -10,7 +10,7 @@
     "zh": "TOTP 一次性密码，兼容 Google Authenticator。粘贴 otpauth:// 链接添加账号。",
     "ja": "TOTP ワンタイムパスワード。Google Authenticator 互換。otpauth:// URI を貼って追加。"
   },
-  "version": "0.1.0",
+  "version": "0.1.1",
   "renderer": "auto",
   "author": "agent-rt",
   "category": "utilities",
@@ -27,18 +27,13 @@
   "requires": [
     {
       "plugin": "crypto",
-      "version": ">=0.1.1"
-    },
-    {
-      "plugin": "encoding",
-      "version": ">=0.1.0"
+      "version": ">=0.1.3"
     }
   ],
   "permissions": [
     "data:read",
     "data:write",
-    "crypto:hash",
-    "encoding:decode"
+    "crypto:totp"
   ],
   "window": {
     "style": "phone",

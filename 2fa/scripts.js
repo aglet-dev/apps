@@ -1,51 +1,15 @@
 /// <reference path="../.types/aglet.d.ts" />
-// 2fa scripts —— TOTP (RFC 6238) compute + otpauth:// URI add.
+// 2fa scripts —— otpauth:// URI parse + TOTP via crypto.totp.
 //
 // State shape:
-//   codes:    { [accountId]: { code: "123456", remaining: 17 } }
 //   add_uri:  staging input from UI (the otpauth URI text field)
 //   add_err:  last add error message (cleared on success)
+//
+// TOTP 全交给 crypto.totp（crypto >= 0.1.3）：base32 解码 + 8 字节 counter +
+// RFC 4226 动态截断都在 audited 的 wasm 插件里。app 不再手搓 HMAC / 截断 /
+// base32，也删掉了原本只为跨 ABI 用的 JS b64 codec —— 兑现旧注释的 dogfood-backlog-totp。
 
 const APP_ID = "2fa";
-
-// ─── base64 helpers (transport-only) ────────────────────────────────────────
-//
-// plugins.encoding 用 bytes_b64 string 做 ABI；JS 侧仍需要轻量 b64 codec
-// 来跨边界。base32 解码完全交给 plugin（删了本地实现）。
-//
-// 留 b64 是 dogfood 暴露的一个真痛点：encoding plugin 的字符串 ABI 让
-// "JS 已有 raw bytes → 想编码到 b64 字符串" 这条路反向依赖一个 JS b64
-// 编码器。后续 plugin SDK 加 bytes primitive (Uint8Array native binding)
-// 后可全删。见 [[dogfood-backlog-totp]] #9。
-
-const B64C = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-
-function bytesToB64(bytes) {
-  let s = "";
-  for (let i = 0; i < bytes.length; i += 3) {
-    const a = bytes[i], b = bytes[i + 1], c = bytes[i + 2];
-    const v = (a << 16) | ((b ?? 0) << 8) | (c ?? 0);
-    s += B64C[(v >> 18) & 63] + B64C[(v >> 12) & 63];
-    s += i + 1 < bytes.length ? B64C[(v >> 6) & 63] : "=";
-    s += i + 2 < bytes.length ? B64C[v & 63] : "=";
-  }
-  return s;
-}
-
-function b64ToBytes(s) {
-  const rev = new Int8Array(256).fill(-1);
-  for (let i = 0; i < 64; i++) rev[B64C.charCodeAt(i)] = i;
-  const out = [];
-  let bits = 0, n = 0;
-  for (const ch of s) {
-    if (ch === "=" || ch === "\n" || ch === " ") continue;
-    const v = rev[ch.charCodeAt(0)];
-    if (v < 0) continue;
-    bits = (bits << 6) | v; n += 6;
-    if (n >= 8) { n -= 8; out.push((bits >> n) & 0xff); }
-  }
-  return Uint8Array.from(out);
-}
 
 // ─── otpauth URI parse ──────────────────────────────────────────────────────
 
@@ -79,51 +43,24 @@ function parseOtpauth(uri) {
   };
 }
 
-// ─── TOTP core ──────────────────────────────────────────────────────────────
+// ─── TOTP via crypto.totp plugin ──────────────────────────────────────────────
 
-async function totp(account, nowSec, plugins) {
-  // base32 → bytes_b64 直接给 hmac（不走 JS 中转 raw bytes）；plugins.encoding
-  // 替了 26-line 手写 base32 decoder。
-  const { bytes_b64: key_b64 } = await plugins.encoding.decodeBase32({
-    s: account.secret_b32,
+async function totpCode(account, nowSec, plugins) {
+  const { code } = await plugins.crypto.totp({
+    secret_b32: account.secret_b32,
+    unix_seconds: nowSec,
+    algo: account.algo || "SHA1",
+    digits: account.digits || 6,
+    period: account.period || 30,
   });
-  const period = account.period || 30;
-  const digits = account.digits || 6;
-  const counter = Math.floor(nowSec / period);
-
-  // 8-byte big-endian counter
-  const cb = new Uint8Array(8);
-  let c = counter;
-  for (let i = 7; i >= 0; i--) { cb[i] = c & 0xff; c = Math.floor(c / 256); }
-
-  const algo = (account.algo || "SHA1").toLowerCase();
-  const algoMap = { sha1: "sha1", sha256: "sha256", sha512: "sha512" };
-  const algoName = algoMap[algo] || "sha1";
-
-  const { mac_b64 } = await plugins.crypto.hmac({
-    algo: algoName,
-    key_b64,
-    data_b64: bytesToB64(cb),
-  });
-  const mac = b64ToBytes(mac_b64);
-
-  // RFC 4226 dynamic truncation
-  const offset = mac[mac.length - 1] & 0x0f;
-  const bin =
-    ((mac[offset] & 0x7f) << 24) |
-    ((mac[offset + 1] & 0xff) << 16) |
-    ((mac[offset + 2] & 0xff) << 8) |
-    (mac[offset + 3] & 0xff);
-  const code = (bin % Math.pow(10, digits)).toString().padStart(digits, "0");
-  const remaining = period - (nowSec % period);
-  return { code, remaining, period };
+  return code;
 }
 
 // ─── handlers ───────────────────────────────────────────────────────────────
 
 export default {
   // Tick @ 1Hz: recompute `current_code` only when it actually changed (period
-  // boundary crossed). 倒计时 UI 走 `{op:"countdown"}` reactive directive，
+  // boundary crossed). 倒计时 UI 走 `$countdown(item.period)` reactive directive，
   // 不再 per-second 写 row。
   async tick(_, ctx) {
     const list = aglet.data.list(APP_ID, "accounts", { limit: 200 });
@@ -132,8 +69,7 @@ export default {
     for (const row of list.items) {
       let nextCode;
       try {
-        const t = await totp(row.data, nowSec, ctx.plugins);
-        nextCode = t.code;
+        nextCode = await totpCode(row.data, nowSec, ctx.plugins);
       } catch (_e) {
         nextCode = "------";
       }
@@ -149,8 +85,14 @@ export default {
     if (!uri) return ctx.setState({ add_err: "paste an otpauth://totp/... URI first" });
     try {
       const parsed = parseOtpauth(uri);
-      // Sanity-check secret decodes（plugin 失败时整段进 catch 显示错误）
-      await ctx.plugins.encoding.decodeBase32({ s: parsed.secret_b32 });
+      // Sanity-check the secret actually computes —— crypto.totp errors on bad base32.
+      await ctx.plugins.crypto.totp({
+        secret_b32: parsed.secret_b32,
+        unix_seconds: 0,
+        algo: parsed.algo,
+        digits: parsed.digits,
+        period: parsed.period,
+      });
       await ctx.dispatch("data.create", {
         collection: "accounts",
         data: { ...parsed, created_at: new Date().toISOString() },
