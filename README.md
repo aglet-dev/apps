@@ -74,8 +74,8 @@ git push --tags
 ## Contributing
 
 1. Fork.
-2. Add `<id>/<id>.json` + `<id>/<id>.ui.tsx` (or `aglet new <id>` for a skeleton).
-3. `aglet validate ./<id>/<id>.json` must pass.
+2. Add `<id>/aglet.json` + `<id>/ui.tsx` (or `aglet new <id>` for a skeleton). Optional: `<id>/scripts.js`, `<id>/locales/`, `<id>/tests/<id>.test.json`.
+3. `aglet validate ./<id>/aglet.json` must pass.
 4. Open PR. CI validates; a maintainer merges; tag to publish.
 
 ## License
