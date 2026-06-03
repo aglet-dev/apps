@@ -14,14 +14,8 @@ function dayNum(y, mo, d) {
   return Math.floor(Date.UTC(y, mo - 1, d) / 86400000);
 }
 
-// 文案模板：优先用 ctx.scope.t（按当前语言），缺失回退英文默认（headless/test）。
-function tpl(t, key, fallback, vars) {
-  let s = (t && t[key]) || fallback;
-  for (const k in vars) s = s.replace("{" + k + "}", vars[k]);
-  return s;
-}
-
-// 给定一条 event 的字段 + 当前 epoch ms + i18n 表 → 派生 {days_until, next_at, milestone, age_label}。
+// 给定一条 event 的字段 + 当前 epoch ms + i18n 函数 t → 派生
+// {days_until, next_at, milestone, age_label}。t = ctx.t（'key',{params} 查表+插值）。
 function derive(e, nowMs, t) {
   const ev = parseYMD(e.date);
   if (!ev) return { days_until: 99999, next_at: "", milestone: "", age_label: "" };
@@ -43,8 +37,8 @@ function derive(e, nowMs, t) {
   const years = nxt.y - ev.y; // 下次发生时要满的岁数 / 第几周年
 
   let milestone = "";
-  if (e.kind === "birthday") milestone = years > 0 ? tpl(t, "msBirthday", "Turns {n}", { n: years }) : tpl(t, "msBorn", "Born", {});
-  else if (e.kind === "anniversary") milestone = years > 0 ? tpl(t, "msAnniversary", "{n} yr", { n: years }) : "";
+  if (e.kind === "birthday") milestone = years > 0 ? t("msBirthday", { n: years }) : t("msBorn");
+  else if (e.kind === "anniversary") milestone = years > 0 ? t("msAnniversary", { n: years }) : "";
 
   // 不满一岁（生日、循环）：额外显示当前实龄。
   let age_label = "";
@@ -52,22 +46,21 @@ function derive(e, nowMs, t) {
     const ageDays = todayNum - dayNum(ev.y, ev.mo, ev.d);
     if (ageDays >= 0 && ageDays < 365) {
       age_label = ageDays < 100
-        ? tpl(t, "ageDays", "{n} days old", { n: ageDays })
-        : tpl(t, "ageMonths", "{n} mo old", { n: Math.floor(ageDays / 30.44) });
+        ? t("ageDays", { n: ageDays })
+        : t("ageMonths", { n: Math.floor(ageDays / 30.44) });
     }
   }
 
-  return { days_until, next_at: tpl(t, "nextAt", "{mo}/{d}", { mo: nxt.mo, d: nxt.d }), milestone, age_label };
+  return { days_until, next_at: t("nextAt", { mo: nxt.mo, d: nxt.d }), milestone, age_label };
 }
 
 // 重算所有 events 的派生字段。app 打开(onEnter) + 添加后触发。
 async function refresh(_args, ctx) {
   const nowMs = ctx.now();
-  const t = (ctx.scope && ctx.scope.t) || {};
   const resp = await ctx.dispatch("data.list", { collection: "events" });
   const items = (resp && resp.items) || [];
   for (const rec of items) {
-    const patch = derive(rec.data || rec, nowMs, t);
+    const patch = derive(rec.data || rec, nowMs, ctx.t);
     await ctx.dispatch("data.update", { collection: "events", id: rec.id, patch });
   }
   return { count: items.length };
