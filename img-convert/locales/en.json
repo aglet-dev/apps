@@ -1,0 +1,12 @@
+{
+  "sectionSource": "Source",
+  "labelDataUrl": "Image data URL",
+  "sectionConvert": "Convert",
+  "labelOutput": "Output",
+  "labelQuality": "Quality (1-100)",
+  "btnConvert": "Convert",
+  "sectionResult": "Result",
+  "btnCopy": "Copy to clipboard",
+  "alertError": "Error",
+  "errNoImage": "Paste an image first"
+}

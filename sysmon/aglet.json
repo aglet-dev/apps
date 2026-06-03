@@ -1,7 +1,15 @@
 {
   "id": "sysmon",
-  "name": "System Monitor",
-  "description": "System monitor — CPU, memory, disk, GPU, battery, temperature, fan, network. Subscribes to the `sysmon` stdio plugin's `cpu` resource — plugin pushes a sample every 1s, the host fans it out to `onCpuSample` via the plugin event bus. No polling.",
+  "name": {
+    "default": "System Monitor",
+    "zh": "系统监控",
+    "ja": "システムモニター"
+  },
+  "description": {
+    "default": "Menu-bar system monitor — CPU, memory, disk, GPU, battery, temperature, fan, network.",
+    "zh": "菜单栏系统监控：CPU、内存、磁盘、GPU、电池、温度、风扇、网络。",
+    "ja": "メニューバーのシステムモニター：CPU・メモリ・ディスク・GPU・バッテリー・温度・ファン・ネットワーク。"
+  },
   "version": "0.5.0",
   "renderer": "web",
   "requires": [

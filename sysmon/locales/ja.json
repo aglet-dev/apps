@@ -1,0 +1,10 @@
+{
+  "labelMemory": "メモリ",
+  "labelDisk": "ディスク",
+  "labelBattery": "バッテリー",
+  "labelTemp": "温度",
+  "labelFan": "ファン",
+  "labelNetwork": "ネットワーク",
+  "histCpu": "CPU 履歴",
+  "histNet": "ネットワーク ↓ KB/s"
+}

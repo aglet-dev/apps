@@ -1,0 +1,9 @@
+{
+  "heading": "ToDo",
+  "placeholder": "何をする？",
+  "btnAdd": "追加",
+  "empty": "ToDo はまだありません",
+  "btnDone": "完了",
+  "btnUndo": "戻す",
+  "btnDelete": "削除"
+}

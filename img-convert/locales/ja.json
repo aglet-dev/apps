@@ -1,0 +1,12 @@
+{
+  "sectionSource": "ソース",
+  "labelDataUrl": "画像データ URL",
+  "sectionConvert": "変換",
+  "labelOutput": "出力",
+  "labelQuality": "品質 (1-100)",
+  "btnConvert": "変換",
+  "sectionResult": "結果",
+  "btnCopy": "クリップボードにコピー",
+  "alertError": "エラー",
+  "errNoImage": "先に画像を貼り付けてください"
+}

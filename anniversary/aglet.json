@@ -1,7 +1,11 @@
 {
   "id": "anniversary",
-  "name": { "default": "Anniversary", "zh": "纪念日" },
-  "description": { "default": "Track anniversaries (birthdays, milestones) with a live countdown to the next occurrence." },
+  "name": { "default": "Anniversary", "zh": "纪念日", "ja": "記念日" },
+  "description": {
+    "default": "Track anniversaries (birthdays, milestones) with a live countdown to the next occurrence.",
+    "zh": "记录纪念日（生日、里程碑），实时倒数到下一次。",
+    "ja": "記念日（誕生日・節目）を登録し、次の発生までをカウントダウン。"
+  },
   "version": "0.1.0",
   "renderer": "web",
   "default_locale": "en",

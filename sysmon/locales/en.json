@@ -1,0 +1,10 @@
+{
+  "labelMemory": "Memory",
+  "labelDisk": "Disk",
+  "labelBattery": "Battery",
+  "labelTemp": "Temp",
+  "labelFan": "Fan",
+  "labelNetwork": "Network",
+  "histCpu": "CPU history",
+  "histNet": "Network ↓ KB/s"
+}

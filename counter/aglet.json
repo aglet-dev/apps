@@ -2,10 +2,13 @@
   "id": "counter",
   "name": {
     "default": "Counter",
-    "zh": "计数器"
+    "zh": "计数器",
+    "ja": "カウンター"
   },
   "description": {
-    "default": "Dogfood: interactive counter driven end-to-end via aglet app automation."
+    "default": "A simple tap counter.",
+    "zh": "简单的点击计数器。",
+    "ja": "シンプルなタップカウンター。"
   },
   "version": "0.1.0",
   "renderer": "web",
