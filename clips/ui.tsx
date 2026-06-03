@@ -7,7 +7,7 @@
   {/* 点开弹出：搜索框 + 历史列表（置顶在前，按时间倒序）。 */}
   <TrayPopover>
     <VStack gap={8} className="px-3 py-3">
-      <Input name="search" bind="/state/search" placeholder="Search clipboard…"/>
+      <Input name="search" bind="/state/search" placeholder={t.searchPlaceholder}/>
 
       <DataList
         collection="clips"
@@ -21,7 +21,7 @@
         }}
       >
         <Empty>
-          <EmptyState title="No clips yet" description="Copy some text — it shows up here." icon="clipboard"/>
+          <EmptyState title={t.emptyTitle} description={t.emptyDesc} icon="clipboard"/>
         </Empty>
         <Item>
           <HStack className="items-center gap-1">

@@ -20,7 +20,7 @@
 
       <VStack gap={1}>
         <HStack className="items-center">
-          <Text className="text-xs font-medium uppercase tracking-wider text-zinc-500">Memory</Text>
+          <Text className="text-xs font-medium uppercase tracking-wider text-zinc-500">{t.labelMemory}</Text>
           <Spacer/>
           <Text className="text-sm font-semibold tabular-nums">{{op:"state", path:"/state/mem_text"}}</Text>
         </HStack>
@@ -29,7 +29,7 @@
 
       <VStack gap={1}>
         <HStack className="items-center">
-          <Text className="text-xs font-medium uppercase tracking-wider text-zinc-500">Disk</Text>
+          <Text className="text-xs font-medium uppercase tracking-wider text-zinc-500">{t.labelDisk}</Text>
           <Spacer/>
           <Text className="text-sm font-semibold tabular-nums">{{op:"state", path:"/state/disk_text"}}</Text>
         </HStack>
@@ -47,7 +47,7 @@
 
       <VStack gap={1}>
         <HStack className="items-center">
-          <Text className="text-xs font-medium uppercase tracking-wider text-zinc-500">Battery</Text>
+          <Text className="text-xs font-medium uppercase tracking-wider text-zinc-500">{t.labelBattery}</Text>
           <Spacer/>
           <Text className="text-sm font-semibold tabular-nums">{{op:"state", path:"/state/batt_text"}}</Text>
         </HStack>
@@ -56,7 +56,7 @@
 
       <VStack gap={1}>
         <HStack className="items-center">
-          <Text className="text-xs font-medium uppercase tracking-wider text-zinc-500">Temp</Text>
+          <Text className="text-xs font-medium uppercase tracking-wider text-zinc-500">{t.labelTemp}</Text>
           <Spacer/>
           <Text className="text-sm font-semibold tabular-nums">{{op:"state", path:"/state/temp_text"}}</Text>
         </HStack>
@@ -65,7 +65,7 @@
 
       <VStack gap={1}>
         <HStack className="items-center">
-          <Text className="text-xs font-medium uppercase tracking-wider text-zinc-500">Fan</Text>
+          <Text className="text-xs font-medium uppercase tracking-wider text-zinc-500">{t.labelFan}</Text>
           <Spacer/>
           <Text className="text-sm font-semibold tabular-nums">{{op:"state", path:"/state/fan_text"}}</Text>
         </HStack>
@@ -73,7 +73,7 @@
 
       <VStack gap={1}>
         <HStack className="items-center">
-          <Text className="text-xs font-medium uppercase tracking-wider text-zinc-500">Network</Text>
+          <Text className="text-xs font-medium uppercase tracking-wider text-zinc-500">{t.labelNetwork}</Text>
           <Spacer/>
           <Text className="text-sm font-semibold tabular-nums">↓ {{op:"state", path:"/state/net_rx_text"}}  ↑ {{op:"state", path:"/state/net_tx_text"}}</Text>
         </HStack>
@@ -82,7 +82,7 @@
       <Divider/>
 
       <VStack gap={1}>
-        <Text className="text-xs uppercase tracking-wider text-zinc-400">CPU history</Text>
+        <Text className="text-xs uppercase tracking-wider text-zinc-400">{t.histCpu}</Text>
         <Chart collection="metrics"
                query={{orderBy:[{field:"ts",direction:"asc"}], limit:60}}
                xField="ts" yField="cpu_pct" kind="line"
@@ -91,7 +91,7 @@
       </VStack>
 
       <VStack gap={1}>
-        <Text className="text-xs uppercase tracking-wider text-zinc-400">Network ↓ KB/s</Text>
+        <Text className="text-xs uppercase tracking-wider text-zinc-400">{t.histNet}</Text>
         <Chart collection="metrics"
                query={{orderBy:[{field:"ts",direction:"asc"}], limit:60}}
                xField="ts" yField="rx_kbps" kind="line"

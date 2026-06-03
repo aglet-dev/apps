@@ -5,8 +5,8 @@
   </TrayLabel>
 
   <TrayMenu>
-    <TrayMenuItem label="Refresh now" onSelect="refreshNow"/>
-    <TrayMenuItem label="Quit" quit/>
+    <TrayMenuItem label={t.menuRefresh} onSelect="refreshNow"/>
+    <TrayMenuItem label={t.menuQuit} quit/>
   </TrayMenu>
 
   <TrayPopover>
@@ -21,7 +21,7 @@
           </HStack>
           <VStack gap={1}>
             <HStack className="items-center">
-              <Text className="text-[10px] uppercase tracking-wider text-zinc-500">Session</Text>
+              <Text className="text-[10px] uppercase tracking-wider text-zinc-500">{t.session}</Text>
               <Spacer/>
               <Text className="text-xs font-semibold tabular-nums">{{op:"state", path:"/data/cl/session_pct_text"}}</Text>
             </HStack>
@@ -31,11 +31,11 @@
               color={{op:"state", path:"/data/cl/session_color"}}
               size="sm"
             />
-            <Text className="text-[10px] text-zinc-500 leading-tight">resets {{op:"state", path:"/data/cl/session_reset_text"}}</Text>
+            <Text className="text-[10px] text-zinc-500 leading-tight">{t.resets} {{op:"state", path:"/data/cl/session_reset_text"}}</Text>
           </VStack>
           <VStack gap={1}>
             <HStack className="items-center">
-              <Text className="text-[10px] uppercase tracking-wider text-zinc-500">Week</Text>
+              <Text className="text-[10px] uppercase tracking-wider text-zinc-500">{t.week}</Text>
               <Spacer/>
               <Text className="text-xs font-semibold tabular-nums">{{op:"state", path:"/data/cl/weekly_pct_text"}}</Text>
             </HStack>
@@ -45,7 +45,7 @@
               color={{op:"state", path:"/data/cl/weekly_color"}}
               size="sm"
             />
-            <Text className="text-[10px] text-zinc-500 leading-tight">resets {{op:"state", path:"/data/cl/weekly_reset_text"}}</Text>
+            <Text className="text-[10px] text-zinc-500 leading-tight">{t.resets} {{op:"state", path:"/data/cl/weekly_reset_text"}}</Text>
           </VStack>
           <Text className="text-[10px] text-amber-500 leading-tight">{{op:"state", path:"/data/cl/err"}}</Text>
         </VStack>
@@ -72,11 +72,11 @@
               color={{op:"state", path:"/data/cx/session_color"}}
               size="sm"
             />
-            <Text className="text-[10px] text-zinc-500 leading-tight">resets {{op:"state", path:"/data/cx/session_reset_text"}}</Text>
+            <Text className="text-[10px] text-zinc-500 leading-tight">{t.resets} {{op:"state", path:"/data/cx/session_reset_text"}}</Text>
           </VStack>
           <VStack gap={1}>
             <HStack className="items-center">
-              <Text className="text-[10px] uppercase tracking-wider text-zinc-500">Week</Text>
+              <Text className="text-[10px] uppercase tracking-wider text-zinc-500">{t.week}</Text>
               <Spacer/>
               <Text className="text-xs font-semibold tabular-nums">{{op:"state", path:"/data/cx/weekly_pct_text"}}</Text>
             </HStack>
@@ -86,7 +86,7 @@
               color={{op:"state", path:"/data/cx/weekly_color"}}
               size="sm"
             />
-            <Text className="text-[10px] text-zinc-500 leading-tight">resets {{op:"state", path:"/data/cx/weekly_reset_text"}}</Text>
+            <Text className="text-[10px] text-zinc-500 leading-tight">{t.resets} {{op:"state", path:"/data/cx/weekly_reset_text"}}</Text>
           </VStack>
           <Text className="text-[10px] text-amber-500 leading-tight">{{op:"state", path:"/data/cx/err"}}</Text>
         </VStack>

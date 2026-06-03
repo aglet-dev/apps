@@ -1,0 +1,9 @@
+{
+  "heading": "Todo",
+  "placeholder": "What needs doing?",
+  "btnAdd": "Add",
+  "empty": "No todos yet",
+  "btnDone": "Done",
+  "btnUndo": "Undo",
+  "btnDelete": "Delete"
+}

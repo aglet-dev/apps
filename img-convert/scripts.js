@@ -35,9 +35,9 @@ export default {
     }
   },
 
-  async convert({ src_dataurl, format, quality }, { setState, plugins }) {
+  async convert({ src_dataurl, format, quality }, { setState, plugins, scope }) {
     const b64 = stripDataUrl(src_dataurl);
-    if (!b64) return setState({ out_dataurl: "", out_meta: "", error: "需要先贴图" });
+    if (!b64) return setState({ out_dataurl: "", out_meta: "", error: scope.t.errNoImage });
     const fmt = format || "webp";
     const q = Number(quality) || 85;
     try {

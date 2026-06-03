@@ -1,0 +1,10 @@
+{
+  "labelMemory": "内存",
+  "labelDisk": "磁盘",
+  "labelBattery": "电池",
+  "labelTemp": "温度",
+  "labelFan": "风扇",
+  "labelNetwork": "网络",
+  "histCpu": "CPU 历史",
+  "histNet": "网络 ↓ KB/s"
+}

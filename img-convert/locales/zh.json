@@ -1,0 +1,12 @@
+{
+  "sectionSource": "源",
+  "labelDataUrl": "图片数据 URL",
+  "sectionConvert": "转换",
+  "labelOutput": "输出",
+  "labelQuality": "质量 (1-100)",
+  "btnConvert": "转换",
+  "sectionResult": "结果",
+  "btnCopy": "复制到剪贴板",
+  "alertError": "错误",
+  "errNoImage": "需要先贴图"
+}

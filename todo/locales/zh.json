@@ -1,0 +1,9 @@
+{
+  "heading": "待办",
+  "placeholder": "要做什么？",
+  "btnAdd": "添加",
+  "empty": "暂无待办",
+  "btnDone": "完成",
+  "btnUndo": "撤销",
+  "btnDelete": "删除"
+}

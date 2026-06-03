@@ -1,24 +1,24 @@
 <Page className="p-6">
   <VStack gap={6}>
-    <Section title="Source">
+    <Section title={t.sectionSource}>
       <DataForm collection="scratch">
-        <Input name="src_dataurl" label="Image data URL" placeholder="data:image/...;base64,..."/>
+        <Input name="src_dataurl" label={t.labelDataUrl} placeholder="data:image/...;base64,..."/>
       </DataForm>
       {form.src_dataurl && <Image src={form.src_dataurl} fit="contain" className="max-w-full max-h-48 mx-auto"/>}
       {state.src_meta && <Text content={state.src_meta} muted className="text-sm"/>}
     </Section>
 
-    <Section title="Convert">
+    <Section title={t.sectionConvert}>
       <DataForm collection="scratch">
-        <Select name="format" label="Output" placeholder="webp">
+        <Select name="format" label={t.labelOutput} placeholder="webp">
           <Option value="webp" label="WebP"/>
           <Option value="png"  label="PNG"/>
           <Option value="jpeg" label="JPEG"/>
           <Option value="bmp"  label="BMP"/>
         </Select>
-        <Input name="quality" label="Quality (1-100)" type="number" placeholder="85"/>
+        <Input name="quality" label={t.labelQuality} type="number" placeholder="85"/>
         <HStack justify="end">
-          <Button label="Convert" color="primary" icon="arrow-right"
+          <Button label={t.btnConvert} color="primary" icon="arrow-right"
             onClick={() => scripts.convert({
               src_dataurl: form.src_dataurl,
               format: form.format,
@@ -29,17 +29,17 @@
     </Section>
 
     {state.out_dataurl && (
-      <Section title="Result">
+      <Section title={t.sectionResult}>
         <Image src={state.out_dataurl} fit="contain" className="max-w-full max-h-48 mx-auto"/>
         <Text content={state.out_meta} muted className="text-sm"/>
         <HStack justify="end">
-          <Button label="Copy to clipboard" icon="copy" onClick={() => scripts.copyOut()}/>
+          <Button label={t.btnCopy} icon="copy" onClick={() => scripts.copyOut()}/>
         </HStack>
       </Section>
     )}
 
     {state.error && (
-      <Alert title="Error" description={state.error} color="danger" icon="warning"/>
+      <Alert title={t.alertError} description={state.error} color="danger" icon="warning"/>
     )}
   </VStack>
 </Page>

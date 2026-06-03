@@ -2,10 +2,13 @@
   "id": "todo",
   "name": {
     "default": "Todo",
-    "zh": "待办"
+    "zh": "待办",
+    "ja": "ToDo"
   },
   "description": {
-    "default": "Dogfood: todo with data collection + list + fill + toggle + delete, driven via aglet automation."
+    "default": "A minimal todo list — add, complete, delete.",
+    "zh": "极简待办清单：添加、完成、删除。",
+    "ja": "シンプルな ToDo リスト：追加・完了・削除。"
   },
   "version": "0.1.0",
   "renderer": "web",
