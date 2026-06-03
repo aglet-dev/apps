@@ -41,10 +41,13 @@ jobs:
               [ -f "$id/aglet.json" ] && echo "$id"
             done | sort -u)
           else
+            # 末尾 `|| true`：while 的退出码 = 最后一次 `[ -f ]` 测试；当最后一个变更
+            # 路径不是 app（如删除的目录 / 非 app 顶层文件）时测试为假 → while 退 1
+            # → `set -e` 下命令替换赋值会中止整步。变更路径里有非 app 是常态，故吞掉。
             apps=$(git diff --name-only "$base" "$head" \
               | awk -F/ 'NF>=2 && $1!=".github" { print $1 }' \
               | sort -u \
-              | while read d; do [ -f "$d/aglet.json" ] && echo "$d"; done)
+              | while read d; do [ -f "$d/aglet.json" ] && echo "$d"; done || true)
           fi
           if [ -z "$apps" ]; then
             echo "apps=" >> "$GITHUB_OUTPUT"; exit 0
