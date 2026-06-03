@@ -1,13 +1,13 @@
 {
   "id": "sysmon",
   "name": "System Monitor",
-  "description": "OS CPU / memory / disk dogfood. Subscribes to the `sysmon` stdio plugin's `cpu` resource — plugin pushes a sample every 1s, the host fans it out to `onCpuSample` via the plugin event bus. No polling.",
-  "version": "0.4.0",
+  "description": "System monitor — CPU, memory, disk, GPU, battery, temperature, fan, network. Subscribes to the `sysmon` stdio plugin's `cpu` resource — plugin pushes a sample every 1s, the host fans it out to `onCpuSample` via the plugin event bus. No polling.",
+  "version": "0.5.0",
   "renderer": "web",
   "requires": [
     {
       "plugin": "sysmon",
-      "version": ">=0.4"
+      "version": ">=0.5"
     }
   ],
   "permissions": [
@@ -38,6 +38,12 @@
           "type": "number"
         },
         "temp_c": {
+          "type": "number"
+        },
+        "rx_kbps": {
+          "type": "number"
+        },
+        "tx_kbps": {
           "type": "number"
         }
       }
