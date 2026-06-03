@@ -1,0 +1,223 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aglet.dev/schema/aglet.json",
+  "title": "Aglet app manifest (aglet.json)",
+  "description": "App manifest source. The renderer-facing package is {manifest, ui, css} (ui comes from ui.tsx, css extracted) — this schema covers the manifest half. Runtime applies stricter cross-checks at install (src/core/aglet/validator.zig). Plugins use aplugin.schema.json instead.",
+  "type": "object",
+  "required": ["id", "name", "version", "renderer"],
+  "additionalProperties": false,
+  "patternProperties": {
+    "^_?comment": {
+      "description": "JSON has no comments — `comment` / `comment_<field>` / `_comment*` keys are author notes, ignored by the runtime."
+    }
+  },
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9](?:[a-z0-9]|-(?!-))*[a-z0-9]$",
+      "minLength": 2,
+      "maxLength": 50,
+      "description": "Unique id; kebab-case [a-z0-9-], no leading/trailing/consecutive dashes."
+    },
+    "name": { "$ref": "#/$defs/localized_string", "description": "Display name (i18n)." },
+    "version": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Version string (semver by convention; non-empty enforced)."
+    },
+    "renderer": {
+      "enum": ["auto", "web", "native"],
+      "description": "How the UI renders. auto = native where the used components support the platform else web; web = React/WebView (runs everywhere); native = platform-native (apple/android). Plugins must NOT set this."
+    },
+    "description": { "$ref": "#/$defs/localized_string", "description": "One-line description (i18n)." },
+    "docs": { "type": "string", "description": "Long-form Markdown docs." },
+    "scripts": {
+      "type": ["null", "string", "object"],
+      "description": "Handler source: null (none / supplied via a separate .scripts.js file), a path string, or { js }. Inlined into manifest.scripts.js at pack."
+    },
+    "schema_revision": { "type": "integer", "minimum": 0, "description": "Manifest schema revision (default 1)." },
+    "category": {
+      "enum": ["productivity", "developer-tools", "utilities", "data", "media", "social", "education", "system", "other"],
+      "description": "Store category."
+    },
+    "keywords": {
+      "type": "array",
+      "maxItems": 10,
+      "items": { "type": "string", "minLength": 1, "maxLength": 32 },
+      "description": "Search tags (max 10)."
+    },
+    "icon": { "type": "string", "description": "http(s) URL or relative path (png/jpg/webp/svg/gif/avif)." },
+    "screenshots": {
+      "type": "array",
+      "maxItems": 10,
+      "items": {
+        "type": "object",
+        "required": ["url"],
+        "additionalProperties": false,
+        "properties": {
+          "url": { "type": "string" },
+          "caption": { "type": "string" }
+        }
+      }
+    },
+    "author": { "$ref": "#/$defs/author" },
+    "homepage": { "type": "string", "pattern": "^https?://" },
+    "repository": { "type": "string", "pattern": "^https?://" },
+    "license": { "type": "string", "minLength": 1, "maxLength": 64, "description": "SPDX id or free form." },
+    "default_locale": { "type": "string", "minLength": 1, "maxLength": 16, "description": "BCP47 tag." },
+    "strings": {
+      "type": "object",
+      "description": "i18n string tables: { <lang>: { <key>: <string> } }.",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": { "type": "string" }
+      }
+    },
+    "permissions": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9_-]+:[a-z0-9_:-]+$",
+        "description": "\"<namespace>:<action>\" — kernel caps or plugin-declared. Not whitelisted at validate; checked against the plugin's own manifest at dispatch."
+      }
+    },
+    "requires": {
+      "type": "array",
+      "description": "Plugin dependencies — provisioned at install.",
+      "items": {
+        "type": "object",
+        "required": ["plugin"],
+        "additionalProperties": false,
+        "properties": {
+          "plugin": { "type": "string", "description": "Plugin id." },
+          "version": { "type": "string", "description": "Semver range, e.g. \">=1.0\"." }
+        }
+      }
+    },
+    "collections": {
+      "type": "object",
+      "description": "Persistent data model: { <name>: { schema, indexes?, vector?, storage? } }.",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["schema"],
+        "properties": {
+          "schema": {
+            "type": "object",
+            "description": "Field defs: { <field>: { type, enum?, required?, min?, max?, ... } }.",
+            "additionalProperties": {
+              "type": "object",
+              "required": ["type"],
+              "properties": {
+                "type": { "enum": ["string", "number", "integer", "boolean", "array", "object", "date"] },
+                "enum": { "type": "array", "minItems": 1 },
+                "required": { "type": "boolean" },
+                "min": { "type": "number" },
+                "max": { "type": "number" }
+              }
+            }
+          },
+          "indexes": { "type": "array", "items": { "type": "string" } },
+          "vector": { "type": "object" },
+          "storage": { "enum": ["persistent", "memory"] }
+        }
+      }
+    },
+    "state": {
+      "type": "object",
+      "description": "Initial state tree. Free-form (intentionally unvalidated) — any JSON, fed to the renderer as initial scope.state. See docs/APP_STATE.md.",
+      "additionalProperties": true
+    },
+    "keys": {
+      "type": "object",
+      "description": "Keyboard bindings: { <key>: \"<script>\" | { script, args? } }."
+    },
+    "watch": {
+      "type": "object",
+      "description": "State-watch handlers: { <state-path>: [<action>, ...] }."
+    },
+    "jobs": {
+      "type": "array",
+      "description": "Declarative scheduler tasks (daemon-side, persistent/background). For foreground UI intervals use `timers`.",
+      "items": {
+        "type": "object",
+        "required": ["id", "trigger", "handler"],
+        "properties": {
+          "id": { "type": "string" },
+          "handler": { "type": "string", "description": "scripts.js export name." },
+          "while": { "enum": ["always", "window_open", "visible", "aglet_active", "charging", "unmetered"] },
+          "trigger": {
+            "type": "object",
+            "required": ["kind"],
+            "properties": {
+              "kind": { "enum": ["interval", "cron", "event", "once"] },
+              "ms": { "type": "integer", "minimum": 200, "description": "interval: period (>=200)." },
+              "expr": { "type": "string", "description": "cron: 5-field expression." },
+              "event": { "type": "string", "description": "event: \"<namespace>.<topic>\"." }
+            }
+          }
+        }
+      }
+    },
+    "timers": {
+      "type": "array",
+      "description": "Foreground UI intervals (renderer-side; tick only while window open/visible; run scripts to drive visible UI like countdowns). For background/persistent work use `jobs`.",
+      "items": {
+        "type": "object",
+        "required": ["id", "ms", "scripts"],
+        "properties": {
+          "id": { "type": "string" },
+          "ms": { "type": "integer", "minimum": 1 },
+          "scripts": {
+            "oneOf": [
+              { "type": "string" },
+              { "type": "array", "items": { "type": "string" } }
+            ]
+          },
+          "while": { "type": "string", "description": "state path gating start/stop." },
+          "stop_when": { "description": "condition to stop the timer." }
+        }
+      }
+    },
+    "window": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "width": { "type": "integer", "minimum": 200, "maximum": 4000 },
+        "height": { "type": "integer", "minimum": 200, "maximum": 4000 },
+        "style": { "enum": ["phone", "desktop"] }
+      }
+    },
+    "plugin": {
+      "const": false,
+      "description": "Apps must not set plugin:true — plugins use aplugin.json (aplugin.schema.json)."
+    }
+  },
+  "$defs": {
+    "localized_string": {
+      "oneOf": [
+        { "type": "string" },
+        {
+          "type": "object",
+          "required": ["default"],
+          "additionalProperties": { "type": "string" },
+          "properties": { "default": { "type": "string" } }
+        }
+      ]
+    },
+    "author": {
+      "oneOf": [
+        { "type": "string", "maxLength": 128 },
+        {
+          "type": "object",
+          "required": ["name"],
+          "additionalProperties": false,
+          "properties": {
+            "name": { "type": "string" },
+            "email": { "type": "string" },
+            "url": { "type": "string" }
+          }
+        }
+      ]
+    }
+  }
+}
