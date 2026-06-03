@@ -73,7 +73,10 @@ jobs:
             echo "::group::$id"
             manifest="$id/aglet.json"
             aglet validate "$manifest" || { fail=1; echo "✗ $id validate"; }
+            # --registry HTTPS：CI 无 SSH key,默认的 git@github.com 注册表 clone 会
+            # Permission denied。aglet-registry 是公开仓,匿名 HTTPS clone 即可。
             aglet publish "$manifest" --dry-run --no-git --no-push --no-pr \
+              --registry https://github.com/agent-rt/aglet-registry.git \
               || { fail=1; echo "✗ $id pack"; }
             echo "::endgroup::"
           done
