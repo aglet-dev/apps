@@ -21,6 +21,8 @@ jobs:
     runs-on: macos-26
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # 'git diff <base> <head>' 需 base 在历史里（默认浅克隆看不到 → 静默空 → 跳过校验）
 
       - name: Detect changed aglets
         id: changes
