@@ -1,0 +1,47 @@
+{
+  "name": "tasks CRUD + status/priority filter",
+  "aglet": "..",
+  "steps": [
+    {
+      "action": "data.create",
+      "params": {
+        "collection": "items",
+        "data": { "title": "buy milk", "priority": "high", "status": "todo" }
+      }
+    },
+    {
+      "action": "data.create",
+      "params": {
+        "collection": "items",
+        "data": { "title": "write report", "priority": "med", "status": "doing" }
+      }
+    },
+    {
+      "action": "data.create",
+      "params": {
+        "collection": "items",
+        "data": { "title": "old chore", "priority": "low", "status": "done" }
+      }
+    },
+    {
+      "action": "data.list",
+      "params": { "collection": "items" },
+      "expect": { "ok": true, "items_len": 3 }
+    },
+    {
+      "action": "data.list",
+      "params": { "collection": "items", "query": { "where": { "status": "todo" } } },
+      "expect": { "ok": true, "items_len": 1 }
+    },
+    {
+      "action": "data.list",
+      "params": { "collection": "items", "query": { "where": { "priority": "high" } } },
+      "expect": { "ok": true, "items_len": 1 }
+    },
+    {
+      "action": "data.get",
+      "params": { "collection": "items", "id": "does-not-exist" },
+      "expect": { "ok": false, "error_code": "NOT_FOUND_RECORD" }
+    }
+  ]
+}

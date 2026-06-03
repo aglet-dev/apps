@@ -1,0 +1,113 @@
+{
+  "name": "json format/minify/validate/clear E2E (select-only)",
+  "aglet": "..",
+  "_comment": "Paste invalid → Validate → Alert；Paste valid → Format → Badge；Clear。",
+  "steps": [
+    {
+      "action": "intent.fill",
+      "name": "input",
+      "value": "{not json}",
+      "expect": {
+        "ok": true,
+        "data": {
+          "typed": true
+        }
+      }
+    },
+    {
+      "_comment": "Validate Button —— icon=check",
+      "action": "intent.fire",
+      "select": {
+        "role": "button",
+        "props": {
+          "icon": "check"
+        }
+      },
+      "expect": {
+        "ok": true,
+        "data": {
+          "clicked": true
+        }
+      }
+    },
+    {
+      "_comment": "Alert error",
+      "action": "view.waitfor",
+      "select": {
+        "role": "alert",
+        "props": {
+          "icon": "warning",
+          "color": "danger"
+        }
+      },
+      "timeout": 3000,
+      "expect": {
+        "ok": true,
+        "data": {
+          "found": true
+        }
+      }
+    },
+    {
+      "action": "intent.fill",
+      "name": "input",
+      "value": "{\"a\":1,\"b\":[2,3]}",
+      "expect": {
+        "ok": true,
+        "data": {
+          "typed": true
+        }
+      }
+    },
+    {
+      "_comment": "Format Button —— icon=brackets-curly",
+      "action": "intent.fire",
+      "select": {
+        "role": "button",
+        "props": {
+          "icon": "brackets-curly",
+          "color": "primary"
+        }
+      },
+      "expect": {
+        "ok": true,
+        "data": {
+          "clicked": true
+        }
+      }
+    },
+    {
+      "_comment": "Success Badge",
+      "action": "view.waitfor",
+      "select": {
+        "role": "badge",
+        "props": {
+          "color": "success"
+        }
+      },
+      "timeout": 3000,
+      "expect": {
+        "ok": true,
+        "data": {
+          "found": true
+        }
+      }
+    },
+    {
+      "_comment": "Clear Button —— icon=x",
+      "action": "intent.fire",
+      "select": {
+        "role": "button",
+        "props": {
+          "icon": "x"
+        }
+      },
+      "expect": {
+        "ok": true,
+        "data": {
+          "clicked": true
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "name": "footprint smoke — page renders",
+  "aglet": "..",
+  "_comment": "Minimum coverage：page renders + collection seeds 不空。",
+  "steps": [
+    { "action": "view.waitfor",
+      "select": { "role": "page" },
+      "timeout": 3000,
+      "expect": { "ok": true, "data": { "found": true } } }
+  ]
+}

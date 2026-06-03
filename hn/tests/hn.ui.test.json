@@ -1,0 +1,166 @@
+{
+  "name": "hn like-button toggle E2E (select-only)",
+  "aglet": "..",
+  "_comment": "select-only：snapshot → ref forward。i18n-immune via item field + icon。",
+  "steps": [
+    {
+      "action": "data.create",
+      "params": {
+        "collection": "stories",
+        "data": {
+          "hn_id": 1,
+          "title_en": "test story",
+          "title": "test story",
+          "url": "https://example.com",
+          "domain": "example.com",
+          "summary": "test summary",
+          "points": 100,
+          "comments": 0,
+          "author": "agent",
+          "age": "now",
+          "liked": false,
+          "disliked": false
+        }
+      }
+    },
+    {
+      "_comment": "等 record row Heading（按 item.hn_id 选）",
+      "action": "view.waitfor",
+      "select": {
+        "role": "heading",
+        "in_item": {
+          "hn_id": 1
+        }
+      },
+      "timeout": 5000,
+      "expect": {
+        "ok": true,
+        "data": {
+          "found": true
+        }
+      }
+    },
+    {
+      "action": "data.list",
+      "params": {
+        "collection": "stories",
+        "query": {
+          "where": {
+            "liked": true
+          }
+        }
+      },
+      "expect": {
+        "ok": true,
+        "items_len": 0
+      }
+    },
+    {
+      "_comment": "Like Button —— icon=heart in row (item.liked=false)",
+      "action": "intent.fire",
+      "select": {
+        "role": "button",
+        "in_item": {
+          "hn_id": 1,
+          "liked": false
+        },
+        "props": {
+          "icon": "heart"
+        }
+      },
+      "expect": {
+        "ok": true,
+        "data": {
+          "clicked": true
+        }
+      }
+    },
+    {
+      "action": "data.list",
+      "params": {
+        "collection": "stories",
+        "query": {
+          "where": {
+            "liked": true
+          }
+        }
+      },
+      "expect": {
+        "ok": true,
+        "items_len": 1
+      }
+    },
+    {
+      "_comment": "再点 Like 切回 (now item.liked=true → toggle 回 false)",
+      "action": "intent.fire",
+      "select": {
+        "role": "button",
+        "in_item": {
+          "hn_id": 1,
+          "liked": true
+        },
+        "props": {
+          "icon": "heart"
+        }
+      },
+      "expect": {
+        "ok": true,
+        "data": {
+          "clicked": true
+        }
+      }
+    },
+    {
+      "action": "data.list",
+      "params": {
+        "collection": "stories",
+        "query": {
+          "where": {
+            "liked": true
+          }
+        }
+      },
+      "expect": {
+        "ok": true,
+        "items_len": 0
+      }
+    },
+    {
+      "_comment": "Tooltip E2E: hover Like Button。apple 没真 popover，accessibility 经 snapshot 已暴露；web 走 Floating UI。",
+      "action": "intent.hover",
+      "select": {
+        "role": "button",
+        "in_item": {
+          "hn_id": 1
+        },
+        "props": {
+          "icon": "heart"
+        }
+      },
+      "expect": {
+        "ok": true,
+        "data": {
+          "hovered": true
+        }
+      }
+    },
+    {
+      "_comment": "Tooltip role 由 walker emit，content 由 nameOf 抠 props.content。i18n 但唯一可识别 attr 是 IR-stable: 包裹 Like Button (icon=heart)，行 hn_id=1 内有 2 个 Tooltip (Like + Block)，按 nth 取首个。后续 spec.Tooltip 加 value 可去 nth。",
+      "action": "view.waitfor",
+      "select": {
+        "role": "tooltip",
+        "in_item": {
+          "hn_id": 1
+        },
+        "nth": 1
+      },
+      "timeout": 3000,
+      "expect": {
+        "ok": true,
+        "data": {
+          "found": true
+        }
+      }
+    }
+  ]
+}

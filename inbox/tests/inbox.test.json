@@ -1,0 +1,79 @@
+{
+  "name": "inbox tab flow",
+  "aglet": "..",
+  "steps": [
+    {
+      "action": "data.create",
+      "params": {
+        "collection": "notes",
+        "data": {
+          "title": "build something",
+          "tag": "idea",
+          "archived": false
+        }
+      }
+    },
+    {
+      "action": "data.create",
+      "params": {
+        "collection": "notes",
+        "data": {
+          "title": "fix the validator",
+          "tag": "todo",
+          "archived": false
+        }
+      }
+    },
+    {
+      "action": "data.create",
+      "params": {
+        "collection": "notes",
+        "data": {
+          "title": "read base ui docs",
+          "tag": "link",
+          "archived": true
+        }
+      }
+    },
+    {
+      "action": "data.list",
+      "params": {
+        "collection": "notes"
+      },
+      "expect": {
+        "ok": true,
+        "items_len": 3
+      }
+    },
+    {
+      "action": "data.list",
+      "params": {
+        "collection": "notes",
+        "query": {
+          "where": {
+            "archived": false
+          }
+        }
+      },
+      "expect": {
+        "ok": true,
+        "items_len": 2
+      }
+    },
+    {
+      "action": "data.list",
+      "params": {
+        "collection": "notes",
+        "query": {
+          "where": {
+            "archived": true
+          }
+        }
+      },
+      "expect": {
+        "ok": true,
+        "items_len": 1
+      }
+    }
+  ]
+}

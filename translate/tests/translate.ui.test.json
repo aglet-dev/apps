@@ -1,0 +1,83 @@
+{
+  "name": "translate UI smoke + history empty",
+  "aglet": "..",
+  "_comment": "scenarios 不接网；select-only UI 渲染 + history 空态。",
+  "steps": [
+    {
+      "_comment": "Translate Button —— icon=translate (color=primary)",
+      "action": "view.waitfor",
+      "select": {
+        "role": "button",
+        "props": {
+          "icon": "translate",
+          "color": "primary"
+        }
+      },
+      "timeout": 3000,
+      "expect": {
+        "ok": true,
+        "data": {
+          "found": true
+        }
+      }
+    },
+    {
+      "action": "intent.fill",
+      "name": "input",
+      "value": "Hello world",
+      "expect": {
+        "ok": true,
+        "data": {
+          "typed": true
+        }
+      }
+    },
+    {
+      "_comment": "Clear Button —— icon=x",
+      "action": "intent.fire",
+      "select": {
+        "role": "button",
+        "props": {
+          "icon": "x"
+        }
+      },
+      "expect": {
+        "ok": true,
+        "data": {
+          "clicked": true
+        }
+      }
+    },
+    {
+      "_comment": "切 History tab",
+      "action": "intent.fire",
+      "select": {
+        "role": "tab",
+        "value": "history"
+      },
+      "expect": {
+        "ok": true,
+        "data": {
+          "clicked": true
+        }
+      }
+    },
+    {
+      "_comment": "Empty state icon=clock",
+      "action": "view.waitfor",
+      "select": {
+        "role": "emptystate",
+        "props": {
+          "icon": "clock"
+        }
+      },
+      "timeout": 3000,
+      "expect": {
+        "ok": true,
+        "data": {
+          "found": true
+        }
+      }
+    }
+  ]
+}

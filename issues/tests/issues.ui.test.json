@@ -1,0 +1,143 @@
+{
+  "name": "issues Table render + Menu close + Drawer filter E2E (select-only)",
+  "aglet": "..",
+  "steps": [
+    {
+      "action": "data.create",
+      "params": {
+        "collection": "issues",
+        "data": {
+          "title": "validator hangs on empty children",
+          "status": "open",
+          "priority": "high",
+          "tags": "validator,bug",
+          "created_at": "2026-05-16T00:00:00Z"
+        }
+      }
+    },
+    {
+      "_comment": "等 row title 出现",
+      "action": "view.waitfor",
+      "select": {
+        "role": "text",
+        "in_item": {
+          "title": "validator hangs on empty children"
+        }
+      },
+      "timeout": 5000,
+      "expect": {
+        "ok": true,
+        "data": {
+          "found": true
+        }
+      }
+    },
+    {
+      "action": "data.list",
+      "params": {
+        "collection": "issues",
+        "query": {
+          "where": {
+            "status": "open"
+          }
+        }
+      },
+      "expect": {
+        "ok": true,
+        "items_len": 1
+      }
+    },
+    {
+      "_comment": "Close MenuItem —— spec 加 value 后跨 locale 稳定。walker 把所有 MenuItem 都 emit 进 refs（不依赖 Menu open 状态），onClick 直接 fire。",
+      "action": "intent.fire",
+      "select": {
+        "role": "menuitem",
+        "in_item": {
+          "status": "open"
+        },
+        "value": "close"
+      },
+      "expect": {
+        "ok": true,
+        "data": {
+          "clicked": true
+        }
+      }
+    },
+    {
+      "action": "data.list",
+      "params": {
+        "collection": "issues",
+        "query": {
+          "where": {
+            "status": "closed"
+          }
+        }
+      },
+      "expect": {
+        "ok": true,
+        "items_len": 1
+      }
+    },
+    {
+      "_comment": "Drawer trigger 打开 filter Drawer —— state-driven，_ui.drawers.filters=true 可观测。",
+      "action": "intent.fire",
+      "select": {
+        "role": "button",
+        "props": {
+          "leftIcon": "funnel"
+        }
+      },
+      "expect": {
+        "ok": true,
+        "data": {
+          "clicked": true
+        }
+      }
+    },
+    {
+      "_comment": "Drawer open 状态在 session.state",
+      "action": "state.waitfor",
+      "timeout": 1000,
+      "expect": {
+        "ok": true,
+        "data": {
+          "state": {
+            "_ui": {
+              "drawers": {
+                "filters": true
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Drawer 内 filterStatus='open' Button —— value=status_open",
+      "action": "intent.fire",
+      "select": {
+        "role": "button",
+        "value": "status_open"
+      },
+      "expect": {
+        "ok": true,
+        "data": {
+          "clicked": true
+        }
+      }
+    },
+    {
+      "_comment": "state.filterStatus='open' 已设",
+      "action": "state.waitfor",
+      "timeout": 3000,
+      "expect": {
+        "ok": true,
+        "data": {
+          "state": {
+            "filterStatus": "open"
+          }
+        }
+      }
+    }
+  ]
+}

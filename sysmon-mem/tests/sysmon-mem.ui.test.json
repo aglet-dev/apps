@@ -1,0 +1,10 @@
+{
+  "name": "sysmon-mem smoke — Tray popover Memory 标签",
+  "aglet": "..",
+  "steps": [
+    { "action": "view.waitfor",
+      "select": { "role": "text", "props": { "content": "Memory" } },
+      "timeout": 3000,
+      "expect": { "ok": true, "data": { "found": true } } }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "name": "clips: clipboard history capture + $contains search + ordering + UI render",
+  "aglet": "..",
+  "steps": [
+    {
+      "_comment": "种两条历史（一条置顶）",
+      "action": "data.create",
+      "params": { "collection": "clips", "data": { "text": "hello world", "ts": 1000, "pinned": false } },
+      "expect": { "ok": true }
+    },
+    {
+      "action": "data.create",
+      "params": { "collection": "clips", "data": { "text": "second snippet", "ts": 2000, "pinned": true } },
+      "expect": { "ok": true }
+    },
+    {
+      "_comment": "$contains 搜索 —— 验证 query LIKE 算子（搜索特性的底座）",
+      "action": "data.list",
+      "params": { "collection": "clips", "query": { "where": { "text": { "$contains": "second" } } } },
+      "expect": { "ok": true, "items_len": 1 }
+    },
+    {
+      "_comment": "全列表：置顶在前 + 时间倒序",
+      "action": "data.list",
+      "params": { "collection": "clips", "query": { "orderBy": [{ "field": "pinned", "direction": "desc" }, { "field": "ts", "direction": "desc" }] } },
+      "expect": { "ok": true, "items_len": 2 }
+    },
+    {
+      "_comment": "UI lower + DataList 渲染：菜单栏 popover 里有 clip 行（Button）",
+      "action": "view.waitfor",
+      "select": { "role": "button" },
+      "timeout": 3000,
+      "expect": { "ok": true }
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "name": "pomodoro smoke — initial 25:00 phase=work",
+  "aglet": "..",
+  "_comment": "Heading 25:00 是 default state.remaining_sec=1500 → mm:ss 格式化结果。",
+  "steps": [
+    { "action": "view.waitfor",
+      "select": { "role": "heading", "level": 1, "props": { "content": "25:00" } },
+      "timeout": 3000,
+      "expect": { "ok": true, "data": { "found": true } } }
+  ]
+}

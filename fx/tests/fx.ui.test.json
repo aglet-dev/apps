@@ -1,0 +1,64 @@
+{
+  "name": "fx UI smoke (form + button visible)",
+  "aglet": "..",
+  "_comment": "App boot 后 form 可见。不实际 fetch rates (需 net)。仅 UI 渲染验证。",
+  "steps": [
+    {
+      "_comment": "Rates section Refresh Button —— icon=arrow-clockwise",
+      "action": "view.waitfor",
+      "select": {
+        "role": "button",
+        "props": {
+          "icon": "arrow-clockwise"
+        }
+      },
+      "timeout": 3000,
+      "expect": {
+        "ok": true,
+        "data": {
+          "found": true
+        }
+      }
+    },
+    {
+      "_comment": "Calc section Calculate Button —— icon=calculator",
+      "action": "view.waitfor",
+      "select": {
+        "role": "button",
+        "props": {
+          "icon": "calculator"
+        }
+      },
+      "timeout": 3000,
+      "expect": {
+        "ok": true,
+        "data": {
+          "found": true
+        }
+      }
+    },
+    {
+      "_comment": "fill cost + check Calculate button enables",
+      "action": "intent.fill",
+      "name": "cost",
+      "value": "100",
+      "expect": {
+        "ok": true,
+        "data": {
+          "typed": true
+        }
+      }
+    },
+    {
+      "action": "intent.fill",
+      "name": "fees_pct",
+      "value": "5",
+      "expect": {
+        "ok": true,
+        "data": {
+          "typed": true
+        }
+      }
+    }
+  ]
+}

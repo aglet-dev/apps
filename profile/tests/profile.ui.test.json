@@ -1,0 +1,48 @@
+{
+  "name": "profile render + saved row E2E (select-only)",
+  "aglet": "..",
+  "steps": [
+    {
+      "action": "data.create",
+      "params": {
+        "collection": "profiles",
+        "data": {
+          "name": "Ada",
+          "avatar": "",
+          "birthday": "1815-12-10",
+          "theme": "auto",
+          "volume": 65,
+          "bio": "founder of programming"
+        }
+      }
+    },
+    {
+      "_comment": "等行 Heading (item.name='Ada')",
+      "action": "view.waitfor",
+      "select": {
+        "role": "heading",
+        "level": 3,
+        "in_item": {
+          "name": "Ada"
+        }
+      },
+      "timeout": 5000,
+      "expect": {
+        "ok": true,
+        "data": {
+          "found": true
+        }
+      }
+    },
+    {
+      "action": "data.list",
+      "params": {
+        "collection": "profiles"
+      },
+      "expect": {
+        "ok": true,
+        "items_len": 1
+      }
+    }
+  ]
+}

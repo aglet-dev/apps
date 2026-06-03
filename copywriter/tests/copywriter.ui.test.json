@@ -1,0 +1,77 @@
+{
+  "name": "copywriter UI smoke + history empty",
+  "aglet": "..",
+  "_comment": "copywriter 需 LLM；只验证 UI 渲染 + form input + history empty。",
+  "steps": [
+    {
+      "_comment": "Generate Button —— icon=sparkle",
+      "action": "view.waitfor",
+      "select": {
+        "role": "button",
+        "props": {
+          "icon": "sparkle"
+        }
+      },
+      "timeout": 3000,
+      "expect": {
+        "ok": true,
+        "data": {
+          "found": true
+        }
+      }
+    },
+    {
+      "action": "intent.fill",
+      "name": "name",
+      "value": "Widget",
+      "expect": {
+        "ok": true,
+        "data": {
+          "typed": true
+        }
+      }
+    },
+    {
+      "action": "intent.fill",
+      "name": "audience",
+      "value": "Developers",
+      "expect": {
+        "ok": true,
+        "data": {
+          "typed": true
+        }
+      }
+    },
+    {
+      "_comment": "切 History tab —— value=history",
+      "action": "intent.fire",
+      "select": {
+        "role": "tab",
+        "value": "history"
+      },
+      "expect": {
+        "ok": true,
+        "data": {
+          "clicked": true
+        }
+      }
+    },
+    {
+      "_comment": "Empty state 出现 —— icon=clock",
+      "action": "view.waitfor",
+      "select": {
+        "role": "emptystate",
+        "props": {
+          "icon": "clock"
+        }
+      },
+      "timeout": 3000,
+      "expect": {
+        "ok": true,
+        "data": {
+          "found": true
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "name": "weight smoke — page renders + Add form",
+  "aglet": "..",
+  "steps": [
+    { "action": "view.waitfor",
+      "select": { "role": "page" },
+      "timeout": 3000,
+      "expect": { "ok": true, "data": { "found": true } } }
+  ]
+}

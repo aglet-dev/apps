@@ -1,0 +1,59 @@
+{
+  "name": "profile new-nodes smoke",
+  "aglet": "..",
+  "steps": [
+    {
+      "action": "data.create",
+      "params": {
+        "collection": "profiles",
+        "data": {
+          "name": "Ada",
+          "avatar": "https://example.com/a.png",
+          "birthday": "1815-12-10",
+          "theme": "dark",
+          "volume": 70,
+          "bio": "first programmer"
+        }
+      }
+    },
+    {
+      "action": "data.create",
+      "params": {
+        "collection": "profiles",
+        "data": {
+          "name": "Linus",
+          "avatar": "https://example.com/l.png",
+          "birthday": "1969-12-28",
+          "theme": "light",
+          "volume": 30,
+          "bio": "kernel"
+        }
+      }
+    },
+    {
+      "action": "data.list",
+      "params": {
+        "collection": "profiles"
+      },
+      "expect": {
+        "ok": true,
+        "items_len": 2
+      }
+    },
+    {
+      "action": "data.list",
+      "params": {
+        "collection": "profiles",
+        "query": {
+          "where": {
+            "theme": "dark"
+          }
+        }
+      },
+      "expect": {
+        "ok": true,
+        "items_len": 1
+      }
+    }
+  ]
+}
