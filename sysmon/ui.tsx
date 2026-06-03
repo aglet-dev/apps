@@ -71,6 +71,14 @@
         </HStack>
       </VStack>
 
+      <VStack gap={1}>
+        <HStack className="items-center">
+          <Text className="text-xs font-medium uppercase tracking-wider text-zinc-500">Network</Text>
+          <Spacer/>
+          <Text className="text-sm font-semibold tabular-nums">↓ {{op:"state", path:"/state/net_rx_text"}}  ↑ {{op:"state", path:"/state/net_tx_text"}}</Text>
+        </HStack>
+      </VStack>
+
       <Divider/>
 
       <VStack gap={1}>
@@ -79,6 +87,14 @@
                query={{orderBy:[{field:"ts",direction:"asc"}], limit:60}}
                xField="ts" yField="cpu_pct" kind="line"
                yMin={0} yMax={100}
+               sparkline={true} height={36}/>
+      </VStack>
+
+      <VStack gap={1}>
+        <Text className="text-xs uppercase tracking-wider text-zinc-400">Network ↓ KB/s</Text>
+        <Chart collection="metrics"
+               query={{orderBy:[{field:"ts",direction:"asc"}], limit:60}}
+               xField="ts" yField="rx_kbps" kind="line"
                sparkline={true} height={36}/>
       </VStack>
     </VStack>

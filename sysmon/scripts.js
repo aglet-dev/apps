@@ -17,6 +17,9 @@ function tempColor(c) {
   return "success";
 }
 const fmtGB = (bytes) => (bytes / 1e9).toFixed(1);
+// bytes/sec → 人读速率（<1MB/s 用 KB/s，否则 MB/s）。
+const fmtRate = (bps) =>
+  bps >= 1048576 ? `${(bps / 1048576).toFixed(1)} MB/s` : `${(bps / 1024).toFixed(0)} KB/s`;
 
 export default {
   async onCpuSample(payload, ctx) {
@@ -40,6 +43,11 @@ export default {
 
     const fan = await ctx.plugins.sysmon.fan();
 
+    // 网络：interface 累计 bytes → 插件内部按上次采样差出 bytes/sec。
+    const net = await ctx.plugins.sysmon.network();
+    const rxBps = net.rx_bytes_per_sec ?? 0;
+    const txBps = net.tx_bytes_per_sec ?? 0;
+
     await ctx.dispatch("data.create", {
       collection: "metrics",
       data: {
@@ -50,6 +58,8 @@ export default {
         disk_pct: diskPct,
         gpu_pct: gpuPct,
         temp_c: tempC,
+        rx_kbps: rxBps / 1024,
+        tx_kbps: txBps / 1024,
       },
     });
 
@@ -94,6 +104,9 @@ export default {
 
       fan_present: fan.present,
       fan_text: fan.present ? `${Math.round(fan.rpm)} rpm` : "—",
+
+      net_rx_text: fmtRate(rxBps),
+      net_tx_text: fmtRate(txBps),
 
       menubar_title:
         `CPU ${cpuPct.toFixed(0)}%\nMEM ${memPct.toFixed(0)}%` +

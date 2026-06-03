@@ -65,7 +65,7 @@ git push --tags
 | `qr` | QR encode + decode |
 | `reader` | URL → markdown + AI summary |
 | `reminders` | Reminders with due-time notifications |
-| `sysmon-{cpu,mem,net}` | Menubar system monitors |
+| `sysmon` | Menubar system monitor — CPU / mem / disk / GPU / battery / temp / fan / network |
 | `tasks` | Task list with priority + project |
 | `timer` | Countdown timer |
 | `translate` | LLM-powered translator |
