@@ -1,0 +1,145 @@
+{
+  "name": "inbox DataForm submit + capture/archive E2E (select-only)",
+  "aglet": "..",
+  "_comment": "全 select 通道。",
+  "steps": [
+    {
+      "action": "intent.fill",
+      "name": "title",
+      "value": "via form",
+      "expect": {
+        "ok": true,
+        "data": {
+          "typed": true
+        }
+      }
+    },
+    {
+      "_comment": "Add Button —— leftIcon=plus, color=primary",
+      "action": "intent.fire",
+      "select": {
+        "role": "button",
+        "props": {
+          "leftIcon": "plus",
+          "color": "primary"
+        }
+      },
+      "expect": {
+        "ok": true,
+        "data": {
+          "clicked": true
+        }
+      }
+    },
+    {
+      "_comment": "等行 Heading 出现 (item.title='via form')",
+      "action": "view.waitfor",
+      "select": {
+        "role": "heading",
+        "level": 3,
+        "in_item": {
+          "title": "via form"
+        }
+      },
+      "timeout": 5000,
+      "expect": {
+        "ok": true,
+        "data": {
+          "found": true
+        }
+      }
+    },
+    {
+      "action": "data.list",
+      "params": {
+        "collection": "notes",
+        "query": {
+          "where": {
+            "archived": false
+          }
+        }
+      },
+      "expect": {
+        "ok": true,
+        "items_len": 1
+      }
+    },
+    {
+      "action": "data.create",
+      "params": {
+        "collection": "notes",
+        "data": {
+          "title": "buy milk",
+          "tag": "todo",
+          "archived": false,
+          "created_at": "2026-05-16T00:00:00Z"
+        }
+      }
+    },
+    {
+      "_comment": "等 buy milk 行 Heading",
+      "action": "view.waitfor",
+      "select": {
+        "role": "heading",
+        "level": 3,
+        "in_item": {
+          "title": "buy milk"
+        }
+      },
+      "timeout": 5000,
+      "expect": {
+        "ok": true,
+        "data": {
+          "found": true
+        }
+      }
+    },
+    {
+      "action": "data.list",
+      "params": {
+        "collection": "notes",
+        "query": {
+          "where": {
+            "archived": false
+          }
+        }
+      },
+      "expect": {
+        "ok": true,
+        "items_len": 2
+      }
+    },
+    {
+      "_comment": "Archive 任一行 —— leftIcon=archive (Inbox 行内唯一)；nth=0 取首行",
+      "action": "intent.fire",
+      "select": {
+        "role": "button",
+        "props": {
+          "leftIcon": "archive"
+        },
+        "nth": 0
+      },
+      "expect": {
+        "ok": true,
+        "data": {
+          "clicked": true
+        }
+      }
+    },
+    {
+      "action": "data.list",
+      "params": {
+        "collection": "notes",
+        "query": {
+          "where": {
+            "archived": true
+          }
+        }
+      },
+      "expect": {
+        "ok": true,
+        "items_len": 1
+      }
+    }
+  ]
+}

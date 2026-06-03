@@ -1,0 +1,101 @@
+{
+  "name": "calc scripts.* end-to-end (Phase 2+3)",
+  "aglet": "..",
+  "_comment": "验 scripts.digit/clear → zig session state 写入。用 state.waitfor 直接断言 /state/display 值；click Button 用 select.props.label (字面量)。无 text needle。",
+  "steps": [
+    {
+      "_comment": "初始 display='0'",
+      "action": "state.waitfor",
+      "timeout": 5000,
+      "expect": {
+        "ok": true,
+        "data": {
+          "state": {
+            "display": "0"
+          }
+        }
+      }
+    },
+    {
+      "action": "intent.fire",
+      "select": {
+        "role": "button",
+        "props": {
+          "label": "7"
+        }
+      },
+      "expect": {
+        "ok": true,
+        "data": {
+          "clicked": true
+        }
+      }
+    },
+    {
+      "action": "state.waitfor",
+      "timeout": 3000,
+      "expect": {
+        "ok": true,
+        "data": {
+          "state": {
+            "display": "7"
+          }
+        }
+      }
+    },
+    {
+      "action": "intent.fire",
+      "select": {
+        "role": "button",
+        "props": {
+          "label": "7"
+        }
+      },
+      "expect": {
+        "ok": true,
+        "data": {
+          "clicked": true
+        }
+      }
+    },
+    {
+      "action": "state.waitfor",
+      "timeout": 3000,
+      "expect": {
+        "ok": true,
+        "data": {
+          "state": {
+            "display": "77"
+          }
+        }
+      }
+    },
+    {
+      "action": "intent.fire",
+      "select": {
+        "role": "button",
+        "props": {
+          "label": "AC"
+        }
+      },
+      "expect": {
+        "ok": true,
+        "data": {
+          "clicked": true
+        }
+      }
+    },
+    {
+      "action": "state.waitfor",
+      "timeout": 3000,
+      "expect": {
+        "ok": true,
+        "data": {
+          "state": {
+            "display": "0"
+          }
+        }
+      }
+    }
+  ]
+}

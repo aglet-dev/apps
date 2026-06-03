@@ -1,0 +1,11 @@
+{
+  "name": "sysmon-cpu smoke — Tray popover CPU 标签",
+  "aglet": "..",
+  "_comment": "Tray UI 走 Tray walker label/popover slot 后 snapshot 有 popover text 节点。",
+  "steps": [
+    { "action": "view.waitfor",
+      "select": { "role": "text", "props": { "content": "CPU" } },
+      "timeout": 3000,
+      "expect": { "ok": true, "data": { "found": true } } }
+  ]
+}

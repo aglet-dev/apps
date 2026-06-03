@@ -1,0 +1,51 @@
+{
+  "name": "qr encode E2E",
+  "aglet": "..",
+  "_comment": "fill text, click Generate, verify QR appears.",
+  "steps": [
+    {
+      "action": "intent.fill",
+      "name": "text",
+      "value": "hello",
+      "expect": {
+        "ok": true,
+        "data": {
+          "typed": true
+        }
+      }
+    },
+    {
+      "_comment": "Encode Button — icon=qr-code (i18n-immune)",
+      "action": "intent.fire",
+      "select": {
+        "role": "button",
+        "props": {
+          "icon": "qr-code"
+        }
+      },
+      "expect": {
+        "ok": true,
+        "data": {
+          "clicked": true
+        }
+      }
+    },
+    {
+      "_comment": "Decode section 出现 —— Decode Button icon=scan",
+      "action": "view.waitfor",
+      "select": {
+        "role": "button",
+        "props": {
+          "icon": "scan"
+        }
+      },
+      "timeout": 3000,
+      "expect": {
+        "ok": true,
+        "data": {
+          "found": true
+        }
+      }
+    }
+  ]
+}

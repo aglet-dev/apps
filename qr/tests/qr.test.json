@@ -1,0 +1,55 @@
+{
+  "name": "qr dogfood：barcode plugin（wasm/zxing-cpp）真 encode 通",
+  "aglet": "..",
+  "_comment": "验证 wasm plugin 全链路：WAMR(classic-interp + legacy wasm-EH) load barcode.wasm → zxing-cpp QR encode → stb_image_write PNG → base64 → 回 host arena。manifest.requires barcode + permissions barcode:encode 校验也走过。",
+  "steps": [
+    {
+      "_comment": "encode 文本到 QR PNG dataUrl",
+      "action": "barcode.encode",
+      "params": {
+        "text": "hello aglet via wasmtime+zxing",
+        "format": "QRCode",
+        "ecc": 1,
+        "margin": 4,
+        "width": 200,
+        "height": 200
+      },
+      "expect": {"ok": true}
+    },
+    {
+      "_comment": "短文本也行",
+      "action": "barcode.encode",
+      "params": {"text": "x", "format": "QRCode", "width": 100, "height": 100},
+      "expect": {"ok": true}
+    },
+    {
+      "_comment": "未知 format 走 error path（zxing 报 Unsupported format）",
+      "action": "barcode.encode",
+      "params": {"text": "x", "format": "NotARealFormat"},
+      "expect": {"ok": false}
+    },
+    {
+      "_comment": "clipboard.readText 通：scenario 不预设剪贴板内容，验证 ok 即可（found 可能 false）",
+      "action": "clipboard.readText",
+      "params": {},
+      "expect": {"ok": true}
+    },
+    {
+      "_comment": "clipboard.readImage 同样 ok（无图返 found:false）",
+      "action": "clipboard.readImage",
+      "params": {},
+      "expect": {"ok": true}
+    },
+    {
+      "_comment": "clipboard.writeText 写后立即 readText 取回",
+      "action": "clipboard.writeText",
+      "params": {"text": "aglet plugin round-trip"},
+      "expect": {"ok": true}
+    },
+    {
+      "action": "clipboard.readText",
+      "params": {},
+      "expect": {"ok": true, "data": {"found": true, "text": "aglet plugin round-trip"}}
+    }
+  ]
+}

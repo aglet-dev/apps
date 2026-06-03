@@ -1,0 +1,108 @@
+{
+  "name": "ledger add → list → summary E2E (state-driven)",
+  "aglet": "..",
+  "_comment": "summary 验证用 state.waitfor 读 /state/month_{income,expense}（scripts.refresh 计算后写入）。",
+  "steps": [
+    {
+      "action": "data.create",
+      "params": {
+        "collection": "entries",
+        "data": {
+          "kind": "expense",
+          "amount": 12.5,
+          "category": "Food",
+          "note": "Lunch",
+          "date": "{{thisMonth}}-17"
+        }
+      }
+    },
+    {
+      "action": "data.create",
+      "params": {
+        "collection": "entries",
+        "data": {
+          "kind": "income",
+          "amount": 3000,
+          "category": "Salary",
+          "note": "May",
+          "date": "{{thisMonth}}-01"
+        }
+      }
+    },
+    {
+      "action": "intent.fire",
+      "select": {
+        "role": "tab",
+        "value": "list"
+      },
+      "expect": {
+        "ok": true,
+        "data": {
+          "clicked": true
+        }
+      }
+    },
+    {
+      "_comment": "list 行 amount Heading (item.category=Food)",
+      "action": "view.waitfor",
+      "select": {
+        "role": "heading",
+        "level": 2,
+        "in_item": {
+          "category": "Food"
+        }
+      },
+      "timeout": 3000,
+      "expect": {
+        "ok": true,
+        "data": {
+          "found": true
+        }
+      }
+    },
+    {
+      "action": "intent.fire",
+      "select": {
+        "role": "tab",
+        "value": "summary"
+      },
+      "expect": {
+        "ok": true,
+        "data": {
+          "clicked": true
+        }
+      }
+    },
+    {
+      "_comment": "Refresh —— icon=arrow-clockwise, color=primary",
+      "action": "intent.fire",
+      "select": {
+        "role": "button",
+        "props": {
+          "icon": "arrow-clockwise",
+          "color": "primary"
+        }
+      },
+      "expect": {
+        "ok": true,
+        "data": {
+          "clicked": true
+        }
+      }
+    },
+    {
+      "_comment": "state.month_income/month_expense refresh 后写入",
+      "action": "state.waitfor",
+      "timeout": 3000,
+      "expect": {
+        "ok": true,
+        "data": {
+          "state": {
+            "month_income": 3000,
+            "month_expense": 12.5
+          }
+        }
+      }
+    }
+  ]
+}

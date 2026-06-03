@@ -68,7 +68,6 @@ git push --tags
 | `sysmon-{cpu,mem,net}` | Menubar system monitors |
 | `tasks` | Task list with priority + project |
 | `timer` | Countdown timer |
-| `tip` | Tip + split calculator |
 | `translate` | LLM-powered translator |
 | `weight` | Daily weight log with chart |
 

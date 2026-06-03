@@ -1,0 +1,64 @@
+{
+  "name": "img-convert dogfood：image plugin（stb + libwebp）四种格式 + clipboard 链",
+  "aglet": "..",
+  "_comment": "16×16 红色 PNG (112 bytes b64) → 验 image plugin 全链路 + clipboard write 后 read 回的 round-trip。inputs PNG b64 是 zlib 编一个 RGBA red square，stb_image 解后给 libwebp/stbi_write_jpg 编。",
+  "steps": [
+    {
+      "action": "image.metadata",
+      "params": {"input_b64": "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGUlEQVR4nGP4z8DwnxLMMGrAqAGjBgwXAwAwxP4QHCfkAAAAAABJRU5ErkJggg=="},
+      "expect": {"ok": true, "data": {"width": 16, "height": 16, "format": "png"}}
+    },
+    {
+      "_comment": "PNG → WebP lossy q=90",
+      "action": "image.process",
+      "params": {"input_b64": "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGUlEQVR4nGP4z8DwnxLMMGrAqAGjBgwXAwAwxP4QHCfkAAAAAABJRU5ErkJggg==", "output_format": "webp", "quality": 90},
+      "expect": {"ok": true, "data": {"width": 16, "height": 16, "format": "webp"}}
+    },
+    {
+      "_comment": "PNG → JPEG q=85 (alpha 被 drop 成 RGB)",
+      "action": "image.process",
+      "params": {"input_b64": "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGUlEQVR4nGP4z8DwnxLMMGrAqAGjBgwXAwAwxP4QHCfkAAAAAABJRU5ErkJggg==", "output_format": "jpeg", "quality": 85},
+      "expect": {"ok": true, "data": {"width": 16, "height": 16, "format": "jpeg"}}
+    },
+    {
+      "_comment": "PNG → BMP",
+      "action": "image.process",
+      "params": {"input_b64": "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGUlEQVR4nGP4z8DwnxLMMGrAqAGjBgwXAwAwxP4QHCfkAAAAAABJRU5ErkJggg==", "output_format": "bmp"},
+      "expect": {"ok": true, "data": {"width": 16, "height": 16, "format": "bmp"}}
+    },
+    {
+      "_comment": "不支持的 output format → ENCODE envelope",
+      "action": "image.process",
+      "params": {"input_b64": "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGUlEQVR4nGP4z8DwnxLMMGrAqAGjBgwXAwAwxP4QHCfkAAAAAABJRU5ErkJggg==", "output_format": "heic"},
+      "expect": {"ok": false}
+    },
+    {
+      "_comment": "decode primitive：返 RGBA pixels",
+      "action": "image.decode",
+      "params": {"input_b64": "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGUlEQVR4nGP4z8DwnxLMMGrAqAGjBgwXAwAwxP4QHCfkAAAAAABJRU5ErkJggg=="},
+      "expect": {"ok": true, "data": {"width": 16, "height": 16, "channels": 4, "src_format": "png"}}
+    },
+    {
+      "_comment": "process + resize op：16x16 → 32x32",
+      "action": "image.process",
+      "params": {"input_b64": "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGUlEQVR4nGP4z8DwnxLMMGrAqAGjBgwXAwAwxP4QHCfkAAAAAABJRU5ErkJggg==",
+                 "ops":[{"kind":"resize","w":32,"h":32}], "output_format":"png"},
+      "expect": {"ok": true, "data": {"width": 32, "height": 32, "format": "png"}}
+    },
+    {
+      "_comment": "process + 链：resize + rotate90 + flip x + 转 webp",
+      "action": "image.process",
+      "params": {"input_b64": "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGUlEQVR4nGP4z8DwnxLMMGrAqAGjBgwXAwAwxP4QHCfkAAAAAABJRU5ErkJggg==",
+                 "ops":[{"kind":"resize","w":24,"h":24},{"kind":"rotate","degrees":90},{"kind":"flip","axis":"x"}],
+                 "output_format":"webp", "quality":80},
+      "expect": {"ok": true, "data": {"width": 24, "height": 24, "format": "webp"}}
+    },
+    {
+      "_comment": "rotate 45 → INVALID_OP",
+      "action": "image.process",
+      "params": {"input_b64": "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGUlEQVR4nGP4z8DwnxLMMGrAqAGjBgwXAwAwxP4QHCfkAAAAAABJRU5ErkJggg==",
+                 "ops":[{"kind":"rotate","degrees":45}]},
+      "expect": {"ok": false}
+    }
+  ]
+}

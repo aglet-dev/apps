@@ -1,0 +1,128 @@
+{
+  "name": "calc scripts.call fixture-table (P1)",
+  "aglet": "..",
+  "_comment": "纯函数 reducer 测：fixture state 注入 → 调 scripts.<fn> → patch 断言。不启 DevShell，秒级。见 [[aglet-test-real-priorities]] P1。",
+  "steps": [
+    {
+      "_comment": "digit on fresh display",
+      "action": "scripts.call",
+      "params": {
+        "fn": "digit",
+        "args": {
+          "n": 7
+        },
+        "fixture": {
+          "state": {
+            "display": "0",
+            "fresh": true
+          }
+        }
+      },
+      "expect": {
+        "ok": true,
+        "data": {
+          "patch": {
+            "display": "7",
+            "fresh": false
+          }
+        }
+      }
+    },
+    {
+      "_comment": "digit append (not fresh, current display=7)",
+      "action": "scripts.call",
+      "params": {
+        "fn": "digit",
+        "args": {
+          "n": 7
+        },
+        "fixture": {
+          "state": {
+            "display": "7",
+            "fresh": false
+          }
+        }
+      },
+      "expect": {
+        "ok": true,
+        "data": {
+          "patch": {
+            "display": "77"
+          }
+        }
+      }
+    },
+    {
+      "_comment": "clear from anywhere",
+      "action": "scripts.call",
+      "params": {
+        "fn": "clear",
+        "args": {},
+        "fixture": {
+          "state": {
+            "display": "999",
+            "expr": "1+2",
+            "fresh": false
+          }
+        }
+      },
+      "expect": {
+        "ok": true,
+        "data": {
+          "patch": {
+            "display": "0",
+            "expr": "",
+            "fresh": true
+          }
+        }
+      }
+    },
+    {
+      "_comment": "equals on simple expr",
+      "action": "scripts.call",
+      "params": {
+        "fn": "equals",
+        "args": {},
+        "fixture": {
+          "state": {
+            "display": "7+8",
+            "expr": "",
+            "fresh": false
+          }
+        }
+      },
+      "expect": {
+        "ok": true,
+        "data": {
+          "patch": {
+            "display": "15",
+            "expr": "7+8",
+            "fresh": true
+          }
+        }
+      }
+    },
+    {
+      "_comment": "backspace on multi-char display",
+      "action": "scripts.call",
+      "params": {
+        "fn": "backspace",
+        "args": {},
+        "fixture": {
+          "state": {
+            "display": "123",
+            "fresh": false
+          }
+        }
+      },
+      "expect": {
+        "ok": true,
+        "data": {
+          "patch": {
+            "display": "12"
+          }
+        }
+      }
+    }
+  ]
+}

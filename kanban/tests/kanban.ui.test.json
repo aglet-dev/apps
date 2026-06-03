@@ -1,0 +1,105 @@
+{
+  "name": "kanban — create + advance status + open filter (select-only)",
+  "aglet": "..",
+  "steps": [
+    {
+      "action": "data.create",
+      "params": {
+        "collection": "cards",
+        "data": {
+          "title": "wire up the auth flow",
+          "status": "backlog",
+          "priority": "high",
+          "assignee": "Ada",
+          "effort": 4,
+          "notes": "",
+          "created_at": "2026-05-16T00:00:00Z"
+        }
+      }
+    },
+    {
+      "_comment": "等 backlog 行 Heading（按 item.title）",
+      "action": "view.waitfor",
+      "select": {
+        "role": "heading",
+        "in_item": {
+          "title": "wire up the auth flow"
+        }
+      },
+      "timeout": 5000,
+      "expect": {
+        "ok": true,
+        "data": {
+          "found": true
+        }
+      }
+    },
+    {
+      "_comment": "Start Button —— leftIcon=play (i18n-immune)，行内 (item.status=backlog)",
+      "action": "intent.fire",
+      "select": {
+        "role": "button",
+        "in_item": {
+          "status": "backlog"
+        },
+        "props": {
+          "leftIcon": "play"
+        }
+      },
+      "expect": {
+        "ok": true,
+        "data": {
+          "clicked": true
+        }
+      }
+    },
+    {
+      "action": "data.list",
+      "params": {
+        "collection": "cards",
+        "query": {
+          "where": {
+            "status": "doing"
+          }
+        }
+      },
+      "expect": {
+        "ok": true,
+        "items_len": 1
+      }
+    },
+    {
+      "_comment": "Filter Drawer trigger Button —— leftIcon=funnel",
+      "action": "intent.fire",
+      "select": {
+        "role": "button",
+        "props": {
+          "leftIcon": "funnel"
+        }
+      },
+      "expect": {
+        "ok": true,
+        "data": {
+          "clicked": true
+        }
+      }
+    },
+    {
+      "_comment": "Drawer 内的 Ada Button —— props.label='Ada' (literal, i18n-immune)",
+      "action": "view.waitfor",
+      "select": {
+        "role": "button",
+        "props": {
+          "label": "Ada"
+        }
+      },
+      "timeout": 3000,
+      "expect": {
+        "ok": true,
+        "data": {
+          "found": true
+        }
+      }
+    }
+  ]
+}

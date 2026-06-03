@@ -1,0 +1,71 @@
+{
+  "name": "sysmon dogfood：C1 memory + C2 sysmon plugin + C3 Page lifecycle",
+  "aglet": "..",
+  "_comment": "验证三件能力正交：\n  C1 metrics 是 memory tier collection（路由到 mem.records）\n  C2 sysmon plugin 提供 cpu/memory bridge actions（manifest.requires 校验通）\n  C3 Page onEnter/onLeave 由 React lifecycle 驱动（需 --render=web 才真触发；logic mode 不跑 useEffect）\n  scenario 验证 bridge dispatch 链路：plugin 路由 + permission + memory collection 路由。",
+  "steps": [
+    {
+      "_comment": "Tray popover 内 CPU 标签可见（验证 manifest.requires 通过 + Tray UI lower 正确）",
+      "action": "view.waitfor",
+      "select": {"role": "text", "props": {"content": "CPU"}},
+      "timeout": 3000,
+      "expect": {"ok": true}
+    },
+    {
+      "_comment": "C2: dispatch sysmon.cpu，plugin 路由 + permission system:read 通过 + OS read",
+      "action": "sysmon.cpu",
+      "params": {},
+      "expect": {"ok": true}
+    },
+    {
+      "_comment": "C2: sysmon.memory 返 used/total bytes",
+      "action": "sysmon.memory",
+      "params": {},
+      "expect": {"ok": true}
+    },
+    {
+      "_comment": "C2: sysmon.disk(/) 返 used/total/free/used_pct（statfs）",
+      "action": "sysmon.disk",
+      "params": {"path": "/"},
+      "expect": {"ok": true}
+    },
+    {
+      "_comment": "C2: sysmon.battery 返 present/percent/charging/...（IOPS；台式机 present=false 也 ok）",
+      "action": "sysmon.battery",
+      "params": {},
+      "expect": {"ok": true}
+    },
+    {
+      "_comment": "C2: sysmon.gpu 返 util_pct/mem_used_bytes（IOAccelerator IORegistry）",
+      "action": "sysmon.gpu",
+      "params": {},
+      "expect": {"ok": true}
+    },
+    {
+      "_comment": "C2: sysmon.temp 返 present/cpu_c/gpu_c/max_c（私有 IOHID 热传感器；无传感器 present=false 也 ok）",
+      "action": "sysmon.temp",
+      "params": {},
+      "expect": {"ok": true}
+    },
+    {
+      "_comment": "C2: sysmon.fan 返 present/count/rpm（SMC F0Ac；无风扇机型 present=false 也 ok）",
+      "action": "sysmon.fan",
+      "params": {},
+      "expect": {"ok": true}
+    },
+    {
+      "_comment": "C1: 写 metrics 到 memory tier collection",
+      "action": "data.create",
+      "params": {
+        "collection": "metrics",
+        "data": {"ts": 1, "cpu_pct": 42, "mem_used": 1000, "mem_total": 4000}
+      },
+      "expect": {"ok": true}
+    },
+    {
+      "_comment": "C1: list 该 collection（路由到 mem.records）",
+      "action": "data.list",
+      "params": {"collection": "metrics"},
+      "expect": {"ok": true}
+    }
+  ]
+}

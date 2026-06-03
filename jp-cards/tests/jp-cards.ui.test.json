@@ -1,0 +1,131 @@
+{
+  "name": "jp-cards add → review → mark known → all-list E2E (select-only)",
+  "aglet": "..",
+  "_comment": "select-only。",
+  "steps": [
+    {
+      "action": "data.create",
+      "params": {
+        "collection": "cards",
+        "data": {
+          "front": "勉強",
+          "reading": "べんきょう",
+          "back": "study; learning",
+          "level": 0,
+          "created_at": "2026-05-01"
+        }
+      }
+    },
+    {
+      "_comment": "切 review tab",
+      "action": "intent.fire",
+      "select": {
+        "role": "tab",
+        "value": "review"
+      },
+      "expect": {
+        "ok": true,
+        "data": {
+          "clicked": true
+        }
+      }
+    },
+    {
+      "action": "view.waitfor",
+      "select": {
+        "role": "heading",
+        "level": 1,
+        "in_item": {
+          "front": "勉強"
+        }
+      },
+      "timeout": 3000,
+      "expect": {
+        "ok": true,
+        "data": {
+          "found": true
+        }
+      }
+    },
+    {
+      "action": "view.waitfor",
+      "select": {
+        "role": "text",
+        "in_item": {
+          "back": "study; learning"
+        }
+      },
+      "timeout": 3000,
+      "expect": {
+        "ok": true,
+        "data": {
+          "found": true
+        }
+      }
+    },
+    {
+      "_comment": "Got it —— icon=check, color=primary",
+      "action": "intent.fire",
+      "select": {
+        "role": "button",
+        "props": {
+          "icon": "check",
+          "color": "primary"
+        }
+      },
+      "expect": {
+        "ok": true,
+        "data": {
+          "clicked": true
+        }
+      }
+    },
+    {
+      "action": "data.list",
+      "params": {
+        "collection": "cards",
+        "query": {
+          "where": {
+            "level": 1
+          }
+        }
+      },
+      "expect": {
+        "ok": true,
+        "items_len": 1
+      }
+    },
+    {
+      "_comment": "切 all tab",
+      "action": "intent.fire",
+      "select": {
+        "role": "tab",
+        "value": "all"
+      },
+      "expect": {
+        "ok": true,
+        "data": {
+          "clicked": true
+        }
+      }
+    },
+    {
+      "_comment": "all tab Reset Button —— icon=arrow-counter-clockwise + size=sm",
+      "action": "view.waitfor",
+      "select": {
+        "role": "button",
+        "props": {
+          "icon": "arrow-counter-clockwise",
+          "size": "sm"
+        }
+      },
+      "timeout": 3000,
+      "expect": {
+        "ok": true,
+        "data": {
+          "found": true
+        }
+      }
+    }
+  ]
+}

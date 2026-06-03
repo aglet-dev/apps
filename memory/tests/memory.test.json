@@ -1,0 +1,118 @@
+{
+  "name": "memory CRUD + multi-project / multi-agent filters",
+  "aglet": "..",
+  "steps": [
+    {
+      "action": "data.create",
+      "params": {
+        "collection": "memories",
+        "data": {
+          "text": "user prefers terse responses, no trailing summary",
+          "tags": "style,terse",
+          "project": "aglet",
+          "agent": "claude",
+          "kind": "preference",
+          "pinned": true
+        }
+      }
+    },
+    {
+      "action": "data.create",
+      "params": {
+        "collection": "memories",
+        "data": {
+          "text": "merge freeze 2026-03-05 for mobile release cut",
+          "tags": "release,deadline",
+          "project": "fleet",
+          "agent": "human",
+          "kind": "fact",
+          "pinned": false
+        }
+      }
+    },
+    {
+      "action": "data.create",
+      "params": {
+        "collection": "memories",
+        "data": {
+          "text": "use bun not npm",
+          "tags": "stack",
+          "project": "aglet",
+          "agent": "human",
+          "kind": "decision",
+          "pinned": false
+        }
+      }
+    },
+    {
+      "action": "data.list",
+      "params": {
+        "collection": "memories"
+      },
+      "expect": {
+        "ok": true,
+        "items_len": 3
+      }
+    },
+    {
+      "action": "data.list",
+      "params": {
+        "collection": "memories",
+        "query": {
+          "where": {
+            "project": "aglet"
+          }
+        }
+      },
+      "expect": {
+        "ok": true,
+        "items_len": 2
+      }
+    },
+    {
+      "action": "data.list",
+      "params": {
+        "collection": "memories",
+        "query": {
+          "where": {
+            "agent": "human"
+          }
+        }
+      },
+      "expect": {
+        "ok": true,
+        "items_len": 2
+      }
+    },
+    {
+      "action": "data.list",
+      "params": {
+        "collection": "memories",
+        "query": {
+          "where": {
+            "pinned": true
+          }
+        }
+      },
+      "expect": {
+        "ok": true,
+        "items_len": 1
+      }
+    },
+    {
+      "action": "data.list",
+      "params": {
+        "collection": "memories",
+        "query": {
+          "where": {
+            "kind": "decision"
+          }
+        }
+      },
+      "expect": {
+        "ok": true,
+        "items_len": 1
+      }
+    }
+  ]
+}
