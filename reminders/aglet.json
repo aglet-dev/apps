@@ -37,6 +37,15 @@
     "width": 380,
     "height": 640
   },
+  "reminders": [
+    {
+      "collection": "items",
+      "at": "remind_at_ms",
+      "title": "title",
+      "body": "notes",
+      "url": "aglet://reminders/"
+    }
+  ],
   "collections": {
     "items": {
       "schema": {
@@ -48,6 +57,9 @@
         },
         "due_at": {
           "type": "string"
+        },
+        "remind_at_ms": {
+          "type": "number"
         },
         "completed": {
           "type": "boolean"

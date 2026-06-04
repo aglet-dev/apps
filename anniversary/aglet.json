@@ -12,6 +12,16 @@
   "category": "utilities",
   "permissions": ["data:read", "data:write", "notifications:post"],
   "window": { "style": "phone", "width": 400, "height": 720 },
+  "reminders": [
+    {
+      "collection": "events",
+      "at": "remind_at_ms",
+      "title": "remind_title",
+      "body": "remind_body",
+      "repeat": "yearly",
+      "url": "aglet://anniversary/"
+    }
+  ],
   "collections": {
     "events": {
       "schema": {
@@ -27,7 +37,10 @@
         "days_word": { "type": "string" },
         "next_at": { "type": "string" },
         "milestone": { "type": "string" },
-        "age_label": { "type": "string" }
+        "age_label": { "type": "string" },
+        "remind_at_ms": { "type": "number" },
+        "remind_title": { "type": "string" },
+        "remind_body": { "type": "string" }
       },
       "indexes": ["sort_key", "days_until", "kind"]
     }

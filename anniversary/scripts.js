@@ -99,7 +99,19 @@ function derive(e, nowMs, t) {
   // 排序键：未来按天数升序在前；一次性已过沉到最后（按最近在前），避免过去事件占「下一个」。
   const sort_key = days_until >= 0 ? days_until : 1000000 + Math.abs(days_until);
 
-  return { days_until, sort_key, days_big, days_word, next_at, milestone, age_label };
+  // 声明式提醒（P2b-A）：把「下次发生提前 N 天、当地 9 点」算进字段，host 按
+  // manifest.reminders 绑定自动 schedule（repeat:yearly）/cancel。remind_days<0
+  // → remind_at_ms=0 → host 取消。app 不再写 notifications.schedule/cancel。
+  const remind_at_ms = (e.remind_days != null && e.remind_days >= 0)
+    ? (reminderAtMs(e.date, e.remind_days, nowMs) || 0)
+    : 0;
+  const remind_title = "🎉 " + (e.title || "");
+  const remind_body = t("remindBody", {});
+
+  return {
+    days_until, sort_key, days_big, days_word, next_at, milestone, age_label,
+    remind_at_ms, remind_title, remind_body,
+  };
 }
 
 // 重算所有 events 的派生字段。app 打开(onEnter) + 添加后触发。
@@ -120,7 +132,9 @@ async function addEvent(_args, ctx) {
   const title = ((f.title || "") + "").trim();
   if (!title || !f.date) return { ok: false, reason: "need title + date" };
   const rd = parseInt(f.remind_days != null ? f.remind_days : "-1", 10);
-  const rec = await ctx.dispatch("data.create", {
+  // 提醒不在这里排：建记录后 refresh() 会 derive 出 remind_at_ms，host 按
+  // manifest.reminders 绑定自动 schedule（声明式，P2b-A）。
+  await ctx.dispatch("data.create", {
     collection: "events",
     data: {
       title: title,
@@ -131,20 +145,6 @@ async function addEvent(_args, ctx) {
       created_at: new Date(ctx.now()).toISOString(),
     },
   });
-  // 排提醒（OS 原生年度定时）：rd>=0 才排，id=记录 id 便于删时 cancel。
-  if (rec && rec.id && rd >= 0) {
-    const atMs = reminderAtMs(f.date, rd, ctx.now());
-    if (atMs != null) {
-      await ctx.dispatch("notifications.schedule", {
-        id: rec.id,
-        title: "🎉 " + title,
-        body: ctx.t("remindBody", {}),
-        at: atMs,
-        repeat: "yearly",
-        url: "aglet://anniversary/",
-      });
-    }
-  }
   ctx.setStateAt("/form/title", "");
   ctx.setStateAt("/form/date", "");
   // 关闭底部录入 drawer（state-bound：/state/_ui/drawers/<id>）。
@@ -153,9 +153,9 @@ async function addEvent(_args, ctx) {
   return { ok: true };
 }
 
-// 删事件：先 cancel 提醒（按记录 id）再删，避免过期年度提醒残留。
+// 删事件：data.delete 后 host 按 manifest.reminders 绑定自动 cancel 该 row 的
+// 年度提醒（声明式，P2b-A），无需 app 手 cancel。
 async function removeEvent(args, ctx) {
-  await ctx.dispatch("notifications.cancel", { id: args.id });
   await ctx.dispatch("data.delete", { collection: "events", id: args.id });
   return { ok: true };
 }
