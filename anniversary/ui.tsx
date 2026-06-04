@@ -69,7 +69,7 @@
                   description: t.confirmDelDesc,
                   confirmLabel: t.btnDelete,
                   color: "danger",
-                  onConfirm: () => data.delete({ collection: "events", id: item.id }),
+                  onConfirm: () => scripts.removeEvent({ id: item.id }),
                 })}/>
             </HStack>
           </HStack>
@@ -92,6 +92,13 @@
           <Option value="custom" label={t.optCustom}/>
         </Select>
       </HStack>
+      <Select name="remind_days" label={t.labelRemind} placeholder={t.optRemindOff}>
+        <Option value="-1" label={t.optRemindOff}/>
+        <Option value="0" label={t.optRemindDay}/>
+        <Option value="1" label={t.optRemind1}/>
+        <Option value="3" label={t.optRemind3}/>
+        <Option value="7" label={t.optRemind7}/>
+      </Select>
       <HStack justify="between" className="items-center pt-1">
         <Switch name="recurring" label={t.switchRecurring}/>
         <Button label={t.btnAdd} color="primary" icon="check" disabled={!form.title || !form.date}

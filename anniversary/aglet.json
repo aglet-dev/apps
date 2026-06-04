@@ -10,7 +10,7 @@
   "renderer": "web",
   "default_locale": "en",
   "category": "utilities",
-  "permissions": ["data:read", "data:write"],
+  "permissions": ["data:read", "data:write", "notifications:post"],
   "window": { "style": "phone", "width": 400, "height": 720 },
   "collections": {
     "events": {
@@ -19,6 +19,7 @@
         "date": { "type": "string" },
         "kind": { "type": "string" },
         "recurring": { "type": "boolean" },
+        "remind_days": { "type": "number" },
         "created_at": { "type": "string" },
         "days_until": { "type": "number" },
         "sort_key": { "type": "number" },

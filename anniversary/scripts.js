@@ -14,6 +14,20 @@ function dayNum(y, mo, d) {
   return Math.floor(Date.UTC(y, mo - 1, d) / 86400000);
 }
 
+// 提醒触发时刻 epoch ms：下次发生日（循环→今年的月日，过了取明年）提前 remindDays 天、
+// 当地 09:00。配 notifications.schedule({repeat:"yearly"}) → 每年同月日 9 点响。
+function reminderAtMs(dateStr, remindDays, nowMs) {
+  const ev = parseYMD(dateStr);
+  if (!ev) return null;
+  const today = new Date(nowMs);
+  const todayNum = dayNum(today.getFullYear(), today.getMonth() + 1, today.getDate());
+  let ny = today.getFullYear();
+  if (dayNum(ny, ev.mo, ev.d) < todayNum) ny += 1; // 今年的已过 → 明年
+  const occ = new Date(ny, ev.mo - 1, ev.d, 9, 0, 0, 0);
+  occ.setDate(occ.getDate() - remindDays); // 提前 N 天（可跨月/年，Date 自处理）
+  return occ.getTime();
+}
+
 // 给定一条 event 的字段 + 当前 epoch ms + i18n 函数 t → 派生
 // {days_until, next_at, milestone, age_label}。t = ctx.t（'key',{params} 查表+插值）。
 function derive(e, nowMs, t) {
@@ -105,16 +119,32 @@ async function addEvent(_args, ctx) {
   const f = ctx.form || {};
   const title = ((f.title || "") + "").trim();
   if (!title || !f.date) return { ok: false, reason: "need title + date" };
-  await ctx.dispatch("data.create", {
+  const rd = parseInt(f.remind_days != null ? f.remind_days : "-1", 10);
+  const rec = await ctx.dispatch("data.create", {
     collection: "events",
     data: {
       title: title,
       date: f.date,
       kind: f.kind || "birthday",
       recurring: f.recurring !== false,
+      remind_days: rd,
       created_at: new Date(ctx.now()).toISOString(),
     },
   });
+  // 排提醒（OS 原生年度定时）：rd>=0 才排，id=记录 id 便于删时 cancel。
+  if (rec && rec.id && rd >= 0) {
+    const atMs = reminderAtMs(f.date, rd, ctx.now());
+    if (atMs != null) {
+      await ctx.dispatch("notifications.schedule", {
+        id: rec.id,
+        title: "🎉 " + title,
+        body: ctx.t("remindBody", {}),
+        at: atMs,
+        repeat: "yearly",
+        url: "aglet://anniversary/",
+      });
+    }
+  }
   ctx.setStateAt("/form/title", "");
   ctx.setStateAt("/form/date", "");
   // 关闭底部录入 drawer（state-bound：/state/_ui/drawers/<id>）。
@@ -123,4 +153,11 @@ async function addEvent(_args, ctx) {
   return { ok: true };
 }
 
-export default { refresh, addEvent };
+// 删事件：先 cancel 提醒（按记录 id）再删，避免过期年度提醒残留。
+async function removeEvent(args, ctx) {
+  await ctx.dispatch("notifications.cancel", { id: args.id });
+  await ctx.dispatch("data.delete", { collection: "events", id: args.id });
+  return { ok: true };
+}
+
+export default { refresh, addEvent, removeEvent };

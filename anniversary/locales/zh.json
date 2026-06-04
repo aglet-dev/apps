@@ -40,5 +40,12 @@
   "daysAgo": "天前",
   "today": "今天",
   "agoYearsMD": "{y} 年 {m} 个月 {d} 天前",
-  "agoMonthsD": "{m} 个月 {d} 天前"
+  "agoMonthsD": "{m} 个月 {d} 天前",
+  "labelRemind": "提醒",
+  "optRemindOff": "不提醒",
+  "optRemindDay": "当天",
+  "optRemind1": "提前 1 天",
+  "optRemind3": "提前 3 天",
+  "optRemind7": "提前 1 周",
+  "remindBody": "别忘了这个纪念日 🎉"
 }

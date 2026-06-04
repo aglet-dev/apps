@@ -40,5 +40,12 @@
   "daysAgo": "日前",
   "today": "今日",
   "agoYearsMD": "{y}年{m}か月{d}日前",
-  "agoMonthsD": "{m}か月{d}日前"
+  "agoMonthsD": "{m}か月{d}日前",
+  "labelRemind": "通知",
+  "optRemindOff": "通知しない",
+  "optRemindDay": "当日",
+  "optRemind1": "1 日前",
+  "optRemind3": "3 日前",
+  "optRemind7": "1 週間前",
+  "remindBody": "この記念日をお忘れなく 🎉"
 }

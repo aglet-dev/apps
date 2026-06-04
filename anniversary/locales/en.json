@@ -40,5 +40,12 @@
   "daysAgo": "days ago",
   "today": "Today",
   "agoYearsMD": "{y}y {m}mo {d}d ago",
-  "agoMonthsD": "{m}mo {d}d ago"
+  "agoMonthsD": "{m}mo {d}d ago",
+  "labelRemind": "Remind",
+  "optRemindOff": "No reminder",
+  "optRemindDay": "On the day",
+  "optRemind1": "1 day before",
+  "optRemind3": "3 days before",
+  "optRemind7": "1 week before",
+  "remindBody": "Don't forget this anniversary 🎉"
 }
