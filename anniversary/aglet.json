@@ -21,11 +21,14 @@
         "recurring": { "type": "boolean" },
         "created_at": { "type": "string" },
         "days_until": { "type": "number" },
+        "sort_key": { "type": "number" },
+        "days_big": { "type": "string" },
+        "days_word": { "type": "string" },
         "next_at": { "type": "string" },
         "milestone": { "type": "string" },
         "age_label": { "type": "string" }
       },
-      "indexes": ["days_until", "kind"]
+      "indexes": ["sort_key", "days_until", "kind"]
     }
   }
 }

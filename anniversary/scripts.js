@@ -34,24 +34,58 @@ function derive(e, nowMs, t) {
   }
 
   const days_until = dayNum(nxt.y, nxt.mo, nxt.d) - todayNum;
-  const years = nxt.y - ev.y; // 下次发生时要满的岁数 / 第几周年
+  const nextYears = nxt.y - ev.y; // 下次发生时要满的岁数 / 第几周年
+
+  // 下次发生是星期几（周日=0 .. 周六=6）→ 拼到 next_at 后。
+  const wd = new Date(Date.UTC(nxt.y, nxt.mo - 1, nxt.d)).getUTCDay();
+  const next_at = t("nextAt", { mo: nxt.mo, d: nxt.d }) + " " + t("wd" + wd);
 
   let milestone = "";
-  if (e.kind === "birthday") milestone = years > 0 ? t("msBirthday", { n: years }) : t("msBorn");
-  else if (e.kind === "anniversary") milestone = years > 0 ? t("msAnniversary", { n: years }) : "";
+  if (e.kind === "birthday") milestone = nextYears > 0 ? t("msBirthday", { n: nextYears }) : t("msBorn");
+  else if (e.kind === "anniversary") milestone = nextYears > 0 ? t("msAnniversary", { n: nextYears }) : "";
+  else if (e.kind === "custom" && recurring) milestone = nextYears > 0 ? t("msCustom", { n: nextYears }) : "";
 
-  // 不满一岁（生日、循环）：额外显示当前实龄。
+  // 已历时长。日历月差 + 余天（非 /30.44 估算）。生日(循环)=当前实龄；纪念日/自定义
+  // (循环)=已过多久；一次性已过事件=精确「X 年 X 个月 X 天前」（比裸 days 更有体感）。
   let age_label = "";
-  if (e.kind === "birthday" && recurring) {
-    const ageDays = todayNum - dayNum(ev.y, ev.mo, ev.d);
-    if (ageDays >= 0 && ageDays < 365) {
-      age_label = ageDays < 100
-        ? t("ageDays", { n: ageDays })
-        : t("ageMonths", { n: Math.floor(ageDays / 30.44) });
+  const elapsedDays = todayNum - dayNum(ev.y, ev.mo, ev.d);
+  if (elapsedDays >= 0) {
+    let months = (today.getFullYear() - ev.y) * 12 + (today.getMonth() + 1 - ev.mo);
+    let days = today.getDate() - ev.d;
+    if (days < 0) {
+      months -= 1;
+      // 借上个月的天数（today.getMonth() 是 0-indexed 当前月 → day 0 = 上月最后一天）
+      days += new Date(today.getFullYear(), today.getMonth(), 0).getDate();
+    }
+    const ay = Math.floor(months / 12);
+    const am = months % 12;
+    if (recurring && e.kind === "birthday") {
+      age_label = months < 1 ? t("ageDays", { n: elapsedDays })
+        : ay < 1 ? t("ageMonthsDays", { m: am, d: days })
+        : t("ageYearsMonths", { y: ay, m: am });
+    } else if (recurring) {
+      // anniversary / custom（循环）= 已 X 年 X 个月
+      age_label = ay >= 1 ? t("elapsedYearsMonths", { y: ay, m: am })
+        : months >= 1 ? t("elapsedMonthsDays", { m: am, d: days })
+        : t("elapsedDays", { n: elapsedDays });
+    } else {
+      // 一次性已过事件（elapsedDays>=0 即已过）= X 年 X 个月 X 天前。
+      // <1 月时裸 days_big("X 天前") 已够，不再叠 badge。
+      age_label = ay >= 1 ? t("agoYearsMD", { y: ay, m: am, d: days })
+        : months >= 1 ? t("agoMonthsD", { m: am, d: days })
+        : "";
     }
   }
 
-  return { days_until, next_at: t("nextAt", { mo: nxt.mo, d: nxt.d }), milestone, age_label };
+  // 展示用：一次性已过事件 days_until 为负，卡片大数字要显示「X 天前」而非负数。
+  //   未来 → 正数 + "天后"；今天 → "今天"（无副标题）；已过 → 绝对值 + "天前"。
+  const past = days_until < 0;
+  const days_big = days_until === 0 ? t("today") : String(Math.abs(days_until));
+  const days_word = days_until === 0 ? "" : t(past ? "daysAgo" : "daysLeft");
+  // 排序键：未来按天数升序在前；一次性已过沉到最后（按最近在前），避免过去事件占「下一个」。
+  const sort_key = days_until >= 0 ? days_until : 1000000 + Math.abs(days_until);
+
+  return { days_until, sort_key, days_big, days_word, next_at, milestone, age_label };
 }
 
 // 重算所有 events 的派生字段。app 打开(onEnter) + 添加后触发。
@@ -83,6 +117,8 @@ async function addEvent(_args, ctx) {
   });
   ctx.setStateAt("/form/title", "");
   ctx.setStateAt("/form/date", "");
+  // 关闭底部录入 drawer（state-bound：/state/_ui/drawers/<id>）。
+  ctx.setStateAt("/state/_ui/drawers/add", false);
   await refresh(_args, ctx);
   return { ok: true };
 }
