@@ -1,0 +1,31 @@
+{
+  "name": "anniversary — 声明式提醒绑定 headless 可观测 (refresh→schedule, 选择性, 幂等)",
+  "_doc": "host 能力(通知)无头可观测：AGLET_TEST_NOTIFY=1 时 daemon 把 schedule/cancel 记进内存 store，notifications.list 直接查。schedule/选择性跳过/幂等替换三路在此断言；cancel(delete/at<=0) 由 handler.zig RecordingNotif 单测覆盖（scenario 拿不到生成的 ULID 无法按 id 删）。",
+  "aglet": "..",
+  "steps": [
+    { "_comment": "remind_days:0 → 当天提醒，应排程", "action": "data.create",
+      "params": { "collection": "events", "data": { "title": "提醒娃", "date": "2025-08-15", "kind": "birthday", "recurring": true, "remind_days": 0 } },
+      "expect": { "ok": true } },
+
+    { "_comment": "remind_days:-1 → 不提醒，不应排程", "action": "data.create",
+      "params": { "collection": "events", "data": { "title": "不提醒", "date": "2025-12-25", "kind": "birthday", "recurring": true, "remind_days": -1 } },
+      "expect": { "ok": true } },
+
+    { "_comment": "起始无任何排程", "action": "notifications.list", "params": {},
+      "expect": { "ok": true, "ids_len": 0 } },
+
+    { "_comment": "refresh → derive 算 remind_at_ms 写回 → host 按 reminders 绑定自动排程", "action": "scripts.call",
+      "params": { "fn": "refresh", "fixture": { "now": 1780142400000 } },
+      "expect": { "ok": true, "data_eq": { "result": { "count": 2 } } } },
+
+    { "_comment": "只有 remind_days>=0 的「提醒娃」排了，「不提醒」被选择性跳过", "action": "notifications.list", "params": {},
+      "expect": { "ok": true, "ids_len": 1 } },
+
+    { "_comment": "再 refresh → 同 id 幂等替换，不重复堆积", "action": "scripts.call",
+      "params": { "fn": "refresh", "fixture": { "now": 1780142400000 } },
+      "expect": { "ok": true, "data_eq": { "result": { "count": 2 } } } },
+
+    { "_comment": "仍只 1 条（幂等）", "action": "notifications.list", "params": {},
+      "expect": { "ok": true, "ids_len": 1 } }
+  ]
+}
