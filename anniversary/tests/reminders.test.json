@@ -26,6 +26,10 @@
       "expect": { "ok": true, "data_eq": { "result": { "count": 2 } } } },
 
     { "_comment": "仍只 1 条（幂等）", "action": "notifications.list", "params": {},
-      "expect": { "ok": true, "ids_len": 1 } }
+      "expect": { "ok": true, "ids_len": 1 } },
+
+    { "_comment": "devloop 可观测：log.tail 拉到 host 端的 reminder-binding 日志（headless daemon 进程内 ring）",
+      "action": "log.tail", "params": { "contains": "reminder-binding" },
+      "expect": { "ok": true, "lines_min": 1 } }
   ]
 }
