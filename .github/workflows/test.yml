@@ -1,0 +1,105 @@
+name: Test
+
+# 跑变更 app 的行为 scenario（aglet-apps/<app>/tests/*.test.json）。validate.yml
+# 只做 manifest 校验 + pack dry-run；本 workflow 补「行为」这层：headless 起
+# aglet-daemon，逐 step dispatch + expect 断言（含 notifications.list 等 host
+# 能力 —— AGLET_TEST_NOTIFY 内存 store 让通知无头可观测）。
+on:
+  pull_request:
+    paths:
+      - "**/*.json"
+      - "**/scripts.js"
+      - "**/ui.tsx"
+      - "**/tests/**"
+      - "**/locales/**"
+      - ".github/workflows/test.yml"
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Test
+    runs-on: macos-26
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # 'git diff <base> <head>' 需 base 在历史里（浅克隆看不到 → 静默空 → 跳过）
+
+      - name: Detect changed aglets
+        id: changes
+        run: |
+          set -e
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            base="${{ github.event.pull_request.base.sha }}"
+            head="${{ github.event.pull_request.head.sha }}"
+          else
+            base="${{ github.event.before }}"
+            head="${{ github.sha }}"
+          fi
+          if [ "$base" = "0000000000000000000000000000000000000000" ] || [ -z "$base" ]; then
+            apps=$(for d in */; do
+              id="${d%/}"
+              [ -f "$id/aglet.json" ] && echo "$id"
+            done | sort -u)
+          else
+            # 末尾 `|| true`：见 validate.yml 同款 while/set-e 注释。
+            apps=$(git diff --name-only "$base" "$head" \
+              | awk -F/ 'NF>=2 && $1!=".github" { print $1 }' \
+              | sort -u \
+              | while read d; do [ -f "$d/aglet.json" ] && echo "$d"; done || true)
+          fi
+          if [ -z "$apps" ]; then
+            echo "apps=" >> "$GITHUB_OUTPUT"; exit 0
+          fi
+          echo "apps<<EOF" >> "$GITHUB_OUTPUT"
+          printf '%s\n' $apps >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
+
+      - name: Install aglet CLI + daemon
+        if: steps.changes.outputs.apps != ''
+        run: |
+          set -eu
+          brew tap agent-rt/tap
+          brew install agent-rt/tap/aglet
+          # `aglet test` fork 同目录的 aglet-daemon 跑 headless runtime。新版 CLI
+          # tarball 已随 formula 装 bin/aglet-daemon；老版没有 → 退回装 cask 用
+          # Aglet.app 内置的 daemon（剥 quarantine 才能直接执行）。
+          DAEMON="$(brew --prefix)/bin/aglet-daemon"
+          if [ ! -x "$DAEMON" ]; then
+            brew install --cask agent-rt/tap/aglet
+            xattr -dr com.apple.quarantine /Applications/Aglet.app || true
+            DAEMON="/Applications/Aglet.app/Contents/MacOS/aglet-daemon"
+          fi
+          test -x "$DAEMON"
+          echo "AGLET_DAEMON_BIN=$DAEMON" >> "$GITHUB_ENV"
+
+      - name: Run scenarios
+        if: steps.changes.outputs.apps != ''
+        env:
+          APPS: ${{ steps.changes.outputs.apps }}
+        run: |
+          set -uo pipefail
+          fail=0
+          ran=0
+          for id in $APPS; do
+            # nullglob：没匹配时 glob 不残留字面量
+            shopt -s nullglob
+            tests=("$id"/tests/*.test.json)
+            shopt -u nullglob
+            [ ${#tests[@]} -eq 0 ] && continue
+            echo "::group::$id (${#tests[@]} scenario)"
+            for t in "${tests[@]}"; do
+              ran=$((ran+1))
+              if aglet test "$t"; then
+                echo "✓ $t"
+              else
+                fail=1; echo "✗ $t"
+              fi
+            done
+            echo "::endgroup::"
+          done
+          echo "ran $ran scenario(s)"
+          exit $fail

@@ -1,54 +1,64 @@
-// Reminders due 扫描器 —— Scheduler C jobs 模式：interval 触发 dueScan handler。
-//
-// 工作流：
-//   1. 查所有 completed=false 的 items
-//   2. 过滤 due_at <= now AND (notified_at 为空 OR notified_at < due_at)
-//   3. 对每条 ctx.dispatch("app.notify", ...)
-//   4. 写回 notified_at = now 避免下一轮重复
+// Reminders —— 声明式提醒（P2b-A）：app 不写 notifications.schedule/cancel，
+// 只维护一个 `remind_at_ms`（epoch ms）字段；host 按 manifest.reminders 绑定，
+// 在 data-write 后自动排程/取消（>0 排，<=0 或删除取消）。OS 到点投递，
+// daemon/Aglet.app 休眠也响；无 due_scan job、无 notified_at 去重字段。
 
-const APP_ID = "reminders";
-
-function parseDue(s) {
+function dueMs(s) {
   if (!s) return 0;
-  const norm = s.replace(" ", "T");
-  const t = Date.parse(norm);
+  const t = Date.parse(String(s).replace(" ", "T"));
   return isNaN(t) ? 0 : t;
 }
 
 export default {
-  async dueScan(_, ctx) {
-    const now = new Date();
-    const nowIso = now.toISOString();
-    const nowMs = now.getTime();
-
-    const list = aglet.data.list(APP_ID, "items", {
-      where: { completed: false },
-      limit: 500,
+  // 新建：completed=false，remind_at_ms 取 due_at（有就排）。host 自动排程。
+  async addReminder(_args, ctx) {
+    const f = ctx.form || {};
+    const title = ((f.title || "") + "").trim();
+    if (!title) return { ok: false };
+    await ctx.dispatch("data.create", {
+      collection: "items",
+      data: {
+        title: title,
+        notes: f.notes || "",
+        due_at: f.due_at || "",
+        remind_at_ms: dueMs(f.due_at),
+        completed: false,
+        created_at: new Date(ctx.now()).toISOString(),
+      },
     });
+    ctx.setStateAt("/form/title", "");
+    ctx.setStateAt("/form/notes", "");
+    ctx.setStateAt("/form/due_at", "");
+    return { ok: true };
+  },
 
-    let notified = 0;
-    let skipped = 0;
-    const fired = [];
+  // 完成：清 remind_at_ms（→ host 自动取消未来通知）。
+  async complete(args, ctx) {
+    await ctx.dispatch("data.update", {
+      collection: "items",
+      id: args.id,
+      patch: {
+        completed: true,
+        completed_at: new Date(ctx.now()).toISOString(),
+        remind_at_ms: 0,
+      },
+    });
+    return { ok: true };
+  },
 
-    for (const row of list.items) {
-      const d = row.data;
-      if (!d.due_at) { skipped++; continue; }
-      const dueMs = parseDue(d.due_at);
-      if (!dueMs || dueMs > nowMs) { skipped++; continue; }
-      if (d.notified_at) {
-        const notifMs = parseDue(d.notified_at);
-        if (notifMs >= dueMs) { skipped++; continue; }
-      }
-      ctx.dispatch("app.notify", {
-        title: "⏰ " + d.title,
-        body: d.notes || "到点了",
-        url: "aglet://reminders/",
-      });
-      aglet.data.update(APP_ID, "items", row.id, { notified_at: nowIso });
-      notified++;
-      fired.push({ id: row.id, title: d.title, due_at: d.due_at });
-    }
+  // 撤销完成：复活 remind_at_ms（→ host 若 due 在未来自动重排）。
+  async uncomplete(args, ctx) {
+    await ctx.dispatch("data.update", {
+      collection: "items",
+      id: args.id,
+      patch: { completed: false, completed_at: "", remind_at_ms: dueMs(args.due_at) },
+    });
+    return { ok: true };
+  },
 
-    return { notified, skipped, fired };
+  // 删除：host 在 data.delete 后自动取消该 row 的通知。
+  async remove(args, ctx) {
+    await ctx.dispatch("data.delete", { collection: "items", id: args.id });
+    return { ok: true };
   },
 };

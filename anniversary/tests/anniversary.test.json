@@ -9,12 +9,12 @@
     { "action": "scripts.call", "params": { "fn": "refresh", "fixture": { "now": 1780142400000 } }, "expect": { "ok": true, "data_eq": { "result": { "count": 3 } } } },
 
     { "action": "data.list", "params": { "collection": "events", "query": { "where": { "title": "结婚" } } },
-      "expect": { "ok": true, "items_len": 1, "data_eq": { "items": [ { "data": { "days_until": 6, "milestone": "6 yr", "next_at": "6/5" } } ] } } },
+      "expect": { "ok": true, "items_len": 1, "data_eq": { "items": [ { "data": { "days_until": 6, "milestone": "6 yr", "next_at": "6/5 Fri" } } ] } } },
 
     { "action": "data.list", "params": { "collection": "events", "query": { "where": { "title": "宝宝" } } },
-      "expect": { "ok": true, "items_len": 1, "data_eq": { "items": [ { "data": { "days_until": 77, "milestone": "Turns 1", "age_label": "9 mo old" } } ] } } },
+      "expect": { "ok": true, "items_len": 1, "data_eq": { "items": [ { "data": { "days_until": 77, "milestone": "Turns 1", "age_label": "9mo 15d" } } ] } } },
 
     { "action": "data.list", "params": { "collection": "events", "query": { "where": { "title": "小明" } } },
-      "expect": { "ok": true, "items_len": 1, "data_eq": { "items": [ { "data": { "milestone": "Turns 36", "age_label": "" } } ] } } }
+      "expect": { "ok": true, "items_len": 1, "data_eq": { "items": [ { "data": { "milestone": "Turns 36", "age_label": "35y 5mo" } } ] } } }
   ]
 }

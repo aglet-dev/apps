@@ -12,16 +12,7 @@
               color="primary"
               icon="plus"
               disabled={!form.title}
-              onClick={() => data.create({
-                collection: "items",
-                data: {
-                  title: form.title,
-                  notes: form.notes,
-                  due_at: form.due_at,
-                  completed: false,
-                  created_at: now,
-                },
-              })}
+              onClick={() => scripts.addReminder()}
             />
           </HStack>
         </DataForm>
@@ -48,9 +39,7 @@
                 label={t.btnComplete}
                 icon="check"
                 color="primary"
-                onClick={() => data.update({
-                  collection: "items", id: item.id, patch: { completed: true, completed_at: now },
-                })}
+                onClick={() => scripts.complete({ id: item.id })}
               />
             </HStack>
           </Card>
@@ -81,16 +70,14 @@
                   label={t.btnUndo}
                   icon="arrow-counter-clockwise"
                   size="sm"
-                  onClick={() => data.update({
-                    collection: "items", id: item.id, patch: { completed: false, completed_at: "" },
-                  })}
+                  onClick={() => scripts.uncomplete({ id: item.id, title: item.title, notes: item.notes, due_at: item.due_at })}
                 />
                 <Button
                   label={t.btnDelete}
                   icon="trash"
                   color="danger"
                   size="sm"
-                  onClick={() => data.delete({ collection: "items", id: item.id })}
+                  onClick={() => scripts.remove({ id: item.id })}
                 />
               </HStack>
             </HStack>
