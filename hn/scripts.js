@@ -37,13 +37,6 @@ const TITLE_SYSTEM = "把英文 HN 标题翻成中文。技术名词（Rust / Ka
 const SUMMARY_SYSTEM = "用 1 句中文（≤60 字）写这条 HN story 的看点：为什么它上 HN、争议点或核心结论。不要复述标题。仅输出一行中文。";
 
 // data.list 在 script 侧返回 { items: [...] }（call 解 envelope.data）。容错处理。
-function listStories() {
-  const res = aglet.data.list(APP_ID, "stories");
-  if (res && Array.isArray(res.items)) return res.items;
-  if (Array.isArray(res)) return res;
-  return [];
-}
-
 export default {
   async ingest(args, _ctx) {
     const MAX = (args && args.max) || DEFAULT_MAX;
@@ -52,9 +45,12 @@ export default {
     if (!ids_resp.ok) throw new Error(`topstories fetch failed: ${ids_resp.status}`);
     const ids = JSON.parse(ids_resp.body).slice(0, MAX);
 
-    // ── Phase 1（快）：抓 + 批量 upsert 元数据，不翻译。列表立即满。──────────
+    // ── Phase 1（快）：抓 + 批量 upsert 元数据，不翻译。列表立即满。────────────
+    // 顺手把「需翻译」的记录收进 pending（id + 英文标题），Phase 2 直接用 ——
+    // 不回头 data.list（其 item 形态/字段嵌套不保证，曾因 s.title_en 取不到而整轮跳过）。
     let added = 0;
     let refreshed = 0;
+    const pending = []; // { id, title_en }
     for (const id of ids) {
       const r = fetch(`https://hacker-news.firebaseio.com/v0/item/${id}.json`);
       if (!r.ok) continue;
@@ -81,28 +77,25 @@ export default {
           disliked: false,
         });
         added++;
+        pending.push({ id: up.id, title_en: item.title });
       } else {
         refreshed++;
+        // 已存在但还没译（up.data 是现有记录）→ 也补译；已译的不动（保留用户/已有内容）。
+        const cur = up.data || {};
+        if (!cur.title || !cur.summary) pending.push({ id: up.id, title_en: item.title });
       }
     }
 
-    // ── Phase 2（渐进）：翻译未翻译的 story（title 空），逐条 update。──────────
-    // 不再每条卡 llmctl —— 列表已全出，这里只是把中文逐条补上。绝不覆盖用户
-    // 已有 like 状态或已翻译内容（只补 title/summary 仍为空的）。
+    // ── Phase 2（渐进）：翻译 pending，逐条 update。列表已全出，这里只补中文。────
     let translated = 0;
-    for (const s of listStories()) {
-      if (!s.title_en) continue;
+    for (const p of pending) {
+      const tzh = llmcall(TITLE_SYSTEM, p.title_en);
+      const szh = llmcall(SUMMARY_SYSTEM, p.title_en);
       const patch = {};
-      if (!s.title) {
-        const tzh = llmcall(TITLE_SYSTEM, s.title_en);
-        if (tzh) patch.title = tzh;
-      }
-      if (!s.summary) {
-        const szh = llmcall(SUMMARY_SYSTEM, s.title_en);
-        if (szh) patch.summary = szh;
-      }
+      if (tzh) patch.title = tzh;
+      if (szh) patch.summary = szh;
       if (Object.keys(patch).length > 0) {
-        aglet.data.update(APP_ID, "stories", s.id, patch);
+        aglet.data.update(APP_ID, "stories", p.id, patch);
         translated++;
       }
     }
