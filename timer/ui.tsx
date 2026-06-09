@@ -54,6 +54,8 @@ export default {
 
   // host timer 每秒一发：递减 remaining，到 0 设 done=true (host 自动停)。
   tick(_args, ctx) {
+    if (!ctx.scope.state.running) return;
+    if (ctx.scope.state.done) return;
     const remaining = Number(ctx.scope.state.remaining) || 0;
     const next = remaining - 1;
     if (next <= 0) {

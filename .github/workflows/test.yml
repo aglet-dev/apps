@@ -58,23 +58,18 @@ jobs:
           printf '%s\n' $apps >> "$GITHUB_OUTPUT"
           echo "EOF" >> "$GITHUB_OUTPUT"
 
-      - name: Install aglet CLI + daemon
+      - name: Install aglet CLI
         if: steps.changes.outputs.apps != ''
         run: |
           set -eu
           brew tap agent-rt/tap
           brew install agent-rt/tap/aglet
-          # `aglet test` fork 同目录的 aglet-daemon 跑 headless runtime。新版 CLI
-          # tarball 已随 formula 装 bin/aglet-daemon；老版没有 → 退回装 cask 用
-          # Aglet.app 内置的 daemon（剥 quarantine 才能直接执行）。
-          DAEMON="$(brew --prefix)/bin/aglet-daemon"
-          if [ ! -x "$DAEMON" ]; then
-            brew install --cask agent-rt/tap/aglet
-            xattr -dr com.apple.quarantine /Applications/Aglet.app || true
-            DAEMON="/Applications/Aglet.app/Contents/MacOS/aglet-daemon"
-          fi
-          test -x "$DAEMON"
-          echo "AGLET_DAEMON_BIN=$DAEMON" >> "$GITHUB_ENV"
+          # `aglet test` 全 in-process 跑 headless runtime（libaglet 链进 CLI），
+          # 不再 fork aglet-daemon 子进程 —— daemon 已删。装 CLI 即可，无需 cask /
+          # AGLET_DAEMON_BIN。scenario 输出会显示 `socket: (in-proc)`。
+          # 插件依赖也无需本仓 provision：`aglet test` 自己按被测 app 的 requires[]
+          # 从公开 registry 下载已发布插件到 tmp data_dir（v0.3.3+）。CI 只要能联网。
+          aglet --version
 
       - name: Run scenarios
         if: steps.changes.outputs.apps != ''

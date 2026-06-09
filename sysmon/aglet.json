@@ -60,12 +60,9 @@
   "jobs": [
     {
       "id": "on_cpu",
-      "trigger": {
-        "kind": "event",
-        "event": "sysmon.cpu"
-      },
-      "while": "always",
-      "handler": "onCpuSample"
+      "run": "onCpuSample",
+      "on": "sysmon.cpu",
+      "while": "always"
     }
   ],
   "window": {

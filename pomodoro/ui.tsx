@@ -59,6 +59,7 @@ export default {
 
   // 每秒 tick：递减；到 0 自动切相位（但不自动开始）。
   tick(_args, ctx) {
+    if (!ctx.scope.state.running) return;
     const remaining = Number(ctx.scope.state.remaining) || 0;
     const next = remaining - 1;
     if (next <= 0) {

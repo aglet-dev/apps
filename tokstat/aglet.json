@@ -112,12 +112,9 @@
   "jobs": [
     {
       "id": "on_sample",
-      "trigger": {
-        "kind": "event",
-        "event": "tokstat.sample"
-      },
-      "while": "always",
-      "handler": "onSample"
+      "run": "onSample",
+      "on": "tokstat.sample",
+      "while": "always"
     }
   ],
   "comment_state": "DATA_FLOW.md：popover/menubar 当前值全部走 SQLite `current` collection（数据源→SQLite→UI），不再用 setState 表征。state 留空。",

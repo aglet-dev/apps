@@ -38,12 +38,9 @@
   "jobs": [
     {
       "id": "ingest",
-      "trigger": {
-        "kind": "interval",
-        "ms": 900000
-      },
-      "while": "always",
-      "handler": "ingest"
+      "run": "ingest",
+      "every": 900000,
+      "while": "always"
     }
   ],
   "collections": {

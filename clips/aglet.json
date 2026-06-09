@@ -36,9 +36,9 @@
   "jobs": [
     {
       "id": "on_change",
-      "trigger": { "kind": "event", "event": "clipboard.changed" },
-      "while": "always",
-      "handler": "onClip"
+      "run": "onClip",
+      "on": "clipboard.changed",
+      "while": "always"
     }
   ],
   "window": {
