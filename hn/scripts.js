@@ -1,14 +1,16 @@
-// HN ingest —— Scheduler C jobs 模式：interval 触发 ingest handler。
+// HN —— Scheduler C jobs 模式：interval 触发 ingest handler。
 //
-// 数据源：HN 官方 JSON API：
-//   - https://hacker-news.firebaseio.com/v0/topstories.json  → ids 列表
-//   - https://hacker-news.firebaseio.com/v0/item/<id>.json    → 单条详情
+// 产品目标：打开 hn 即看到「当前 HN 热榜」列表，中文标题/摘要随后补上。
+// 据此把 ingest 拆两段、解耦「抓取存储」与「翻译」（旧版每条 upsert 后同步跑 2 次
+// llmctl 才到下一条 → 列表一条一条慢慢冒，要好几分钟才满）：
+//   Phase 1（快）：fetch topstories + 各 item，批量 upsert 元数据，**不调 LLM**
+//                  → ~30 条记录几秒内全落库，列表立即满（title 空时 UI 显 title_en）。
+//   Phase 2（渐进）：扫未翻译的 story（title 空），逐条 llmctl 翻译标题+摘要并 update
+//                  → 中文渐进出现；崩了/没跑完的下次 ingest 会补。
 //
+// 数据源：HN 官方 JSON API（topstories.json → ids；item/<id>.json → 详情）。
 // 翻译：title_en → title + 一句 summary，走 llmctl (local provider)。
-// 幂等：用原子 `data.upsert(by_field: "hn_id")` 替代 list-then-create dedup
-//       —— Phase A 并发治理，避免两个并发 worker 同时 list 都未命中 → 都 create
-//       → 同 hn_id 双插入。SQLite 单写事务保证 dedup 原子性。
-// 用户字段 liked/disliked 只在 create 时初始化（upsert.upserted=="created" 分支）。
+// 幂等：data.upsert(by_field: "hn_id") 原子 dedup；用户字段 liked/disliked 仅 create 初始化。
 
 const APP_ID = "hn";
 const DEFAULT_MAX = 30;
@@ -34,6 +36,14 @@ function llmcall(system, user) {
 const TITLE_SYSTEM = "把英文 HN 标题翻成中文。技术名词（Rust / Kafka / GPU / OAuth 等）保留英文。仅输出译文一行，不加引号、不加前后缀。";
 const SUMMARY_SYSTEM = "用 1 句中文（≤60 字）写这条 HN story 的看点：为什么它上 HN、争议点或核心结论。不要复述标题。仅输出一行中文。";
 
+// data.list 在 script 侧返回 { items: [...] }（call 解 envelope.data）。容错处理。
+function listStories() {
+  const res = aglet.data.list(APP_ID, "stories");
+  if (res && Array.isArray(res.items)) return res.items;
+  if (Array.isArray(res)) return res;
+  return [];
+}
+
 export default {
   async ingest(args, _ctx) {
     const MAX = (args && args.max) || DEFAULT_MAX;
@@ -42,19 +52,15 @@ export default {
     if (!ids_resp.ok) throw new Error(`topstories fetch failed: ${ids_resp.status}`);
     const ids = JSON.parse(ids_resp.body).slice(0, MAX);
 
+    // ── Phase 1（快）：抓 + 批量 upsert 元数据，不翻译。列表立即满。──────────
     let added = 0;
-    let updated = 0;
-    let translated = 0;
-
+    let refreshed = 0;
     for (const id of ids) {
       const r = fetch(`https://hacker-news.firebaseio.com/v0/item/${id}.json`);
       if (!r.ok) continue;
       const item = JSON.parse(r.body);
       if (!item || item.type !== "story" || !item.title) continue;
 
-      // 原子 dedup：单 SQLite tx 内 SELECT by hn_id + INSERT/UPDATE。
-      // 仅写"稳定 / 每次 ingest 都该刷新"字段；title/summary/liked/disliked 等
-      // 走第二段 update —— 既保留已翻译内容，也不覆盖用户操作。
       const up = aglet.data.upsert(APP_ID, "stories", "hn_id", {
         hn_id: id,
         title_en: item.title,
@@ -66,35 +72,41 @@ export default {
       });
 
       if (up.upserted === "created") {
-        // 初次见到：translate + 初始化 user fields。
-        const tzh = llmcall(TITLE_SYSTEM, item.title);
-        const szh = llmcall(SUMMARY_SYSTEM, item.title);
-        if (tzh) translated++;
+        // 初次见到：初始化用户字段 + 留空 title/summary 给 Phase 2 翻译补。
         aglet.data.update(APP_ID, "stories", up.id, {
-          title: tzh,
-          summary: szh,
+          title: "",
+          summary: "",
           age: "",
           liked: false,
           disliked: false,
         });
         added++;
       } else {
-        // 已存在：仅在缺翻译时补，绝不覆盖已有 title/summary 或用户 like 状态。
-        if (!up.data.title) {
-          const tzh = llmcall(TITLE_SYSTEM, item.title);
-          if (tzh) {
-            aglet.data.update(APP_ID, "stories", up.id, { title: tzh });
-            translated++;
-          }
-        }
-        if (!up.data.summary) {
-          const szh = llmcall(SUMMARY_SYSTEM, item.title);
-          if (szh) aglet.data.update(APP_ID, "stories", up.id, { summary: szh });
-        }
-        updated++;
+        refreshed++;
       }
     }
 
-    return { fetched: ids.length, added, updated, translated };
+    // ── Phase 2（渐进）：翻译未翻译的 story（title 空），逐条 update。──────────
+    // 不再每条卡 llmctl —— 列表已全出，这里只是把中文逐条补上。绝不覆盖用户
+    // 已有 like 状态或已翻译内容（只补 title/summary 仍为空的）。
+    let translated = 0;
+    for (const s of listStories()) {
+      if (!s.title_en) continue;
+      const patch = {};
+      if (!s.title) {
+        const tzh = llmcall(TITLE_SYSTEM, s.title_en);
+        if (tzh) patch.title = tzh;
+      }
+      if (!s.summary) {
+        const szh = llmcall(SUMMARY_SYSTEM, s.title_en);
+        if (szh) patch.summary = szh;
+      }
+      if (Object.keys(patch).length > 0) {
+        aglet.data.update(APP_ID, "stories", s.id, patch);
+        translated++;
+      }
+    }
+
+    return { fetched: ids.length, added, refreshed, translated };
   },
 };
