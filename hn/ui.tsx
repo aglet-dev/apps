@@ -21,7 +21,7 @@
           <Card>
             <VStack gap={6}>
               <HStack justify="between" gap={6}>
-                <Heading level={3}>🎯 {item.title || item.title_en}</Heading>
+                <Heading level={3}>{item.title || item.title_en}</Heading>
                 <Badge content={item.points} color="warning" icon="fire"/>
               </HStack>
               <HStack gap="sm">
