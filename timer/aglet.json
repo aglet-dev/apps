@@ -33,13 +33,12 @@
     "running": false,
     "done": false
   },
-  "timers": [
+  "jobs": [
     {
       "id": "tick",
-      "ms": 1000,
-      "scripts": "tick",
-      "while": "/state/running",
-      "stop_when": "/state/done"
+      "run": "tick",
+      "every": 1000,
+      "while": "window_open"
     }
   ],
   "keys": {

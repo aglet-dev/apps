@@ -43,12 +43,9 @@
   "jobs": [
     {
       "id": "tick",
-      "trigger": {
-        "kind": "interval",
-        "ms": 1000
-      },
-      "while": "window_open",
-      "handler": "tick"
+      "run": "tick",
+      "every": 1000,
+      "while": "window_open"
     }
   ],
   "collections": {
