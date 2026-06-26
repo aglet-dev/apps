@@ -1,0 +1,21 @@
+{
+  "tabRepos": "Repos",
+  "tabRuns": "Runs",
+
+  "emptyReposTitle": "No repos yet",
+  "emptyReposDesc": "Discovers repos you're active in that have Actions",
+  "emptyRunsTitle": "No recent runs",
+  "emptyRunsDesc": "Connect GitHub and wait for the next sync",
+  "emptyWfTitle": "No workflows",
+
+  "secWorkflows": "Workflows",
+  "secRuns": "Recent runs",
+
+  "btnOpen": "Open",
+  "btnBack": "Back",
+  "btnRerun": "Re-run",
+  "btnCancel": "Cancel",
+  "btnRun": "Run",
+  "btnOpenGithub": "Logs",
+  "btnView": "View"
+}

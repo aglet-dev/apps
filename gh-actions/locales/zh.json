@@ -1,0 +1,21 @@
+{
+  "tabRepos": "仓库",
+  "tabRuns": "运行",
+
+  "emptyReposTitle": "暂无仓库",
+  "emptyReposDesc": "自动发现你近期参与的、有 Actions 的仓库",
+  "emptyRunsTitle": "暂无最近运行",
+  "emptyRunsDesc": "连接 GitHub 后等待下次同步",
+  "emptyWfTitle": "暂无工作流",
+
+  "secWorkflows": "工作流",
+  "secRuns": "最近运行",
+
+  "btnOpen": "打开",
+  "btnBack": "返回",
+  "btnRerun": "重跑",
+  "btnCancel": "取消",
+  "btnRun": "运行",
+  "btnOpenGithub": "日志",
+  "btnView": "查看"
+}

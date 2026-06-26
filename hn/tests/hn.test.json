@@ -1,0 +1,106 @@
+{
+  "name": "hn ingest + like + dislike + restore",
+  "aglet": "..",
+  "steps": [
+    {
+      "action": "data.create",
+      "params": {
+        "collection": "stories",
+        "data": {
+          "hn_id": 48111545,
+          "title_en": "Googlebook",
+          "title": "Googlebook（谷歌电子书复活？）",
+          "url": "https://googlebook.google/",
+          "domain": "googlebook.google",
+          "summary": "Google 悄悄上线 Googlebook 域名，讨论集中在 Google Books 是否重启。",
+          "points": 576,
+          "comments": 926,
+          "author": "tambourine_man",
+          "age": "6 hours ago",
+          "liked": false,
+          "disliked": false
+        }
+      }
+    },
+    {
+      "action": "data.create",
+      "params": {
+        "collection": "stories",
+        "data": {
+          "hn_id": 48109224,
+          "title_en": "Bambu Lab is abusing the open source social contract",
+          "title": "Bambu Lab 正在滥用开源社会契约",
+          "url": "https://www.jeffgeerling.com/blog/2026/bambu-lab-abusing-open-source-social-contract/",
+          "domain": "jeffgeerling.com",
+          "summary": "Jeff Geerling 批评 Bambu 关闭网络协议、强迫云端账号，违背了基于开源社区起家的初衷。",
+          "points": 1063,
+          "comments": 354,
+          "author": "rubenbe",
+          "age": "9 hours ago",
+          "liked": false,
+          "disliked": false
+        }
+      }
+    },
+    {
+      "action": "data.create",
+      "params": {
+        "collection": "stories",
+        "data": {
+          "hn_id": 48116207,
+          "title_en": "My graduation cap runs Rust",
+          "title": "我的毕业帽运行 Rust",
+          "url": "https://ericswpark.com/blog/2026/2026-05-12-my-graduation-cap-runs-rust/",
+          "domain": "ericswpark.com",
+          "summary": "作者在毕业帽上塞了一块 ESP32，用 Rust 写固件展示动画，分享硬件 / 嵌入式 Rust 经验。",
+          "points": 11,
+          "comments": 2,
+          "author": "ericswpark",
+          "age": "28 minutes ago",
+          "liked": false,
+          "disliked": false
+        }
+      }
+    },
+    {
+      "action": "data.list",
+      "params": {
+        "collection": "stories"
+      },
+      "expect": {
+        "ok": true,
+        "items_len": 3
+      }
+    },
+    {
+      "action": "data.list",
+      "params": {
+        "collection": "stories",
+        "query": {
+          "where": {
+            "disliked": false
+          }
+        }
+      },
+      "expect": {
+        "ok": true,
+        "items_len": 3
+      }
+    },
+    {
+      "action": "data.list",
+      "params": {
+        "collection": "stories",
+        "query": {
+          "where": {
+            "hn_id": 48111545
+          }
+        }
+      },
+      "expect": {
+        "ok": true,
+        "items_len": 1
+      }
+    }
+  ]
+}

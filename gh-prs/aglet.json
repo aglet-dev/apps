@@ -1,0 +1,126 @@
+{
+  "id": "gh-prs",
+  "name": {
+    "default": "GitHub PRs",
+    "zh": "GitHub PR 看板",
+    "ja": "GitHub PR ボード"
+  },
+  "description": {
+    "default": "Review queue + my open PRs. Auto-detects the `gh` CLI; otherwise connect with a GitHub token.",
+    "zh": "Review 队列 + 我的 open PR。自动探测 `gh` CLI;没有则用 GitHub token 连接。",
+    "ja": "レビュー待ち + 自分の open PR。`gh` CLI を自動検出;なければ GitHub トークンで接続。"
+  },
+  "docs": "# GitHub PR 看板\n\nReview 队列 + 我的 open PR,只读看板。\n\n## 连接(自动探测,开箱即用)\n\n1. **`gh` CLI**:已装且 `gh auth login` 过 → 自动用它,零配置(开发者首选)。\n2. **GitHub token**:没有 gh CLI → 登录门里贴一个 PAT(去 https://github.com/settings/tokens 建,勾 `repo` scope)→ 走 GitHub REST API 直连。token 存平台 Keychain(secrets)。\n\n(OAuth 连接待官方 client_id;见 docs/OAUTH.md。)\n\n## 数据来源\n\n后台 job(每 15 分钟 + 开窗即刷)两条查询:\n\n```\nis:pr is:open review-requested:@me   → reviewed_by_me\nis:pr is:open author:@me             → authored_by_me\n```\n\n按 `pr_id`(owner/repo#number)upsert 进 `prs`;本轮未命中(已关/合)自动删。同 PR 命中两条 → merge 旗标。\n\n## Tabs\n\n- **Review**:被 request review 的 open PR\n- **我的**:我 author 的 open PR\n- **全部**:所有 open PR\n\n## 只读\n\nAgent 写库,用户浏览 + 跳 GitHub。\n",
+  "version": "0.1.0",
+  "license": "MIT",
+  "renderer": "auto",
+  "author": "aglet-dev",
+  "category": "developer-tools",
+  "keywords": [
+    "github",
+    "pr",
+    "review",
+    "code"
+  ],
+  "icon": "https://api.iconify.design/ph/git-pull-request-fill.svg?color=%231f883d&width=256",
+  "screenshots": [
+    {
+      "url": "screenshots/01.png",
+      "caption": "Review queue + your open PRs"
+    }
+  ],
+  "permissions": [
+    "data:read",
+    "data:write",
+    "notifications:post",
+    "secrets:read",
+    "secrets:write"
+  ],
+  "window": {
+    "style": "phone",
+    "width": 440,
+    "height": 760
+  },
+  "jobs": [
+    {
+      "id": "ingest",
+      "run": "ingest",
+      "every": 900000,
+      "while": "always"
+    }
+  ],
+  "collections": {
+    "prs": {
+      "schema": {
+        "pr_id": {
+          "type": "string"
+        },
+        "number": {
+          "type": "number"
+        },
+        "title": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        },
+        "repo": {
+          "type": "string"
+        },
+        "author": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        },
+        "is_draft": {
+          "type": "boolean"
+        },
+        "reviewed_by_me": {
+          "type": "boolean"
+        },
+        "authored_by_me": {
+          "type": "boolean"
+        },
+        "comments_count": {
+          "type": "number"
+        },
+        "labels": {
+          "type": "string"
+        },
+        "updated_at": {
+          "type": "string"
+        }
+      },
+      "indexes": [
+        "pr_id",
+        "reviewed_by_me",
+        "authored_by_me",
+        "state",
+        "updated_at"
+      ]
+    }
+  },
+  "state": {
+    "needs_auth": false,
+    "sync_error": "",
+    "source": ""
+  },
+  "auth": {
+    "groups": [
+      {
+        "title": "GitHub",
+        "help": "Auto-detects the `gh` CLI. If not available, paste a personal access token.",
+        "fields": [
+          {
+            "key": "github_token",
+            "label": "GitHub token",
+            "type": "secret",
+            "required": false,
+            "help": "Create at github.com/settings/tokens (scope: repo). Skip if the `gh` CLI is set up."
+          }
+        ]
+      }
+    ]
+  }
+}

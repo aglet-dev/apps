@@ -1,0 +1,17 @@
+{
+  "tabReview": "Review",
+  "tabMine": "Mine",
+  "tabAll": "All",
+
+  "emptyReviewTitle": "No PRs awaiting your review",
+  "emptyReviewDesc": "Wait for the next scheduler tick to refresh",
+  "emptyMineTitle": "No open PRs from you",
+  "emptyAllTitle": "No open PRs",
+
+  "draftTag": "Draft",
+  "byAuthor": "by",
+  "comments": "comments",
+
+  "btnOpenGithub": "Open in GitHub",
+  "btnView": "View"
+}

@@ -1,0 +1,62 @@
+name: Publish
+
+# Trigger: tag `<aglet>-v<version>` or manual dispatch.
+# Opens a PR to aglet-dev/registry.
+
+on:
+  push:
+    tags:
+      - '*-v*'
+  workflow_dispatch:
+    inputs:
+      app:
+        description: 'Aglet id'
+        required: true
+      version:
+        description: 'Version'
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    name: Publish
+    runs-on: macos-26
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Resolve target
+        id: target
+        run: |
+          set -e
+          if [ -n "${{ github.event.inputs.app }}" ]; then
+            APP="${{ github.event.inputs.app }}"
+            VERSION="${{ github.event.inputs.version }}"
+          else
+            TAG="${GITHUB_REF#refs/tags/}"
+            APP="${TAG%-v*}"
+            VERSION="${TAG##*-v}"
+          fi
+          manifest="$APP/aglet.json"
+          [ -f "$manifest" ] || { echo "✗ $manifest missing"; exit 1; }
+          MANIFEST_VER=$(jq -r '.manifest.version // .version' "$manifest")
+          if [ "$MANIFEST_VER" != "$VERSION" ]; then
+            echo "✗ tag $VERSION ≠ manifest.version $MANIFEST_VER"; exit 1
+          fi
+          echo "app=$APP"         >> "$GITHUB_OUTPUT"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Install
+        run: |
+          brew tap aglet-dev/tap
+          brew install aglet-dev/tap/aglet
+
+      - name: Publish
+        env:
+          GH_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
+        run: |
+          set -e
+          gh auth setup-git
+          export AGLET_REGISTRY_URL="https://github.com/aglet-dev/registry.git"
+          aglet publish "${{ steps.target.outputs.app }}/aglet.json"

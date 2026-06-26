@@ -1,0 +1,96 @@
+{
+  "name": "gh PR list E2E",
+  "aglet": "..",
+  "_comment": "Seed 几条 PR；验证 Review tab 显示 + tab switching。EN locale。",
+  "steps": [
+    {
+      "action": "data.create",
+      "params": {
+        "collection": "prs",
+        "data": {
+          "repo": "aglet-dev/aglet",
+          "number": 123,
+          "title": "feat: add bind_item_i18n",
+          "author": "aglet-dev",
+          "url": "https://github.com/x/y/pull/123",
+          "state": "open",
+          "is_draft": false,
+          "reviewed_by_me": true,
+          "authored_by_me": false,
+          "comments_count": 2,
+          "updated_at": "2026-05-17T10:00:00Z",
+          "labels": "feature, i18n"
+        }
+      }
+    },
+    {
+      "_comment": "等 PR row Heading 出现",
+      "action": "view.waitfor",
+      "select": {
+        "role": "heading",
+        "level": 3,
+        "in_item": {
+          "number": 123
+        }
+      },
+      "timeout": 3000,
+      "expect": {
+        "ok": true,
+        "data": {
+          "found": true
+        }
+      }
+    },
+    {
+      "_comment": "Open-in-GitHub Link in review row",
+      "action": "view.waitfor",
+      "select": {
+        "role": "link",
+        "in_item": {
+          "number": 123
+        },
+        "props": {
+          "icon": "arrow-square-out"
+        }
+      },
+      "timeout": 3000,
+      "expect": {
+        "ok": true,
+        "data": {
+          "found": true
+        }
+      }
+    },
+    {
+      "_comment": "切 All tab",
+      "action": "intent.fire",
+      "select": {
+        "role": "tab",
+        "value": "all"
+      },
+      "expect": {
+        "ok": true,
+        "data": {
+          "clicked": true
+        }
+      }
+    },
+    {
+      "_comment": "All tab 行的 Link",
+      "action": "view.waitfor",
+      "select": {
+        "role": "link",
+        "props": {
+          "icon": "arrow-square-out"
+        }
+      },
+      "timeout": 3000,
+      "expect": {
+        "ok": true,
+        "data": {
+          "found": true
+        }
+      }
+    }
+  ]
+}

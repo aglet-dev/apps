@@ -1,0 +1,21 @@
+{
+  "tabFeed": "首页",
+  "tabLiked": "喜欢",
+  "tabBlocked": "屏蔽",
+
+  "emptyFeedTitle": "还没有内容",
+  "emptyFeedDesc": "让 Agent 拉一次 HN：「刷新一下 HN」",
+  "emptyLikedTitle": "还没有喜欢的内容",
+  "emptyBlockedTitle": "屏蔽列表为空",
+
+  "btnSource": "原文",
+  "btnLike": "喜欢",
+  "btnBlock": "屏蔽",
+  "btnUnlike": "取消喜欢",
+  "btnRestore": "恢复",
+
+  "tipLike": "加入喜欢列表（首页隐藏屏蔽列表）",
+  "tipBlock": "不再在首页看到此条；可在「屏蔽」tab 恢复",
+
+  "points": "分"
+}

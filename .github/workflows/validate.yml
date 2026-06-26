@@ -1,0 +1,83 @@
+name: Validate
+
+on:
+  pull_request:
+    paths:
+      - "**/*.json"
+      - "**/scripts.js"
+      - "**/ui.tsx"
+      - "**/locales/**"
+      - "**/screenshots/**"
+      - ".github/workflows/validate.yml"
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Validate
+    runs-on: macos-26
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # 'git diff <base> <head>' 需 base 在历史里（默认浅克隆看不到 → 静默空 → 跳过校验）
+
+      - name: Detect changed aglets
+        id: changes
+        run: |
+          set -e
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            base="${{ github.event.pull_request.base.sha }}"
+            head="${{ github.event.pull_request.head.sha }}"
+          else
+            base="${{ github.event.before }}"
+            head="${{ github.sha }}"
+          fi
+          if [ "$base" = "0000000000000000000000000000000000000000" ] || [ -z "$base" ]; then
+            apps=$(for d in */; do
+              id="${d%/}"
+              [ -f "$id/aglet.json" ] && echo "$id"
+            done | sort -u)
+          else
+            # 末尾 `|| true`：while 的退出码 = 最后一次 `[ -f ]` 测试；当最后一个变更
+            # 路径不是 app（如删除的目录 / 非 app 顶层文件）时测试为假 → while 退 1
+            # → `set -e` 下命令替换赋值会中止整步。变更路径里有非 app 是常态，故吞掉。
+            apps=$(git diff --name-only "$base" "$head" \
+              | awk -F/ 'NF>=2 && $1!=".github" { print $1 }' \
+              | sort -u \
+              | while read d; do [ -f "$d/aglet.json" ] && echo "$d"; done || true)
+          fi
+          if [ -z "$apps" ]; then
+            echo "apps=" >> "$GITHUB_OUTPUT"; exit 0
+          fi
+          echo "apps<<EOF" >> "$GITHUB_OUTPUT"
+          printf '%s\n' $apps >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
+
+      - name: Install
+        if: steps.changes.outputs.apps != ''
+        run: |
+          brew tap aglet-dev/tap
+          brew install aglet-dev/tap/aglet
+
+      - name: Validate
+        if: steps.changes.outputs.apps != ''
+        env:
+          APPS: ${{ steps.changes.outputs.apps }}
+        run: |
+          set -euo pipefail
+          fail=0
+          for id in $APPS; do
+            echo "::group::$id"
+            manifest="$id/aglet.json"
+            aglet validate "$manifest" || { fail=1; echo "✗ $id validate"; }
+            # --registry HTTPS：CI 无 SSH key,默认的 git@github.com 注册表 clone 会
+            # Permission denied。aglet-registry 是公开仓,匿名 HTTPS clone 即可。
+            aglet publish "$manifest" --dry-run --no-git --no-push --no-pr \
+              --registry https://github.com/aglet-dev/registry.git \
+              || { fail=1; echo "✗ $id pack"; }
+            echo "::endgroup::"
+          done
+          exit $fail

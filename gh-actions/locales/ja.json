@@ -1,0 +1,21 @@
+{
+  "tabRepos": "リポジトリ",
+  "tabRuns": "実行",
+
+  "emptyReposTitle": "リポジトリがありません",
+  "emptyReposDesc": "最近関わった Actions のあるリポジトリを自動検出します",
+  "emptyRunsTitle": "最近の実行はありません",
+  "emptyRunsDesc": "GitHub に接続して次の同期をお待ちください",
+  "emptyWfTitle": "ワークフローがありません",
+
+  "secWorkflows": "ワークフロー",
+  "secRuns": "最近の実行",
+
+  "btnOpen": "開く",
+  "btnBack": "戻る",
+  "btnRerun": "再実行",
+  "btnCancel": "キャンセル",
+  "btnRun": "実行",
+  "btnOpenGithub": "ログ",
+  "btnView": "表示"
+}

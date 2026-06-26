@@ -1,0 +1,21 @@
+{
+  "tabFeed": "ホーム",
+  "tabLiked": "お気に入り",
+  "tabBlocked": "ブロック",
+
+  "emptyFeedTitle": "まだ記事がありません",
+  "emptyFeedDesc": "エージェントに「HN を更新して」と頼んでください",
+  "emptyLikedTitle": "お気に入りはまだありません",
+  "emptyBlockedTitle": "ブロック一覧は空です",
+
+  "btnSource": "原文",
+  "btnLike": "お気に入り",
+  "btnBlock": "ブロック",
+  "btnUnlike": "解除",
+  "btnRestore": "復元",
+
+  "tipLike": "お気に入りに追加（ブロックは自動で非表示）",
+  "tipBlock": "フィードから非表示。ブロック一覧で復元できます",
+
+  "points": "pt"
+}

@@ -1,0 +1,152 @@
+{
+  "id": "gh-actions",
+  "name": {
+    "default": "GitHub Actions",
+    "zh": "GitHub Actions",
+    "ja": "GitHub Actions"
+  },
+  "description": {
+    "default": "Watch and run GitHub Actions across your active repos. Auto-detects the `gh` CLI; otherwise connect with a token.",
+    "zh": "查看并执行你活跃仓库的 GitHub Actions。自动探测 `gh` CLI;没有则用 token 连接。",
+    "ja": "アクティブなリポジトリの GitHub Actions を確認・実行。`gh` CLI を自動検出;なければトークンで接続。"
+  },
+  "docs": "# GitHub Actions\n\n查看并执行 GitHub Actions —— 跨你的活跃仓库,**自动发现有 Actions 的仓库**(零配置)。\n\n## 连接(自动探测)\n\n1. **`gh` CLI**:已装且 `gh auth login` 过 → 自动复用它的 token(零配置,scope 已全)。\n2. **GitHub token**:没有 gh CLI → 登录门里贴一个 PAT。**scope 需勾 `repo` + `workflow`**(workflow 是执行 workflow_dispatch 必需的)。token 存平台 Keychain。\n\n## 自动发现\n\n后台两段式(都用你的 token / gh CLI):\n\n- **Discover(每 30 分钟)**:拉 `/user/repos`(按最近推送排,取前 N),逐仓查 `/actions/workflows`,**只把有 ≥1 个 workflow 的仓**入库 → `workflows` 表 + 这些仓的最近 runs。\n- **Refresh runs(每 2 分钟)**:只刷已知活跃仓的 `runs`,状态变化更快回填。\n\n`N` 由设置 `max_repos`(默认 30)控制;也可在设置里手动 pin 一组 `repos` 覆盖自动发现。\n\n## 查看\n\n- **Runs**:跨仓最近 run,状态徽章(✅ 成功 / ❌ 失败 / 🟡 跑中 / ⏹ 取消 / ⏳ 排队),点击跳 GitHub 日志。\n- **Workflows**:每仓的 workflow,可一键触发。\n\n## 执行(按钮 = 你的确认)\n\n- **Re-run**:对已完成的 run 重跑。\n- **Cancel**:取消跑中的 run。\n- **Run**:触发 workflow_dispatch(默认分支)。workflow 未声明 `on: workflow_dispatch` 会返错误。\n\n执行后立即刷新该仓 runs 回填状态。\n",
+  "version": "0.1.0",
+  "license": "MIT",
+  "renderer": "auto",
+  "author": "aglet-dev",
+  "category": "developer-tools",
+  "keywords": [
+    "github",
+    "actions",
+    "ci",
+    "workflow",
+    "devops"
+  ],
+  "icon": "https://api.iconify.design/ph/play-circle-fill.svg?color=%232088ff&width=256",
+  "permissions": [
+    "data:read",
+    "data:write",
+    "notifications:post",
+    "secrets:read",
+    "secrets:write"
+  ],
+  "window": {
+    "style": "phone",
+    "width": 460,
+    "height": 780
+  },
+  "jobs": [
+    {
+      "id": "discover",
+      "run": "discover",
+      "every": 1800000,
+      "while": "always"
+    },
+    {
+      "id": "refresh",
+      "run": "refreshRuns",
+      "every": 120000,
+      "while": "always"
+    }
+  ],
+  "collections": {
+    "repos": {
+      "schema": {
+        "repo": { "type": "string" },
+        "owner": { "type": "string" },
+        "name_short": { "type": "string" },
+        "default_branch": { "type": "string" },
+        "wf_count": { "type": "number" },
+        "last_status": { "type": "string" },
+        "last_run_at": { "type": "string" },
+        "actions_url": { "type": "string" }
+      },
+      "indexes": ["repo", "owner", "last_run_at"]
+    },
+    "workflows": {
+      "schema": {
+        "wf_id": { "type": "string" },
+        "repo": { "type": "string" },
+        "name": { "type": "string" },
+        "state": { "type": "string" },
+        "default_branch": { "type": "string" },
+        "path": { "type": "string" },
+        "html_url": { "type": "string" }
+      },
+      "indexes": ["wf_id", "repo", "name"]
+    },
+    "runs": {
+      "schema": {
+        "run_id": { "type": "string" },
+        "repo": { "type": "string" },
+        "workflow_name": { "type": "string" },
+        "status": { "type": "string" },
+        "conclusion": { "type": "string" },
+        "branch": { "type": "string" },
+        "event": { "type": "string" },
+        "actor": { "type": "string" },
+        "run_number": { "type": "number" },
+        "html_url": { "type": "string" },
+        "updated_at": { "type": "string" },
+        "can_rerun": { "type": "boolean" },
+        "can_cancel": { "type": "boolean" },
+        "state_emoji": { "type": "string" }
+      },
+      "indexes": ["run_id", "repo", "status", "updated_at"]
+    }
+  },
+  "state": {
+    "needs_auth": false,
+    "sync_error": "",
+    "action_error": "",
+    "source": "",
+    "repo": "",
+    "browsing": true
+  },
+  "auth": {
+    "groups": [
+      {
+        "title": "GitHub",
+        "help": "Auto-detects the `gh` CLI. If not available, paste a personal access token (scopes: repo + workflow).",
+        "fields": [
+          {
+            "key": "github_token",
+            "label": "GitHub token",
+            "type": "secret",
+            "required": false,
+            "help": "Create at github.com/settings/tokens with `repo` + `workflow` scopes. Skip if the `gh` CLI is set up."
+          }
+        ]
+      }
+    ]
+  },
+  "settings": {
+    "groups": [
+      {
+        "title": "Scope",
+        "help": "Which repos to watch. By default discovers your active repos that have Actions.",
+        "fields": [
+          {
+            "key": "show_all_repos",
+            "label": "Show all repos with Actions",
+            "type": "bool",
+            "help": "Off by default: only repos you're active in (recent runs you triggered/pushed) or own. Turn on to include every repo you can see that has Actions (e.g. all org repos)."
+          },
+          {
+            "key": "max_repos",
+            "label": "Max repos",
+            "type": "number",
+            "help": "How many of your most-recently-pushed repos to scan for workflows (default 30)."
+          },
+          {
+            "key": "repos",
+            "label": "Pin repos (optional)",
+            "type": "textarea",
+            "help": "One owner/repo per line. If set, overrides auto-discovery and watches only these."
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,127 @@
+{
+  "id": "tokstat",
+  "name": {
+    "default": "AI Token Usage",
+    "zh": "AI 用量",
+    "ja": "AI トークン使用量"
+  },
+  "description": {
+    "default": "Claude + Codex usage (session & weekly) in your menu bar, with progress bars and reset countdowns.",
+    "zh": "在菜单栏查看 Claude + Codex 的用量（会话与每周），含进度条与重置倒计时。",
+    "ja": "メニューバーで Claude + Codex の使用量（セッション・週）を進捗バーとリセットまでのカウントダウン付きで表示。"
+  },
+  "version": "0.1.0",
+  "license": "MIT",
+  "renderer": "auto",
+  "requires": [
+    {
+      "plugin": "tokstat",
+      "version": ">=0.1.0"
+    }
+  ],
+  "permissions": [
+    "data:read",
+    "data:write"
+  ],
+  "collections": {
+    "samples": {
+      "storage": "persistent",
+      "schema": {
+        "ts": {
+          "type": "integer"
+        },
+        "source": {
+          "type": "string"
+        },
+        "ok": {
+          "type": "boolean"
+        },
+        "session_pct": {
+          "type": "integer"
+        },
+        "weekly_pct": {
+          "type": "integer"
+        },
+        "session_resets_ms": {
+          "type": "integer"
+        },
+        "weekly_resets_ms": {
+          "type": "integer"
+        },
+        "total_cost_usd": {
+          "type": "number"
+        }
+      }
+    },
+    "current": {
+      "storage": "memory",
+      "schema": {
+        "source": {
+          "type": "string"
+        },
+        "ts": {
+          "type": "integer"
+        },
+        "ok": {
+          "type": "boolean"
+        },
+        "err": {
+          "type": "string"
+        },
+        "menu_text": {
+          "type": "string"
+        },
+        "session_pct": {
+          "type": "integer"
+        },
+        "session_pct_text": {
+          "type": "string"
+        },
+        "session_color": {
+          "type": "string"
+        },
+        "session_reset_text": {
+          "type": "string"
+        },
+        "weekly_pct": {
+          "type": "integer"
+        },
+        "weekly_pct_text": {
+          "type": "string"
+        },
+        "weekly_color": {
+          "type": "string"
+        },
+        "weekly_reset_text": {
+          "type": "string"
+        },
+        "cost_text": {
+          "type": "string"
+        },
+        "plan_text": {
+          "type": "string"
+        },
+        "source_text": {
+          "type": "string"
+        },
+        "credits_text": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "jobs": [
+    {
+      "id": "on_sample",
+      "run": "onSample",
+      "on": "tokstat.sample",
+      "while": "always"
+    }
+  ],
+  "comment_state": "DATA_FLOW.md：popover/menubar 当前值全部走 SQLite `current` collection（数据源→SQLite→UI），不再用 setState 表征。state 留空。",
+  "state": {},
+  "window": {
+    "width": 280,
+    "height": 320
+  }
+}

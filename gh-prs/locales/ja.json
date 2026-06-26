@@ -1,0 +1,17 @@
+{
+  "tabReview": "レビュー",
+  "tabMine": "自分",
+  "tabAll": "全て",
+
+  "emptyReviewTitle": "レビュー待ちの PR はありません",
+  "emptyReviewDesc": "次のスケジューラ更新までお待ちください",
+  "emptyMineTitle": "オープンの PR はありません",
+  "emptyAllTitle": "オープンの PR はありません",
+
+  "draftTag": "下書き",
+  "byAuthor": "作成者",
+  "comments": "コメント",
+
+  "btnOpenGithub": "GitHub で開く",
+  "btnView": "表示"
+}

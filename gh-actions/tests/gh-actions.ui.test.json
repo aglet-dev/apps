@@ -1,0 +1,102 @@
+{
+  "name": "gh-actions repo drill-down E2E",
+  "aglet": "..",
+  "_comment": "Seed repo + workflow + run;验证 Repos tab 列卡 + Open 钻入 → 该仓 workflow 的 Run 按钮 + run 的 Re-run。EN locale。",
+  "steps": [
+    {
+      "_comment": "一个活跃仓聚合行",
+      "action": "data.create",
+      "params": {
+        "collection": "repos",
+        "data": {
+          "repo": "aglet-dev/aglet",
+          "owner": "aglet-dev",
+          "name_short": "aglet",
+          "default_branch": "main",
+          "wf_count": 1,
+          "last_status": "✅",
+          "last_run_at": "2026-06-23T03:00:00Z",
+          "actions_url": "https://github.com/aglet-dev/aglet/actions"
+        }
+      }
+    },
+    {
+      "_comment": "该仓一个 workflow",
+      "action": "data.create",
+      "params": {
+        "collection": "workflows",
+        "data": {
+          "wf_id": "7001",
+          "repo": "aglet-dev/aglet",
+          "name": "Release",
+          "state": "active",
+          "default_branch": "main",
+          "path": ".github/workflows/release.yml",
+          "html_url": "https://github.com/aglet-dev/aglet/actions/workflows/release.yml"
+        }
+      }
+    },
+    {
+      "_comment": "该仓一个已完成 run(can_rerun)",
+      "action": "data.create",
+      "params": {
+        "collection": "runs",
+        "data": {
+          "run_id": "9001",
+          "repo": "aglet-dev/aglet",
+          "workflow_name": "Release",
+          "status": "completed",
+          "conclusion": "success",
+          "branch": "main",
+          "event": "push",
+          "actor": "aglet-dev",
+          "run_number": 42,
+          "html_url": "https://github.com/aglet-dev/aglet/actions/runs/9001",
+          "updated_at": "2026-06-23T03:00:00Z",
+          "can_rerun": true,
+          "can_cancel": false,
+          "state_emoji": "✅"
+        }
+      }
+    },
+    {
+      "_comment": "Repos tab(默认):仓卡 Heading 出现",
+      "action": "view.waitfor",
+      "select": { "role": "heading", "level": 3, "in_item": { "repo": "aglet-dev/aglet" } },
+      "timeout": 3000,
+      "expect": { "ok": true, "data": { "found": true } }
+    },
+    {
+      "_comment": "仓卡 Open 按钮(caret-right)钻入",
+      "action": "intent.fire",
+      "select": {
+        "role": "button",
+        "in_item": { "repo": "aglet-dev/aglet" },
+        "props": { "icon": "caret-right" }
+      },
+      "expect": { "ok": true, "data": { "clicked": true } }
+    },
+    {
+      "_comment": "钻入后:该仓 workflow 的 Run 按钮(play)",
+      "action": "view.waitfor",
+      "select": {
+        "role": "button",
+        "in_item": { "wf_id": "7001" },
+        "props": { "icon": "play" }
+      },
+      "timeout": 3000,
+      "expect": { "ok": true, "data": { "found": true } }
+    },
+    {
+      "_comment": "钻入后:该仓 run 的 Re-run 按钮(arrow-clockwise)",
+      "action": "view.waitfor",
+      "select": {
+        "role": "button",
+        "in_item": { "run_number": 42 },
+        "props": { "icon": "arrow-clockwise" }
+      },
+      "timeout": 3000,
+      "expect": { "ok": true, "data": { "found": true } }
+    }
+  ]
+}
