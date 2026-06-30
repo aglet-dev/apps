@@ -10,8 +10,9 @@
     "zh": "在菜单栏查看 Claude + Codex 的用量（会话与每周），含进度条与重置倒计时。",
     "ja": "メニューバーで Claude + Codex の使用量（セッション・週）を進捗バーとリセットまでのカウントダウン付きで表示。"
   },
-  "version": "0.1.0",
+  "version": "0.1.1",
   "license": "MIT",
+  "min_runtime": "0.1.2",
   "renderer": "auto",
   "requires": [
     {
@@ -21,8 +22,30 @@
   ],
   "permissions": [
     "data:read",
-    "data:write"
+    "data:write",
+    "settings:read",
+    "settings:write"
   ],
+  "settings": {
+    "groups": [
+      {
+        "title": { "default": "Display", "zh": "显示", "ja": "表示" },
+        "fields": [
+          {
+            "key": "show",
+            "label": { "default": "Show", "zh": "显示", "ja": "表示" },
+            "type": "select",
+            "default": "both",
+            "options": [
+              { "value": "both", "label": "Claude + Codex" },
+              { "value": "claude", "label": { "default": "Claude only", "zh": "仅 Claude", "ja": "Claude のみ" } },
+              { "value": "codex", "label": { "default": "Codex only", "zh": "仅 Codex", "ja": "Codex のみ" } }
+            ]
+          }
+        ]
+      }
+    ]
+  },
   "collections": {
     "samples": {
       "storage": "persistent",
@@ -54,7 +77,7 @@
       }
     },
     "current": {
-      "storage": "memory",
+      "storage": "persistent",
       "schema": {
         "source": {
           "type": "string"
@@ -118,8 +141,8 @@
       "while": "always"
     }
   ],
-  "comment_state": "DATA_FLOW.md：popover/menubar 当前值全部走 SQLite `current` collection（数据源→SQLite→UI），不再用 setState 表征。state 留空。",
-  "state": {},
+  "comment_state": "DATA_FLOW.md：popover/menubar 当前值全部走 SQLite `current` collection（数据源→SQLite→UI），不用 setState 表征。state 只留显示过滤的正向布尔 show_claude/show_codex（默认 true=both；scripts.syncShowFlags 按 settings.show 刷）——popover 结构性隐藏整段需正向守卫。",
+  "state": { "show_claude": true, "show_codex": true },
   "window": {
     "width": 280,
     "height": 320

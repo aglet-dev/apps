@@ -11,6 +11,8 @@
 //   { ts, claude:{ok, session:{used_pct,resets_at_raw,resets_at_ms}, weekly:{...}, total_cost_usd},
 //         codex:{ok, source, session:{...}, weekly:{...}, plan_type, credits:{...}} }
 
+const APP_ID = "tokstat";
+
 function pctText(pct) {
   return typeof pct === "number" ? `${pct}%` : "—";
 }
@@ -127,11 +129,40 @@ async function processSample(sample, ctx) {
       source_text: typeof codex.source === "string" ? codex.source : "—",
       credits_text,
     });
+
+    syncShowFlags(ctx);
+}
+
+// Display filter (settings.show = both|claude|codex) → 正向布尔 state，给 popover
+// 区块可见性用。菜单栏 TrayLabel 走服务端 op:ne 过滤（即时、空行跳过）；popover 要
+// 结构性隐藏整段 DataScope，native 守卫只可靠支持正向 `{state.x && ...}`，故用预算成
+// 正向的布尔（默认两者 true=both）。见 memory tsx-jsx-guard-positive-only。
+function syncShowFlags(ctx) {
+  let show = "both";
+  try { show = aglet.settings.get(APP_ID, "show").value || "both"; } catch (_e) {}
+  if (ctx && ctx.setStateAt) {
+    ctx.setStateAt("/state/show_claude", show !== "codex");
+    ctx.setStateAt("/state/show_codex", show !== "claude");
+  }
 }
 
 export default {
   async onSample(payload, ctx) {
-    await processSample(payload?.contents ?? {}, ctx);
+    let sample = payload?.contents;
+    // scheduler.run_app（GUI 保存设置后 / ⌘R 手动刷）派发本 job 时**没有** plugin
+    // 事件 payload → contents 为空。直接 ingest 空数据会把两边 upsert 成 "?·?" 抹掉
+    // 上一次的真值（保存设置瞬间正盯着看 → 体验差）。空 payload 时主动探一次插件。
+    if (!sample || (!sample.claude && !sample.codex)) {
+      try {
+        sample = await ctx.plugins.tokstat.refresh();
+      } catch (e) {
+        console.warn("[tokstat] onSample active refresh failed:", String(e));
+        syncShowFlags(ctx); // 设置可能刚改，至少把过滤 flag 刷上
+        return; // 探测失败：保留上一次真值，不写 "?·?"
+      }
+    }
+    if (sample && (sample.claude || sample.codex)) await processSample(sample, ctx);
+    else syncShowFlags(ctx);
   },
   // 右键菜单 "Refresh now"（<TrayMenuItem onSelect="refreshNow">）→ bg handler（无 webview）。
   // 立即跑一次探针（plugin refresh action 返回 {claude, codex}）并入库。授权靠 app 的
