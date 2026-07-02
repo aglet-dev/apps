@@ -10,13 +10,13 @@
     "zh": "在菜单栏查看 Claude + Codex 的用量（会话与每周），含进度条与重置倒计时。",
     "ja": "メニューバーで Claude + Codex の使用量（セッション・週）を進捗バーとリセットまでのカウントダウン付きで表示。"
   },
-  "version": "0.1.1",
+  "version": "0.2.0",
   "license": "MIT",
   "min_runtime": "0.1.2",
   "renderer": "auto",
   "requires": [
     {
-      "plugin": "tokstat",
+      "plugin": "aicreds",
       "version": ">=0.1.0"
     }
   ],
@@ -135,14 +135,14 @@
   },
   "jobs": [
     {
-      "id": "on_sample",
-      "run": "onSample",
-      "on": "tokstat.sample",
+      "id": "refresh",
+      "run": "refresh",
+      "every": 300000,
       "while": "always"
     }
   ],
-  "comment_state": "DATA_FLOW.md：popover/menubar 当前值全部走 SQLite `current` collection（数据源→SQLite→UI），不用 setState 表征。state 只留显示过滤的正向布尔 show_claude/show_codex（默认 true=both；scripts.syncShowFlags 按 settings.show 刷）——popover 结构性隐藏整段需正向守卫。",
-  "state": { "show_claude": true, "show_codex": true },
+  "comment_state": "DATA_FLOW.md：refresh job(每 5min + 开窗即刷)读凭据(aicreds 插件)→ app 内 HTTP 拉用量 → SQLite `current`/`samples` → UI。popover/menubar 当前值全走 current collection，不用 setState 表征。state：show_claude/show_codex(显示过滤正向布尔，默认 true=both，scripts.syncShowFlags 按 settings.show 刷，popover 正向守卫用)；needs_auth(两边都无凭据=未登录，供宿主横幅)。",
+  "state": { "show_claude": true, "show_codex": true, "needs_auth": false },
   "window": {
     "width": 280,
     "height": 320

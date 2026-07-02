@@ -23,10 +23,11 @@ The system **Jobs** dashboard ships bundled with Aglet.app itself (see the
 ## Plugin dependencies
 
 Apps declare required plugins via `manifest.requires`. Only `tokstat` needs a plugin —
-the native **stdio** `tokstat` plugin (macOS; from
+the native **stdio** `aicreds` plugin (macOS; from
 [aglet-plugins](https://github.com/aglet-dev/plugins)), installed automatically
-with the app. `gh-prs` / `gh-actions` auto-detect the `gh` CLI (or a GitHub token);
-`hn` fetches over HTTP — host capabilities, no plugins.
+with the app. `aicreds` only reads the local AI tools' OAuth access token; `tokstat`
+itself calls the Claude/Codex usage APIs over HTTP. `gh-prs` / `gh-actions` auto-detect
+the `gh` CLI (or a GitHub token); `hn` fetches over HTTP — host capabilities, no plugins.
 
 ## Develop
 
